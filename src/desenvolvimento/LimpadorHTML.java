@@ -167,7 +167,7 @@ public class LimpadorHTML {
 				arquivoAtual = arquivos[i][j];
 				if (arquivoAtual.length() > tamanhoMaximoArquivo){
 					//Mostra o nome e tamanho dos arquivos que são maiores que o tamanhoMaximoArquivo
-					System.out.print("--GRANDE--"+ i + "--GRANDE-- " + arquivoAtual.getName() + " ----------"+ i + "---------- ");
+					System.out.print("--GRANDE-- " + arquivoAtual.getName() + " --GRANDE--");
 					System.out.println("Tamanho: " + arquivoAtual.length() + " B");
 					continue;//Passa para a próxima iteração
 				} else {
@@ -258,7 +258,7 @@ public class LimpadorHTML {
 						//Se a pasta destino já está com arquivos limpos
 						//Recomendamos comentar a linha, para evitar jogar muita informação no console
 						//ATENÇÃO, O ARQUIVO ESCREVERÁ DE TODOO JEITO NO CAMINHO POR ELE INDICADO
-						System.out.println("!!DUPLICADO!! " + i + "!!DUPLICADO!!" + arquivoAtual.getName() + "!!!!!!!!" + i + "!!!!!!!!");
+						System.out.println("!!DUPLICADO!! " + arquivoAtual.getName() + " !!DUPLICADO!!");
 						System.out.println("Caminho que os dados foram escritos: "  + caminho + "Arquivo N°: " + contadorArquivosLimpos);
 						contadorArquivosDuplicados++;
 					}
