@@ -111,7 +111,7 @@ public class LimpadorHTML {
 		String padraoRemoverAlgunsBRs = "<br />\\s*<div>\\s*</div>\\s*<br />";
 		String padraoRemoverFinalPagina = "<div>\\s*<p>\\s*Este.*";
 		String padraoRemoverInicio = "\\s*<div>\\s*<br />\\s*<br />\\s*<div>\\s*<div>\\s*<div>";
-		String padraoNumeroDecreto = "DECRETO\\s*.*\\s*(\\d{2,3})\\s*\\.\\s*(\\d{3})\\s*.?\\s*(</b>)?\\s*(<b>)?.?\\s*(DE|DIA)(&nbsp;)*\\s*(\\d{1,2})[a-zA-Z&;º°]*\\s*DE\\s*([A-Za-z&Çç;]*)\\s*DE\\s*(\\d{4})";
+		String padraoNumeroDecreto = "DECRETO\\s*.*\\s*(\\d{2,3})\\s*\\.\\s*(\\d{3})\\s*.?\\s*(</b>)?\\s*(<b>)?.?\\s*(DE|DIA)(&nbsp;)*\\s*(\\d{1,2})[a-zA-Z&;º°]*\\s*DE\\s*([A-Za-z&Çç;]*) ?\\s*DE\\s*(\\d{4})";
 		
 		//Compilação do padrão e definição de um Matcher
 		Pattern padraoNumDataDecreto = Pattern.compile(padraoNumeroDecreto);

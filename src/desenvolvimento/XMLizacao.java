@@ -33,16 +33,15 @@ public class XMLizacao {
 		String pastaOrigem = "semFormatação";
 
 		//Caminhos dos decretos
-		String[] caminhosDecretos = new String[3]; 
-		caminhosDecretos[0] = "C:\\Users\\JN\\Documents\\DecretosAlepe\\2014\\";
-		caminhosDecretos[1] = "C:\\Users\\JN\\Documents\\DecretosAlepe\\2015\\";
-		caminhosDecretos[2] = "C:\\Users\\JN\\Documents\\DecretosAlepe\\2016\\";
+		//Substitua para a localização em seu computador
+		String caminhoDecretos = "C:\\Users\\JN\\Documents\\DecretosAlepe\\";
+		int[] anosDecretos = {2014, 2015, 2016};
 
 		//"Cria-se" os Files que apontam para as pastas dos decretos
 		File[] pastas = new File[3];
-		pastas[0] = new File(caminhosDecretos[0] + pastaOrigem);
-		pastas[1] = new File(caminhosDecretos[1] + pastaOrigem);
-		pastas[2] = new File(caminhosDecretos[2] + pastaOrigem);
+		pastas[0] = new File(caminhoDecretos + anosDecretos[0] + "\\" + pastaOrigem);
+		pastas[1] = new File(caminhoDecretos + anosDecretos[1] + "\\" + pastaOrigem);
+		pastas[2] = new File(caminhoDecretos + anosDecretos[2] + "\\" + pastaOrigem);
 
 		//Usado para conter a lista de endereços dos arquivos dentro de cada pasta
 		File[][] arquivos = new File[3][];
@@ -62,76 +61,103 @@ public class XMLizacao {
 		BufferedReader br;
 		FileWriter fw;
 		BufferedWriter bw;
-
-		//
+		FileWriter fwarq;
+		BufferedWriter bwarq = null;
+		
 		String nomeArquivo;
 		File arquivoPasta;
-		Map<String, Integer> contadorTiposArquivos = new Hashtable<>();
-		contadorTiposArquivos.put("Abre", 0);
-		contadorTiposArquivos.put("Aloca", 0);
-		contadorTiposArquivos.put("Altera", 0);
-		contadorTiposArquivos.put("Aprova", 0);
-		contadorTiposArquivos.put("Autoriza", 0);
-		contadorTiposArquivos.put("Concede", 0);
-		contadorTiposArquivos.put("Cria", 0);
-		contadorTiposArquivos.put("Declara", 0);
-		contadorTiposArquivos.put("Dispõe", 0);
-		contadorTiposArquivos.put("Estabelece", 0);
-		contadorTiposArquivos.put("Institui", 0);
-		contadorTiposArquivos.put("Introduz", 0);
-		contadorTiposArquivos.put("Qualifica", 0);
-		contadorTiposArquivos.put("Redenomina", 0);
-		contadorTiposArquivos.put("Regulamenta", 0);
-		contadorTiposArquivos.put("Revoga", 0);
-		contadorTiposArquivos.put("Transfere", 0);
-		contadorTiposArquivos.put("Transforma", 0);
+		Map<String, Integer> contadorTiposDecreto = new Hashtable<>();
 
 		//Regex
-		
-		String regexTiposDecretos = "<\\w{1,6}>(Abre|Aloca|Altera|Aprova|Autoriza|Concede|Cria|Declara|Dispõe|Estabelece|Institui|Introduz|Qualifica|Redenomina|Regulamenta|Revoga|Transfere|Transforma)([A-Za-zçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ\"!?$%0-9º°, ]+)\\s*(<a( href=\"[A-Za-z0-9?/\\%:]+\")?>([A-Za-zçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ\"!?$%0-9º°,/ ]+)\\s*</a>(,)?([A-Za-zçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ\"!?$%0-9º°,/ ]+))?\\s*</\\w{1,6}>";
-		String regexTiposDecretos2 = "<\\w{1,6}>\\s*<\\w{1,6}>(Abre|Aloca|Altera|Aprova|Autoriza|Concede|Cria|Declara|Dispõe|Estabelece|Institui|Introduz|Redenomina|Regulamenta|Revoga|Transfere|Transforma)([A-Za-zçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ\"!?$%0-9º°,/ \u00A7\u002E\u002D\u2014]+)</\\w{1,6}>\\s*<\\w{1,6}>(\\s*<a href=\"[A-Za-z0-9?/\\%:]+\">([A-Za-zçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ\"!?$%0-9º°,/ \u00A7\u002E\u002D\u2014]+)\\s*</a>(,)?([A-Za-zçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ\"!?$%0-9º°,/ \u00A7\u002E\u002D\u2014]+))?\\s*</\\w{1,6}>\\s*<\\w{1,6}>([A-Za-zçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ\"!?$%0-9º°,/ \u00A7\u002E\u002D\u2014]+)";
-		String regexTiposDecretos3 = "<\\w{1,6}>(Abre|Aloca|Altera|Aprova|Autoriza|Concede|Cria|Declara|Dispõe|Estabelece|Institui|Introduz|Qualifica|Redenomina|Regulamenta|Revoga|Transfere|Transforma)([0-9A-Za-zçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ\"!?$%º°, -]+)\\s*</\\w{1,6}>";
-		String padraoDecreto = "DECRETO\\s*.*\\s*(</b>)?\\s*(<b>)?(\\d{2,3})\\s*\\.\\s*(\\d{3})\\s*,\\s*DE\\s*(\\d{1,2})\\s*DE\\s*([A-Za-z&Çç;]*)\\s*DE\\s*(\\d{4}";
-		String padraoOGovernador = "(O |<span>O</span>\\s*<span>)?(GOVERNADOR DE ESTADO|GOVERNADOR DO ESTADO|O PRESIDENTE DA ASSEMBLEIA LEGISLATIVA DO ESTADO DE PERNAMBUCO, NO EXERCÍCIO DO CARGO DE GOVERNADOR DO ESTADO)\\s*(</span>)?\\s*(<span>)?([A-Za-zçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ=\"!?0-9º°,/ \u002D\u002E\u00A7]+)\\s*(</span>)?\\s*(<a href=\"[A-Za-z0-9?/]+\">)?\\s*(<span>)?([A-Za-zçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ\"!?0-9º°,/ \u002D\u002E\u00A7\u2014]*)(</span>)?\\s*(</a>)?(,)?\\s*((</span>)\\s*([A-Za-zçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ\"!?0-9º°,/ \u002D\u002E\u00A7]+)\\s*(<span>)([A-Za-zçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ\"!?0-9º°,/ \u002D\u002E\u00A7]*)\\s*(</span>))*(<span>([A-Za-zçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ=\"!?0-9º°,/ \u002D\u002E\u00A7]+)</span>)*([A-Za-zçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ\"!?0-9º°,/ \u002D\u002E\u00A7]+)*\\s*(<a href=\"[A-Za-z0-9?/]+\">\\s*(<span>)?([A-Za-zçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ=\"!?0-9º°,/ \u002D\u002E\u00A7]+))*(</a>,([A-Za-zçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ\"!?0-9º°,/ \u002D\u002E\u00A7]+)\\s*<a href=\"[A-Za-z0-9?/]+\">([A-Za-zçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ\"!?0-9º°,/ \u002D\u002E\u00A7]+)</a>([A-Za-zçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ\"!?0-9º°,/ \u002D\u002E\u00A7]+)\\s*<a href=\"[A-Za-z0-9?/]+\">([A-Za-zçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ\"!?0-9º°,/ \u002D\u002E\u00A7]+)</a>([A-Za-zçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ\"!?0-9º°,/ \u002D\u002E\u00A7]+)\\s*<a href=\"[A-Za-z0-9?/]+\">([A-Za-zçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ\"!?0-9º°,/ \u002D\u002E\u00A7]+)</a>(,)?)*";
-		String padraoOGovernador2= "(O |<span>O</span>\\s*<span>)?(GOVERNADOR DE ESTADO|GOVERNADOR DO ESTADO|O PRESIDENTE DA ASSEMBLEIA LEGISLATIVA DO ESTADO DE PERNAMBUCO, NO EXERCÍCIO DO CARGO DE GOVERNADOR DO ESTADO)\\s*([A-Za-zçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ=\"!?0-9º°,/ \u002D\u002E\u00A7]+)\\s*<a href=\"[A-Za-z0-9?/]+\">\\s*([A-Za-zçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ\"!?0-9º°,/ \u002D\u002E\u00A7]*)\\s*</a>\\s*([A-Za-zçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ\"!?0-9º°,/ \u002D\u002E\u00A7\u2014]*)\\s*<a href=\"[A-Za-z0-9?/]+\">\\s*([A-Za-zçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ\"!?0-9º°,/ \u002D\u002E\u00A7]*)\\s*</a>\\s*([A-Za-zçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ\"!?0-9º°,/ \u002D\u002E\u00A7]*)\\s*(<a href=\"[A-Za-z0-9?/]+\">\\s*([A-Za-zçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ\"!?0-9º°,/ \u002D\u002E\u00A7]*)\\s*</a>\\s*([A-Za-zçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ\"!?0-9º°,/ \u002D\u002E\u00A7]*))*\\s*(<a href=\"[A-Za-z0-9?/]+\">([A-Za-zçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ\"!?0-9º°,/ \u002D\u002E\u00A7]*)</a>)*(,)?";
-		String padraoOGovernador3 = "<span>(O GOVERNADOR DO ESTADO,) ([A-Za-zçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ=\"!?0-9º°,/ ]+)*\\s*</span>([A-Za-zçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ=\"!?0-9º°,/ \u002D\u002E\u00A7\u2014]+)*\\s*<span>([A-Za-zçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ=\"!?0-9º°, \u002D\u002E\u00A7\u2014]+)*</span>\\s*([A-Za-zçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ=\"!?0-9º°,/ \u002D\u002E\u00A7\u2014]+)*\\s*<a href=\"[A-Za-z0-9?/]+\">([A-Za-zçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ=\"!?0-9º°,/ \u002D\u002E\u00A7\u2014]+)*</a>([A-Za-zçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ=\"!?0-9º°,/ \u002D\u002E\u00A7\u2014]+)\\s*<a href=\"[A-Za-z0-9?/]+\">([A-Za-zçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ=\"!?0-9º°,/ \u002D\u002E\u00A7\u2014]+)*</a>\\s*([A-Za-zçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ=\"!?0-9º°,/ \u002D\u002E\u00A7\u2014]+)*\\s*<span>([A-Za-zçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ=\"!?0-9º°,/ \u002D\u002E\u00A7\u2014]+)*\\s*<a href=\"[A-Za-z0-9?/]+\">([A-Za-zçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ=\"!?0-9º°,/ \u002D\u002E\u00A7\u2014]+)</a>([A-Za-zçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ=\"!?0-9º°,/ \u002D\u002E\u00A7\u2014]+)\\s*</span>\\s*([A-Za-zçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ=\"!?0-9º°,/ \u002D\u002E\u00A7\u2014]+)\\s*([A-Za-zçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ=\"!?0-9º°,/ \u002D\u002E\u00A7\u2014]+)";
+		//\u00B2\u00B3\u00B7
+		String regexIdentificacao = "(DECRETO Nº)\\s*(\\d{2}.\\d{3}, (DE|DIA) \\d{1,2}(°|º)? DE [A-ZÇ]+ DE \\d{4}.)";
+		String regexTipoDecreto = "(Abre|Aloca|Altera|Amplia|Aprova|Autoriza|Atualiza|Concede|Convoca|Cria|Declara|Decreta|Define|Desativa|Disciplina|Dispõe|Eleva|Estabelece|Homologa|Incorpora|Institui|Interpreta|Introduz|Modifica|Promove|Prorroga|Qualifica|Redenomina|Regulamenta|Renova|Relaciona|Revoga|Transfere|Transforma)"
+				+ "([A-Za-z0-9çãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ\"\'\\(\\)!?&$%:;,º°ª \n\t/\u002E\u00A7\u002D]+)(O )?(GOVERNADOR|GOVERNO)";
+		String regexTipoDecreto2 = "(Abre|Aloca|Altera|Amplia|Aprova|Autoriza|Atualiza|Concede|Convoca|Cria|Declara|Decreta|Define|Desativa|Disciplina|Dispõe|Eleva|Estabelece|Homologa|Incorpora|Institui|Interpreta|Introduz|Modifica|Promove|Prorroga|Qualifica|Redenomina|Regulamenta|Renova|Relaciona|Revoga|Transfere|Transforma)"
+				+ "([A-Za-z0-9çãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ\"\'\\(\\)!?$%:;,º°ª \n\t/\u002E\u00A7\u002D]+)(O )?(PRESIDENTE DA ASSEMBLEIA LEGISLATIVA DO ESTADO DE PERNAMBUCO, NO EXERCÍCIO DO CARGO DE GOVERNADOR DO ESTADO)";
+		String regexAtribuicoes = "(O )?(GOVERNO DO ESTADO|GOVERNADOR DE ESTADO|GOVERNADOR DO ESTADO)([A-Za-zçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ\"\'!?$%&0-9:;º°ª\\(\\), \n\t/\u002E\u00A7\u002D]+)(CONSIDERANDO|DECRETA)";
+		String regexAtribuicoes2 = "(O )?(PRESIDENTE DA ASSEMBLEIA LEGISLATIVA)( DO ESTADO)?( DE PERNAMBUCO)([A-Za-zçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ\"!?$%0-9:;º°ª\\(\\), \n\t/\u002E\u00A7\u002D]+)(CONSIDERANDO|DECRETA)";
+		String regexConsideracoes = "(CONSIDERANDO)([A-Za-zçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ\"\'\\(\\)!?$%0-9:;º°ª, \n\t/\u002E\u00A7\u002D]+)(DECRETA)";
+		String regexCorpo = "(DECRETA)([A-Za-zçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ\"\'\\(\\)!?$%0-9:;º°ª, \n\t/\u002E\u00A7\u002D]+)(Palácio do Campo das Princesas)";
+		String regexFinalmentes = "(O )?(Palácio do Campo das Princesas)([A-Za-zçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ\"!?$%0-9:;º°ª, \n\t/\\(\\)\u002E\u00A7\u002D\u00B2\u00B3\u00B7]+)(Independência do Brasil\u002E)";
+		String regexAssinaturas = "([A-ZÂÃÁÀÉÊÍÓÔÕÚÇ \n\t]+)(Governador do Estado)( em exercício)?([A-ZÂÃÁÀÉÊÍÓÔÕÚÇ \n\t]+)(ANEXO)?";
 
 		//Padrões e Matchers
-		Pattern padrao1;
-		Pattern padrao2;
-		Pattern padrao3;
-		Pattern padrao4;
-		Pattern padrao5;
-		Pattern padrao6;
-		Matcher matcher1;
-		Matcher matcher2;
-		Matcher matcher3;
-		Matcher matcher4;
-		Matcher matcher5;
+		Pattern padraoIdentificacao = Pattern.compile(regexIdentificacao);
+		Pattern padraoTipoDecreto = Pattern.compile(regexTipoDecreto);
+		Pattern padraoTipoDecreto2 = Pattern.compile(regexTipoDecreto2);
+		Pattern padraoAtribuicoes = Pattern.compile(regexAtribuicoes);
+		Pattern padraoAtribuicoes2 = Pattern.compile(regexAtribuicoes2);
+		Pattern padraoConsideracoes = Pattern.compile(regexConsideracoes);
+		Pattern padraoCorpo = Pattern.compile(regexCorpo);
+		Pattern padraoFinalmentes = Pattern.compile(regexFinalmentes);
+		Pattern padraoAssinaturas = Pattern.compile(regexAssinaturas);
 
-		String dia, mes, ano;
-		String decretoFinal = "";
+		Matcher matcher;
+		Matcher matcherAuxiliar;
+
+		File arquivoRegexNaoCaptura = new File("regexNaoCaptura");
+		try {
+			arquivoRegexNaoCaptura.createNewFile();
+			fwarq = new FileWriter(arquivoRegexNaoCaptura);
+			bwarq = new BufferedWriter(fwarq);
+		} catch (IOException e1) {
+			System.out.println("Arquivo não criado.");
+		}
+
 		String decretoIntermediario = "";
-		String parteDecreto = "";
+		String decretoSaida = "";
 		String decreto;
 		String linha;
+
+
 		//AQUI COMEÇA A REMOÇÃO DA FORMATAÇÃO
-		for (int i = 0; i < caminhosDecretos.length; i++){
-			arquivoPasta = new File(caminhosDecretos[i] + pastaDestino);
-			//System.out.println(arquivoPasta);
+		for (int i = 0; i < anosDecretos.length; i++){
+			arquivoPasta = new File(caminhoDecretos + anosDecretos[i] + "\\" + pastaDestino);
+			System.out.println(arquivoPasta);
 			if (!arquivoPasta.exists()){ //Se pasta não existe, cria
 				arquivoPasta.mkdir();
 			}
-			padrao1 = Pattern.compile(padraoOGovernador);
-			padrao2 = Pattern.compile(padraoOGovernador2);
-			padrao3 = Pattern.compile(padraoOGovernador3);
-			padrao4 = Pattern.compile(regexTiposDecretos);
-			padrao5 = Pattern.compile(regexTiposDecretos2);
-			padrao6 = Pattern.compile(regexTiposDecretos3);
-			
+
+			//tem de add ativa ainda
+			contadorTiposDecreto.put("Abre", 0);
+			contadorTiposDecreto.put("Aloca", 0);
+			contadorTiposDecreto.put("Altera", 0);
+			contadorTiposDecreto.put("Amplia", 0);
+			contadorTiposDecreto.put("Aprova", 0);
+			contadorTiposDecreto.put("Autoriza", 0);
+			contadorTiposDecreto.put("Atualiza", 0);
+			contadorTiposDecreto.put("Concede", 0);
+			contadorTiposDecreto.put("Convoca", 0);
+			contadorTiposDecreto.put("Cria", 0);
+			contadorTiposDecreto.put("Declara", 0);
+			contadorTiposDecreto.put("Decreta", 0);
+			contadorTiposDecreto.put("Define", 0);
+			contadorTiposDecreto.put("Desativa", 0);
+			contadorTiposDecreto.put("Disciplina", 0);
+			contadorTiposDecreto.put("Dispõe", 0);
+			contadorTiposDecreto.put("Eleva", 0);
+			contadorTiposDecreto.put("Estabelece", 0);
+			contadorTiposDecreto.put("Homologa", 0);
+			contadorTiposDecreto.put("Incorpora", 0);
+			contadorTiposDecreto.put("Institui", 0);
+			contadorTiposDecreto.put("Interpreta", 0);
+			contadorTiposDecreto.put("Introduz", 0);
+			contadorTiposDecreto.put("Modifica", 0);
+			contadorTiposDecreto.put("Promove", 0);
+			contadorTiposDecreto.put("Prorroga", 0);
+			contadorTiposDecreto.put("Qualifica", 0);
+			contadorTiposDecreto.put("Redenomina", 0);
+			contadorTiposDecreto.put("Regulamenta", 0);
+			contadorTiposDecreto.put("Relaciona", 0);
+			contadorTiposDecreto.put("Renova", 0);
+			contadorTiposDecreto.put("Revoga", 0);
+			contadorTiposDecreto.put("Transfere", 0);
+			contadorTiposDecreto.put("Transforma", 0);
+
 			for (int j = 0; j < arquivos[i].length; j++){
 				nomeArquivo = (arquivos[i][j]).getName(); //obtém o nome do arquivo
-				//System.out.println(nomeArquivo);
+				System.out.println(nomeArquivo);
 				decreto = "";
 				//Arquivo de leitura a partir do caminhoTemporario (string)
 				try {
@@ -148,93 +174,122 @@ public class XMLizacao {
 					br.close();
 					fr.close();
 
-					//decreto = decreto.replaceAll("\u00C2\u00A0", " ");
-					for (int etapa = 0; etapa < 1; etapa++){
-						decretoIntermediario = decreto;
-						//matcher1 = padrao1.matcher(decretoIntermediario);
-						//matcher2 = padrao2.matcher(decretoIntermediario);
-						//matcher3 = padrao3.matcher(decretoIntermediario);
-						matcher4 = padrao4.matcher(decretoIntermediario);
-						matcher3 = padrao5.matcher(decretoIntermediario);
-						matcher5 = padrao6.matcher(decretoIntermediario);
+					decretoIntermediario = decreto;
 
-						//Se der match e não tiver entrado no if ainda, entre
-						if (matcher5.find()){
-							parteDecreto = matcher5.group(1) + matcher5.group(2);
-						System.out.println("entrou aqui PORRRRRRRRRS");
-						}
-						else if (matcher3.find()){
-							parteDecreto = matcher3.group(1) + matcher3.group(2);
-							if (matcher3.group(4) != null) parteDecreto = parteDecreto + matcher3.group(4);
-							if (matcher3.group(5) != null) parteDecreto = parteDecreto + matcher3.group(5);
-							if (matcher3.group(6) != null) parteDecreto = parteDecreto + matcher3.group(6);
-							parteDecreto = parteDecreto + matcher3.group(7);
-							contadorTiposArquivos.replace(matcher3.group(1), 
-									contadorTiposArquivos.get(matcher3.group(1)) + 1);
-							System.out.println(matcher3.group(1) + " " + contadorTiposArquivos.get(matcher3.group(1)));	
-						} else if (matcher4.find()){
-							parteDecreto = matcher4.group(1) + matcher4.group(2);
-							if (matcher4.group(5) != null) parteDecreto = parteDecreto + matcher4.group(5);
-							if (matcher4.group(6) != null) parteDecreto = parteDecreto + matcher4.group(6);
-							if (matcher4.group(7) != null) parteDecreto = parteDecreto + matcher4.group(7);
-
-							contadorTiposArquivos.replace(matcher4.group(1), 
-									contadorTiposArquivos.get(matcher4.group(1)) + 1);
-
-							System.out.println(matcher4.group(1) + " " + contadorTiposArquivos.get(matcher4.group(1)));
-
-						} 
-						else
-						{System.out.println(decretoIntermediario.substring(50, 500));}
-						/*
-						else if (matcher3.find() && etapa == 1){
-							System.out.println("allll");
-							parteDecreto = matcher3.group(1) + matcher3.group(2) +
-									matcher3.group(3) + matcher3.group(4) +
-									matcher3.group(5) + matcher3.group(6) +
-									matcher3.group(7) + matcher3.group(8) +
-									matcher3.group(9) + matcher3.group(10) +
-									matcher3.group(11) + matcher3.group(12) +
-									matcher3.group(13) + matcher3.group(14) +
-									matcher3.group(15);
-							System.out.println("0 babcao");
-						}
-						else if (matcher2.find() && etapa == 1) {
-							System.out.println("aqqqqq");
-							if (matcher2.group(1) != null) parteDecreto = "O ";
-							parteDecreto = parteDecreto + matcher2.group(2) + matcher2.group(3) +
-									matcher2.group(4) + matcher2.group(5) + matcher2.group(6) +
-									matcher2.group(7);
-
-							if (matcher2.group(9) != null) parteDecreto = parteDecreto + matcher2.group(9);
-							if (matcher2.group(10) != null) parteDecreto = parteDecreto + matcher2.group(10);
-							if (matcher2.group(12) != null) parteDecreto = parteDecreto + matcher2.group(12);
-							if (matcher2.group(13) != null) parteDecreto = parteDecreto + matcher2.group(13);
-							System.out.println("um babcao");
-						}else if (matcher1.find() && etapa == 1){
-							System.out.println("entrou nessa pora");
-							if (matcher1.group(1) != null) parteDecreto = "O ";
-							parteDecreto = parteDecreto +	matcher1.group(2);
-							if (matcher1.group(5) != null) parteDecreto = parteDecreto + matcher1.group(5);
-							if (matcher1.group(9) != null) parteDecreto = parteDecreto + matcher1.group(9);
-							if (matcher1.group(15) != null) parteDecreto = parteDecreto + matcher1.group(15);
-							if (matcher1.group(17) != null) parteDecreto = parteDecreto + matcher1.group(17);
-							if (matcher1.group(20) != null) parteDecreto = parteDecreto + matcher1.group(20);
-							if (matcher1.group(21) != null) parteDecreto = parteDecreto + matcher1.group(21);
-							if (matcher1.group(23) != null) parteDecreto = parteDecreto + matcher1.group(23);
-							if (matcher1.group(25)!= null){
-								if (matcher1.group(26) != null) parteDecreto = parteDecreto + matcher1.group(26);
-								if (matcher1.group(27) != null) parteDecreto = parteDecreto + matcher1.group(27);
-								if (matcher1.group(28) != null) parteDecreto = parteDecreto + matcher1.group(28);
-								if (matcher1.group(29) != null) parteDecreto = parteDecreto + matcher1.group(29);
-								if (matcher1.group(30) != null) parteDecreto = parteDecreto + matcher1.group(30);
-								if (matcher1.group(31) != null) parteDecreto = parteDecreto + matcher1.group(31);
-								if (matcher1.group(32) != null) parteDecreto = parteDecreto + matcher1.group(32);
-							}
-						}
-						 */	
+					matcher = padraoIdentificacao.matcher(decretoIntermediario);
+					if (matcher.find()){
+						decretoSaida += "<IDENTIFICACAO>" + 
+								matcher.group(1) + matcher.group(2) + "</IDENTIFICACAO>";
+					} else{
+						bwarq.write(i + "     " + nomeArquivo + "     " + "IDENTIFICACAO");
+						bwarq.newLine();
 					}
 
+					matcher = padraoTipoDecreto.matcher(decretoIntermediario);
+					matcherAuxiliar = padraoTipoDecreto2.matcher(decretoIntermediario);
+					if (matcherAuxiliar.find()){
+						decretoSaida += "<DESCRICAO>" +
+								matcherAuxiliar.group(1) + " " + matcherAuxiliar.group(2) + "<";
+						if (contadorTiposDecreto.containsKey(matcherAuxiliar.group(1))){
+							contadorTiposDecreto.put(matcherAuxiliar.group(1), contadorTiposDecreto.get(matcherAuxiliar.group(1)) + 1);
+						} else{
+							contadorTiposDecreto.put(matcherAuxiliar.group(1), 1);
+						}
+					} else if (matcher.find()){
+						decretoSaida += "<DESCRICAO>" +
+								matcher.group(1) + " " + matcher.group(2) + "<";
+
+						if (contadorTiposDecreto.containsKey(matcher.group(1))){
+							contadorTiposDecreto.put(matcher.group(1), contadorTiposDecreto.get(matcher.group(1)) + 1);
+						} else{
+							contadorTiposDecreto.put(matcher.group(1), 1);
+						}
+					} else{
+						bwarq.write(i + "     " + nomeArquivo + "     " + "DESCRICAO");
+						bwarq.newLine();
+					}
+
+					decretoSaida = decretoSaida.replaceFirst("O\\s*<", "");
+					decretoSaida = decretoSaida.trim();
+					decretoSaida += "</DESCRICAO>";
+
+					matcher = padraoAtribuicoes.matcher(decretoIntermediario);
+					matcherAuxiliar = padraoAtribuicoes2.matcher(decretoIntermediario);
+
+					decretoSaida += "<ATRIBUICAO>";
+					if (matcherAuxiliar.find()){
+						if (matcherAuxiliar.group(1) != null)
+							decretoSaida += matcherAuxiliar.group(1);
+						decretoSaida += matcherAuxiliar.group(2);
+						if (matcherAuxiliar.group(3) != null)
+							decretoSaida += matcherAuxiliar.group(3);
+						decretoSaida += matcherAuxiliar.group(4) + matcherAuxiliar.group(5);
+					} else if (matcher.find()){
+						if (matcher.group(1) != null)
+							decretoSaida += matcher.group(1);
+						decretoSaida += matcher.group(2) + matcher.group(3);
+					} else{
+						bwarq.write(i + "     " + nomeArquivo + "     " + "ATRIBUICAO");
+						bwarq.newLine();
+					}
+
+					decretoSaida = decretoSaida.trim();
+					decretoSaida += "</ATRIBUICAO>";
+
+					matcher = padraoConsideracoes.matcher(decretoIntermediario);
+					matcherAuxiliar = null;
+					if (matcher.find()){
+						decretoSaida += "<CONSIDERACOES>" + matcher.group(1) 
+								+ matcher.group(2) + "</CONSIDERACOES>";
+					} else if (decretoIntermediario.contains("CONSIDERANDO")){
+						bwarq.write(i + "     " + nomeArquivo + "     " + "CONSIDERACOES");
+						bwarq.newLine();
+					}
+
+					matcher = padraoCorpo.matcher(decretoIntermediario);
+					if (matcher.find()){
+						decretoSaida += "<CORPO>" + matcher.group(1)
+								+ matcher.group(2) + "</CORPO>";
+					} else{
+						bwarq.write(i + "     " + nomeArquivo + "     " + "CORPO");
+						bwarq.newLine();
+					}
+
+					matcher = padraoFinalmentes.matcher(decretoIntermediario);
+					if (matcher.find()){
+						decretoSaida += "<FINALMENTES>";
+						if (matcher.group(1) != null) decretoSaida +=  matcher.group(1).trim();
+						decretoSaida += matcher.group(2).trim() + " " + matcher.group(3).trim() + matcher.group(4).trim() +  "</FINALMENTES>";
+					} else{
+						bwarq.write(i + "     " + nomeArquivo + "     " + "FINALMENTES");
+						bwarq.newLine();
+					}
+
+					matcher = padraoAssinaturas.matcher(decretoIntermediario);
+					if (matcher.find()){
+						decretoSaida += "<ASSINATURAS>" + matcher.group(1).trim()
+								+ matcher.group(2).trim();
+						if (matcher.group(3) != null) decretoSaida += matcher.group(3);
+						decretoSaida +=  matcher.group(4) + "</ASSINATURAS>";
+					} else{
+						bwarq.write(i + "     " + nomeArquivo + "     " + "ASSINATURAS");
+						bwarq.newLine();
+					}
+
+					decretoSaida = decretoSaida.replaceAll("\t", "");
+					decretoSaida = decretoSaida.replaceAll("\u0020,", ",");
+
+					File a = new File("decretos" + anosDecretos[i]);
+					a.createNewFile();
+					fw = new FileWriter(a);
+					bw = new BufferedWriter(fw);
+					List<String> contador = new ArrayList<>(contadorTiposDecreto.keySet());
+					for (int v = 0; v < contador.size(); v++){	
+						bw.write(contador.get(v) + "    " + contadorTiposDecreto.get(contador.get(v)));
+						bw.newLine();
+					}
+					bw.flush();
+					bw.close();
 
 				} catch (FileNotFoundException e) {
 					// TODO Auto-generated catch block
@@ -244,13 +299,10 @@ public class XMLizacao {
 					e.printStackTrace();
 				}
 
-
-				//decreto = decreto.replaceAll("(\u0009)+", "\n\t");
-
 				try {
 					fw = new FileWriter(new File(arquivoPasta + "\\\\" + nomeArquivo));
 					bw = new BufferedWriter(fw);
-					bw.write(parteDecreto);
+					bw.write(decretoSaida);
 					bw.flush();
 					bw.close();
 				} catch (IOException e) {
@@ -258,10 +310,17 @@ public class XMLizacao {
 					e.printStackTrace();
 				}
 
-				//System.out.println(i + " " + j + " foi xmlizado");
-				parteDecreto = "";
+				decretoSaida = "";
 			}
 		}
+
+		try {
+			bwarq.flush();
+			bwarq.close();
+		} catch (IOException e) {
+			System.out.println("Erro no fechamento do streaming.");
+		}
+
 
 	}
 

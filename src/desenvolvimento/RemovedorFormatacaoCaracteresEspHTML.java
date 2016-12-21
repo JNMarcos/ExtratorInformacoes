@@ -12,6 +12,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
+
 /**
  * @author JN
  *
@@ -60,8 +61,8 @@ public class RemovedorFormatacaoCaracteresEspHTML {
 		BufferedWriter bw;
 		
 		//Regex principais
-		String removerTagAbertura = "<(a( href=\"[A-Za-z0-9:?/%]+\")?|b|p|span|strong|br|form|body|head|div)>";
-		String removerTagFim = "</(a|b|p|span|strong|br|form|body|head|div)>";
+		String removerTagAbertura = "<(a( href=\"[A-Za-z0-9:?/\\$%\u00A7_]+\")?|b|p|u|i|sup|em|span|strong|br|form|body|head|div)>";
+		String removerTagFim = "</(a|b|p|u|i|sup|em|span|strong|br|form|body|head|div)>";
 		
 		//AQUI COMEÇA A REMOÇÃO DA FORMATAÇÃO
 		for (int i = 0; i < caminhosDecretos.length; i++){
@@ -96,6 +97,7 @@ public class RemovedorFormatacaoCaracteresEspHTML {
 					e.printStackTrace();
 				}
 				
+				decreto = decreto.replaceAll("Â", "");
 				decreto = decreto.replaceAll("&aacute;", "á");
 				decreto = decreto.replaceAll("&eacute;", "é");
 				decreto = decreto.replaceAll("&iacute;", "í");
@@ -134,13 +136,20 @@ public class RemovedorFormatacaoCaracteresEspHTML {
 				decreto = decreto.replaceAll("&deg;", "°");
 				decreto = decreto.replaceAll("&ndash;", "-");
 				decreto = decreto.replaceAll("&mdash;", "-");
+				decreto = decreto.replaceAll("&amp;", "&");
+				decreto = decreto.replaceAll("&middot;", "\u00B7");
 				decreto = decreto.replaceAll("&sup2;","\u00B2");
 				decreto = decreto.replaceAll("&sup3;","\u00B3");
 				decreto = decreto.replaceAll("&sect;","\u00A7");
+				decreto = decreto.replaceAll("GVERNO|GPVERNO", "GOVERNO");
+				
 				
 				decreto = decreto.replaceAll(removerTagAbertura, "");
 				decreto = decreto.replaceAll(removerTagFim, "");
-				
+				decreto = decreto.replaceAll("\t", "");
+				decreto = decreto.replaceAll("( )+,", ",");
+				decreto = decreto.replaceAll(" ", " ");
+				decreto = decreto.trim();
 					
 				try {
 					fw = new FileWriter(new File(arquivoPasta + "\\\\" + nomeArquivo));
