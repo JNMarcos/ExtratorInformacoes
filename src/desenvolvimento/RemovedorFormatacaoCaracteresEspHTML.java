@@ -11,7 +11,8 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
 
 /**
  * @author JN
@@ -24,7 +25,7 @@ public class RemovedorFormatacaoCaracteresEspHTML {
 	 */
 	public static void main(String[] args) {
 		String pastaDestino = "semFormatação";
-		String pastaOrigem = "tagsReduzidas";
+		String pastaOrigem = "tagsEliminadas";
 		String nomeArquivo;
 		String decreto;
 		String linha;
@@ -53,17 +54,17 @@ public class RemovedorFormatacaoCaracteresEspHTML {
 			});
 			System.out.println(arquivos[i]);
 		}
-		
+
 		//Buffer
 		FileReader fr;
 		BufferedReader br;
 		FileWriter fw;
 		BufferedWriter bw;
-		
-		//Regex principais
-		String removerTagAbertura = "<(a( href=\"[A-Za-z0-9:?/\\$%\u00A7_]+\")?|b|p|u|i|sup|em|span|strong|br|form|body|head|div)>";
-		String removerTagFim = "</(a|b|p|u|i|sup|em|span|strong|br|form|body|head|div)>";
-		
+
+		Pattern padrao;
+		Matcher matcher;
+
+		String substituirPor;
 		//AQUI COMEÇA A REMOÇÃO DA FORMATAÇÃO
 		for (int i = 0; i < caminhosDecretos.length; i++){
 			arquivoPasta = new File(caminhosDecretos[i] + pastaDestino);
@@ -81,12 +82,12 @@ public class RemovedorFormatacaoCaracteresEspHTML {
 					br = new BufferedReader(fr);
 
 					linha = br.readLine();
-					
+
 					while(linha != null){
 						decreto = decreto + " " + linha;
 						linha = br.readLine();
 					}
-					
+
 					br.close();
 					fr.close();
 				} catch (FileNotFoundException e) {
@@ -96,7 +97,8 @@ public class RemovedorFormatacaoCaracteresEspHTML {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				
+
+				//substituição de símbolos (letras)
 				decreto = decreto.replaceAll("Â", "");
 				decreto = decreto.replaceAll("&aacute;", "á");
 				decreto = decreto.replaceAll("&eacute;", "é");
@@ -124,7 +126,8 @@ public class RemovedorFormatacaoCaracteresEspHTML {
 				decreto = decreto.replaceAll("&Ccedil;", "Ç");
 				decreto = decreto.replaceAll("&uuml;", "u");//u com trema
 				decreto = decreto.replaceAll("&Uuml;;", "U");
-				
+
+				//substituição de símbolos (sinais)
 				decreto = decreto.replaceAll("&nbsp;", " ");
 				decreto = decreto.replaceAll("&quot;", "\"");
 				decreto = decreto.replaceAll("&ldquo;", "\"");
@@ -136,21 +139,80 @@ public class RemovedorFormatacaoCaracteresEspHTML {
 				decreto = decreto.replaceAll("&deg;", "°");
 				decreto = decreto.replaceAll("&ndash;", "-");
 				decreto = decreto.replaceAll("&mdash;", "-");
+				decreto = decreto.replaceAll("&sect;","§");
+				decreto = decreto.replaceAll("\u2033", "\"");
+				decreto = decreto.replaceAll("&acute; ", "\'");
 				decreto = decreto.replaceAll("&amp;", "&");
-				decreto = decreto.replaceAll("&middot;", "\u00B7");
-				decreto = decreto.replaceAll("&sup2;","\u00B2");
-				decreto = decreto.replaceAll("&sup3;","\u00B3");
-				decreto = decreto.replaceAll("&sect;","\u00A7");
-				decreto = decreto.replaceAll("GVERNO|GPVERNO", "GOVERNO");
-				
-				
-				decreto = decreto.replaceAll(removerTagAbertura, "");
-				decreto = decreto.replaceAll(removerTagFim, "");
-				decreto = decreto.replaceAll("\t", "");
-				decreto = decreto.replaceAll("( )+,", ",");
+				decreto = decreto.replaceAll("&hellip;", ".");
+				decreto = decreto.replaceAll("ï¬?", "fi");
 				decreto = decreto.replaceAll(" ", " ");
+
+
+				//conserta a numeração do decreto
+				
+				padrao = Pattern.compile("(\\d{2,3})\\.\\s+(\\d{3})[^º]");
+				matcher = padrao.matcher(decreto);
+				if (matcher.find()){
+					//System.out.println(nomeArquivo + "  numeracaoDecreto" + "   "+ matcher.group(1) + matcher.group(2));
+					substituirPor = matcher.group(1) + "." + matcher.group(2);
+					decreto = decreto.replaceFirst("\\d{2,3}\\.\\s+(\\d{3})[^º]", substituirPor);
+				}
+
+				/*
+				padrao = Pattern.compile("(\\d|º)+\\s{2,}(\\w|\\d)");
+				matcher = padrao.matcher(decreto);
+
+				while (matcher.find()){
+					System.out.println(nomeArquivo + "  espaçamento");
+					substituirPor = matcher.group(1) + " " + matcher.group(2);
+					decreto = decreto.replaceFirst("(\\d|°)+\\s{2,}(\\w|\\d)", substituirPor);	
+				}
+*/
+				//remove interrogação quando estiver entre letras. ? proveniente de erro durante a conversão anterior
+				padrao = Pattern.compile("(\\w)\\Q?\\E(\\w)");
+				matcher = padrao.matcher(decreto);
+
+				if (matcher.find()){
+					//System.out.println(nomeArquivo + "  ?");
+					substituirPor = matcher.group(1) + matcher.group(2);
+					decreto = decreto.replaceFirst("\\w\\Q?\\E\\w", substituirPor);	
+				}
+				String[] partes = decreto.split("Palácio do Campo das Princesas");
+
+				padrao = Pattern.compile("( ){2,}(\\w)");
+				
+				for (int k = 0; k < partes.length && k != 1; k++){
+					matcher = padrao.matcher(partes[k]);
+					while (matcher.find()){
+						//System.out.println(nomeArquivo + "  espaço letra");
+						substituirPor = " " + matcher.group(2);
+						partes[k] = partes[k].replaceFirst("( ){2,}(\\w)", substituirPor);
+					}
+				}
+
+				decreto = partes[0];
+				for (int k = 1; k < partes.length; k++){
+					decreto += "Palácio do Campo das Princesas" + partes[k]; 
+				}
+
+
+				//correção de formatação
+				decreto = decreto.replaceFirst("\\s{2,}DE", " DE");	
+				//decreto = decreto.replaceAll("(<\\w{1,6}>\\s*)?(<\\w{1,6}>\\s*)?<\\w{1,6}>\\s*</\\w{1,6}>(\\s*</\\w{1,6}>)?(\\s*</\\w{1,6}>)?", "");				
+				decreto = decreto.replaceAll("( )+,", ",");
+				decreto = decreto.replaceAll("( )+\\.", ".");
 				decreto = decreto.trim();
-					
+
+				//correção de palavras
+				decreto = decreto.replaceAll("A( )+tiva", "Ativa");
+				decreto = decreto.replaceAll("CON S I D E R AN DO", "CONSIDERANDO");
+				decreto = decreto.replaceAll("GVERNO|GPVERNO", "GOVERNO");
+				decreto = decreto.replaceAll("GVERNADOR", "GOVERNADOR");
+				decreto = decreto.replaceAll("O G O VER N ADOR DO E S T ADO", "O GOVERNADOR DO ESTADO");
+				decreto = decreto.replaceAll("D\\s*E\\s*C\\s*R\\s*E\\s*T\\s*A", "DECRETA");
+				decreto = decreto.replaceAll("SETMBRO", "SETEMBRO");
+
+
 				try {
 					fw = new FileWriter(new File(arquivoPasta + "\\\\" + nomeArquivo));
 					bw = new BufferedWriter(fw);
@@ -161,9 +223,9 @@ public class RemovedorFormatacaoCaracteresEspHTML {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				
-				System.out.println(i + "   " + j + " foi limpo");
-				
+
+				System.out.println(nomeArquivo + " foi limpo");
+
 			}
 		}
 	}

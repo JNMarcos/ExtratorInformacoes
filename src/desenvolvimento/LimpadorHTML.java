@@ -41,7 +41,6 @@ public class LimpadorHTML {
 		meses.put("janeiro", "01");
 		meses.put("fevereiro", "02");
 		meses.put("março", "03");
-		meses.put("mar&ccedil;o", "03");//variação usada para março pois o html após a segunda limpeza está usando a "notação" &algumacoisa; para caracteres fora do ASCII
 		meses.put("abril", "04");
 		meses.put("maio", "05");
 		meses.put("junho", "06");
@@ -69,7 +68,7 @@ public class LimpadorHTML {
 
 		//Strings que contém (parte do) endereço de um arquivo 
 		String caminhoPasta;
-		String caminhoInicio = "tagsReduzidas\\";//Parte final do endereço que conterá em cada pasta em caminhosDecreto os arquivos limpos 
+		String caminhoInicio = "tagsEliminadas\\";//Parte final do endereço que conterá em cada pasta em caminhosDecreto os arquivos limpos 
 		String complementoFinal = ".html";
 		String caminhoComplemento;
 		String caminho; // caminho = caminhoInicio + caminhoComplemento + caminhoFinal
@@ -97,22 +96,28 @@ public class LimpadorHTML {
 		TagNode tagNode;
 		
 		//Lista de padrões em regex usados 
+		/*
 		String padraoRemoverDivVazio = "<div>\\W*</div>";
 		String padraoRemoverSpanVazio = "<span>\\W*</span>";
 		String padraoRemoverAVazio = "<a\\W+href=[A-Za-z0-9\\./:\"#?!=&;]*>\\W*</a>";
 		String padraoRemoverPVazio = "<p>\\W*</p>";
 		String padraoRemoverBVazio = "<b>\\W*</b>";
 		String padraoRemoverIVazio = "<i>\\W*</i>";
+		
+		String padraoRemoverTagsRemanescentes = "<\\w*\\s*\\w*>\\s*(<\\w*\\s*\\w*>\\s*</\\w*>)*\\s*</\\w*>";
+		String padraoRemoverAlgunsBRs = "<br />\\s*<div>\\s*</div>\\s*<br />";
+		
+		String padraoRemoverInicio = "\\s*<div>\\s*<br />\\s*<br />\\s*<div>\\s*<div>\\s*<div>";
+		*/
 		String padraoRemoverDivExibindoTexto = "<div>\\W*Exibindo\\W*<span>Texto\\s+[(A-Za-zíÍ &;]*</span>\\s*</div>";
 		String padraoRemoverDivInforme = "<div>\\W*Informe\\s*(<a .*>aqui</a>)[a-zA-Z ;&\t]*(</div>)";
 		String padraoRemoverPClique = "<p>[A-Za-z; \n\t\r\0\\&\\.,]*<br />[A-Za-z; \n\t\r\0\\&\\.,]*<br />\\s*<br />\\s*</p>";
 		String padraoRemoverDivLinks = "<div>\\W*(<a\\W+href=[A-Za-z0-9\\./:\"=?!#&;]*>[a-zA-z \\.\t]*</a>\\s*\\|?\\s*)+</div>";
-		String padraoRemoverTagsRemanescentes = "<\\w*\\s*\\w*>\\s*(<\\w*\\s*\\w*>\\s*</\\w*>)*\\s*</\\w*>";
-		String padraoRemoverAlgunsBRs = "<br />\\s*<div>\\s*</div>\\s*<br />";
 		String padraoRemoverFinalPagina = "<div>\\s*<p>\\s*Este.*";
-		String padraoRemoverInicio = "\\s*<div>\\s*<br />\\s*<br />\\s*<div>\\s*<div>\\s*<div>";
-		String padraoNumeroDecreto = "DECRETO\\s*.*\\s*(\\d{2,3})\\s*\\.\\s*(\\d{3})\\s*.?\\s*(</b>)?\\s*(<b>)?.?\\s*(DE|DIA)(&nbsp;)*\\s*(\\d{1,2})[a-zA-Z&;º°]*\\s*DE\\s*([A-Za-z&Çç;]*) ?\\s*DE\\s*(\\d{4})";
-		
+		String removerTagAbertura = "<(a( href=\"[A-Za-z0-9\\Q:?/\\$%\\E\u00A7_#\u002D\u002E\u00A0]+\")?|b|p|u|i|sup|em|span|strong|br|br /|form|body|head|div|h(1|2|3|4|5|6))>";
+		String removerTagFim = "</(a|b|p|u|i|sup|em|span|strong|br|form|body|head|div|h(1|2|3|4|5|6))>";
+		String padraoNumeroDecreto = "DECRETO\\s*.*\\s*(\\d{2,3})\\s*\\.\\s*(\\d{3})\\s*.?\\s*(</b>)?\\s*(<b>)?.?\\s+(DE|DIA)(&nbsp;)*\\s+(\\d{1,2})[a-zA-Z&;º°]*\\s+DE\\s+([A-Za-z&Çç;]+)( )*\\s*DE\\s+(\\d{4})";
+
 		//Compilação do padrão e definição de um Matcher
 		Pattern padraoNumDataDecreto = Pattern.compile(padraoNumeroDecreto);
 		Matcher matcher;
@@ -156,7 +161,7 @@ public class LimpadorHTML {
 			contadorArquivosLimpos = 0;
 			contadorArquivosDuplicados = 0;
 			
-			System.out.println("Arquivos maiores ou duplicados da pasta: " + caminhoPasta);
+			System.out.println("Arquivos maiores ou duplicados da pasta: " + caminhosDecretos);
 			p = new File(caminhoPasta);
 			if (!p.exists()){ //Se pasta não existe, cria
 				p.mkdir();
@@ -223,23 +228,29 @@ public class LimpadorHTML {
 						if (matcher.find() && jaPassou == false) {
 							jaPassou = true;
 							mes = matcher.group(8);
+							if (mes.contains("&nbsp;"))
+								mes = mes.replaceFirst("&nbsp;", "");
+							else if (mes.contains("&Ccedil;"))
+								mes = mes.replaceFirst("&Ccedil;", "Ç");
+							else if (mes.equals("SETMBRO"))
+								mes = "SETEMBRO";
 							mes = mes.trim();
 							mes = mes.toLowerCase();
 							mes = meses.get(mes);
 							dia = matcher.group(7);
 							
-							//Se tamanho da string dia for menor que 1, adicione um zero à frente
+							//Se tamanho da string dia for igual a 1, adicione um zero à frente
 							if (dia.length() == 1){
 								dia = "0" + dia;
 							}
 							
 							//Contrução do caminho complemento, que define o nome do arquivo na pasta
-							//O padrão usado é D_NO.DEC_DDMMAAAA
+							//O padrão usado é D_NO.DEC_DD-MM-AAAA
 							//Onde NO.DEC: Número do decreto
-							//E DDMMAAAA: Data de publicação
+							//E DD-MM-AAAA: Data de publicação
 							caminhoComplemento = caminhoComplemento +
 									matcher.group(1) + "." + matcher.group(2) + "_"
-									+ dia + mes + matcher.group(9);
+									+ dia + "-" + mes + "-" + matcher.group(10);
 							//System.out.println("\n"+caminhoComplemento);
 						}
 						linha = br.readLine();
@@ -261,6 +272,7 @@ public class LimpadorHTML {
 						System.out.println("!!DUPLICADO!! " + arquivoAtual.getName() + " !!DUPLICADO!!");
 						System.out.println("Caminho que os dados foram escritos: "  + caminho + "Arquivo N°: " + contadorArquivosLimpos);
 						contadorArquivosDuplicados++;
+						continue;
 					}
 
 					//criando os fluxos de escrita
@@ -268,11 +280,9 @@ public class LimpadorHTML {
 					bw = new BufferedWriter(fw);
 
 					//Remoção das tags residuais
+					/*
 					decreto = decreto.replaceAll(padraoRemoverAVazio, "");
-					decreto = decreto.replaceAll(padraoRemoverDivLinks, "");
-					decreto = decreto.replaceFirst(padraoRemoverDivInforme, "");
-					decreto = decreto.replaceAll(padraoRemoverDivExibindoTexto, "");
-					decreto = decreto.replaceFirst(padraoRemoverPClique, "");
+					
 					decreto = decreto.replaceAll(padraoRemoverPVazio, "");
 					decreto = decreto.replaceAll(padraoRemoverSpanVazio, "");
 					decreto = decreto.replaceAll(padraoRemoverBVazio, "");
@@ -280,13 +290,21 @@ public class LimpadorHTML {
 					decreto = decreto.replaceAll(padraoRemoverDivVazio, "");
 					decreto = decreto.replaceAll(padraoRemoverTagsRemanescentes, "");
 					decreto = decreto.replaceFirst(padraoRemoverAlgunsBRs, "");
-					decreto = decreto.replaceFirst(padraoRemoverFinalPagina, "");
+					
 					decreto = decreto.replaceFirst(padraoRemoverInicio, "");
+					*/
+					decreto = decreto.replaceAll(padraoRemoverDivLinks, "");
+					decreto = decreto.replaceFirst(padraoRemoverDivInforme, "");
+					decreto = decreto.replaceAll(padraoRemoverDivExibindoTexto, "");
+					decreto = decreto.replaceFirst(padraoRemoverPClique, "");
+					decreto = decreto.replaceFirst(padraoRemoverFinalPagina, "");
+					decreto = decreto.replaceAll(removerTagAbertura, "");
+					decreto = decreto.replaceAll(removerTagFim, "");
+					decreto = decreto.replaceAll("\t", "");
+					decreto = decreto.trim();
 					
 					//Escreve o decreto
-					bw.write("<head></head>");
 					bw.write(decreto);
-					bw.write("</form> </body>");
 					
 					//Encerra o fluxo de dados
 					bw.flush();
@@ -300,6 +318,7 @@ public class LimpadorHTML {
 					System.out.println("\n" + "Vixe, deu um erro inseperado. Contate o suporte.");
 				}		
 			}
+			
 			//COMENTE OS PRINTLNs A SEGUIR CASO NÃO QUEIRA VER O RESUMO DA LIMPEZA NAS PASTAS
 			System.out.println("Para a pasta: " + caminhoPasta);
 			System.out.println("Número de arquivos na pasta: " + arquivos[i].length);
