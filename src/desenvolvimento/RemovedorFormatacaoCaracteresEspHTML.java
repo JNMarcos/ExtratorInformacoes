@@ -201,6 +201,7 @@ public class RemovedorFormatacaoCaracteresEspHTML {
 				//decreto = decreto.replaceAll("(<\\w{1,6}>\\s*)?(<\\w{1,6}>\\s*)?<\\w{1,6}>\\s*</\\w{1,6}>(\\s*</\\w{1,6}>)?(\\s*</\\w{1,6}>)?", "");				
 				decreto = decreto.replaceAll("( )+,", ",");
 				decreto = decreto.replaceAll("( )+\\.", ".");
+				decreto = decreto.replaceAll("( )+;", ";");
 				decreto = decreto.trim();
 
 				//correção de palavras

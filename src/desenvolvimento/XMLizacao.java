@@ -93,8 +93,8 @@ public class XMLizacao {
 
 		String regexConsiderando = "<CONSIDERACOES>([0-9A-Za-zÁ„‡·‚ÈÍÌÛÙı˙¬√¡¿… Õ”‘’⁄«\"\'\\Q()!?&$ß%:@#;/,∫∞™.<>-_\\\\E \n\t\u00A7\u002D]+)</CONSIDERACOES>";
 		String regexAssinatura = "<ASSINATURAS>([0-9A-Za-zÁ„‡·‚ÈÍÌÛÙı˙¬√¡¿… Õ”‘’⁄«\"\'\\Q()!?&$ß%:@#;/,∫∞™.<>-_\\\\E \n\t\u00A7\u002D]+)</ASSINATURAS>";
-		String regexLeis = "( Decreto| \\QDecreto-Lei\\E| Lei Federal| Lei Complementar| Lei| ResoluÁ„o)( n∫ (\\d{2,3}\\.\\d{3}|\\d{3}), de (\\d{1,2}) de ([a-zÁA-Z«]{4,9}) de (\\d{4}))( da ConstituiÁ„o Estadual)?";
-		String regexAnexo = "<ANEXOS>([0-9A-Za-zÁ„‡·‚ÈÍÌÛÙı˙¬√¡¿… Õ”‘’⁄«\"\'\\Q()!?&$ß%:@#;/,∫∞™.<>-_\\\\E \n\t\u00A7\u002D]+)</ANEXOS>";
+		String regexLeis = "( Decreto| \\QDecreto-Lei\\E| Decreto Lei| Decreto Lei Federal| Decreto-Lei Federal| Lei Federal| Lei Complementar| Lei| ResoluÁ„o| Emenda Constitucional| Ad Referendum| OfÌcio| Parecer| Parecer Conjunto| Portaria Conjunta| Portaria)( (n∫|n∞) (\\d{1,3}\\.\\d{3}|\\d{3}|\\d{2}|\\d{2,4}/([A-Z /-]{0,16}) \\d{2,4} [A-Z/ -]{0,8}), (de (\\d{1,2}) de ([a-zÁA-Z«]{4,9}) de (\\d{4}))?)( da ConstituiÁ„o Estadual)?";
+		String regexAnexo = "<ANEXOS>([0-9A-Za-zÁ„‡·‚ÈÍÌÛÙı˙¬√¡¿… Õ”‘’⁄«\"\'\\Q(!?)&$ß%:@#;/,∫∞™.<>-_\\\\E \n\t\u00A7\u002D]+)</ANEXOS>";
 		
 		//Padrıes e Matchers
 		Pattern padraoIdentificacao = Pattern.compile(regexIdentificacao);
@@ -130,7 +130,17 @@ public class XMLizacao {
 		tiposDocumentos.put("Lei Federal", "LF");
 		tiposDocumentos.put("Decreto", "DE");
 		tiposDocumentos.put("Decreto-Lei", "DL");
+		tiposDocumentos.put("Decreto Lei", "DL");
+		tiposDocumentos.put("Decreto-Lei Federal", "DLF");
+		tiposDocumentos.put("Decreto Lei Federal", "DLF");
 		tiposDocumentos.put("ResoluÁ„o", "RE");
+		tiposDocumentos.put("Emenda Constitucional", "EC");
+		tiposDocumentos.put("Ad Referendum", "AR");
+		tiposDocumentos.put("OfÌcio", "OF");
+		tiposDocumentos.put("Parecer", "PAR");
+		tiposDocumentos.put("Parecer  Conjunto", "PC");
+		tiposDocumentos.put("Portaria", "Pt");
+		tiposDocumentos.put("Portaria  Conjunta", "PtC");
 
 		Hashtable<String, String> numeracaoMeses = new Hashtable<>();
 		numeracaoMeses.put("janeiro", "01");
@@ -404,11 +414,11 @@ public class XMLizacao {
 					String[] segmentosConsAss;
 					if (matcher.find()){
 						entreTags = matcher.group(1);
-						segmentosConsAss = entreTags.split("  CONSIDERANDO");
+						segmentosConsAss = entreTags.split("( )+CONSIDERANDO");
 						textoModificado = "";
 						for (int k = 0; k < segmentosConsAss.length; k++){
 							if (k != 0)
-								textoModificado += "<CONSIDERANDO>" + "CONSIDERANDO "+ segmentosConsAss[k].trim() + "</CONSIDERANDO>";
+								textoModificado += "<CONSIDERANDO>" + ("CONSIDERANDO" + segmentosConsAss[k]).trim() + "</CONSIDERANDO>";
 							else
 								textoModificado += "<CONSIDERANDO>" + segmentosConsAss[k].trim() + "</CONSIDERANDO>";
 						}
@@ -420,11 +430,12 @@ public class XMLizacao {
 						entreTags = matcher.group(1);
 						segmentosConsAss = entreTags.split("( ){2,}");
 						textoModificado = "";
-						for (int k = 0; k < segmentosConsAss.length; k++){
+						textoModificado += "<ASSINATURA_GOV>" + segmentosConsAss[0].trim() + "</ASSINATURA_GOV>";
+						for (int k = 1; k < segmentosConsAss.length; k++){
 							//System.out.println(segmentosConsAss[k]);
 							textoModificado += "<ASSINATURA>" + segmentosConsAss[k].trim() + "</ASSINATURA>";
 						}
-						decretoSaida = decretoSaida.replaceFirst(entreTags, textoModificado);
+						decretoSaida = decretoSaida.replace(entreTags, textoModificado);
 					}
 
 					matcher = padraoLeis.matcher(decretoSaida);
@@ -432,10 +443,12 @@ public class XMLizacao {
 					while (matcher.find()){
 						entreTags = matcher.group(0);
 						//System.out.println(entreTags);
-						textoModificado = " <" +  tiposDocumentos.get(matcher.group(1).trim())+ " numeracao=" + matcher.group(3) + 
-								" data=" + matcher.group(4)+ "-" + numeracaoMeses.get(matcher.group(5).toLowerCase()) + "-" + matcher.group(6)+ ">" +
-								matcher.group(0).trim() + "</" + tiposDocumentos.get(matcher.group(1).trim()) + ">";
-						decretoSaida = decretoSaida.replaceFirst(entreTags, textoModificado);
+						textoModificado = " <" +  tiposDocumentos.get(matcher.group(1).trim())+ " numeracao=" + matcher.group(4);
+						if (matcher.group(6) != null){
+								textoModificado += " data=" + matcher.group(7)+ "-" + numeracaoMeses.get(matcher.group(8).toLowerCase()) + "-" + matcher.group(9);
+						}
+						textoModificado+= ">" + 	matcher.group(0).trim() + "</" + tiposDocumentos.get(matcher.group(1).trim()) + ">";
+						decretoSaida = decretoSaida.replace(entreTags, textoModificado);
 					}
 
 					//T¡ DANDO ERRO AQUI
@@ -445,19 +458,29 @@ public class XMLizacao {
 					if (matcher.find()){
 						entreTags = matcher.group(1);
 						if (entreTags.startsWith("ANEXO ⁄NICO")){
-							System.out.println(entreTags.trim());
-							textoModificado = "<ANEXO>" + entreTags + "</ANEXO>";
-							decretoSaida = decretoSaida.replaceFirst(matcher.group(1), textoModificado);
+							System.out.println(entreTags);
+							if (entreTags.contains("MEMORIAL DESCRITIVO"))
+								textoModificado = "<MEMO>" + entreTags + "</MEMO>";
+							else if (entreTags.contains("table"))
+								textoModificado = "<TABELA>" + entreTags + "</TABELA>";
+							else
+								textoModificado = "<OUTRO>" + entreTags + "</OUTRO>";
+							decretoSaida = decretoSaida.replace(entreTags, textoModificado);
 						} else {
 							segmentosConsAss = entreTags.split("ANEXO [IVX]{1,3}");
-							for (int k = 0; k < segmentosConsAss.length; k++){
-								textoModificado += "<ANEXO>" + segmentosConsAss[k].trim() + "</ANEXO>";
+							
+							for (int k = 1; k < segmentosConsAss.length; k++){
+								if (entreTags.contains("MEMORIAL DESCRITIVO"))
+									textoModificado += "<MEMO>" + "ANEXO " + k + segmentosConsAss[k].trim() + "</MEMO>";
+								else if (entreTags.contains("table"))
+									textoModificado += "<TABELAS>" + "ANEXO " + k + segmentosConsAss[k].trim() + "</TABELAS>";
+								else
+									textoModificado += "<OUTRO>" + "ANEXO " + k + segmentosConsAss[k].trim() + "</OUTRO>";
 							}
-							decretoSaida = decretoSaida.replaceFirst(entreTags, textoModificado);
+							decretoSaida = decretoSaida.replace(entreTags, textoModificado);
 						}
 					}
 					
-					//decretoSaida = decretoSaida.replaceAll("\u0020,", ",");
 					decretoSaida = decretoSaida.replaceAll("&middot;", "\u00B7");
 					decretoSaida = decretoSaida.replaceAll("&sup2;","\u00B2");
 					decretoSaida = decretoSaida.replaceAll("&sup3;","\u00B3");
