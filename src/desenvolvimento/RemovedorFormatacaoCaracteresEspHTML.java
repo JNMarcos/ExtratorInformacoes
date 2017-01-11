@@ -150,24 +150,14 @@ public class RemovedorFormatacaoCaracteresEspHTML {
 
 				//conserta a numeração do decreto
 				
-				padrao = Pattern.compile("(\\d{2,3})\\.\\s+(\\d{3})[^º]");
+				padrao = Pattern.compile("(\\d{2,3})\\s*\\.\\s+(\\d{3})[^º]");
 				matcher = padrao.matcher(decreto);
 				if (matcher.find()){
 					//System.out.println(nomeArquivo + "  numeracaoDecreto" + "   "+ matcher.group(1) + matcher.group(2));
 					substituirPor = matcher.group(1) + "." + matcher.group(2);
-					decreto = decreto.replaceFirst("\\d{2,3}\\.\\s+(\\d{3})[^º]", substituirPor);
+					decreto = decreto.replaceFirst("\\d{2,3}\\s*\\.\\s+(\\d{3})[^º]", substituirPor);
 				}
 
-				/*
-				padrao = Pattern.compile("(\\d|º)+\\s{2,}(\\w|\\d)");
-				matcher = padrao.matcher(decreto);
-
-				while (matcher.find()){
-					System.out.println(nomeArquivo + "  espaçamento");
-					substituirPor = matcher.group(1) + " " + matcher.group(2);
-					decreto = decreto.replaceFirst("(\\d|°)+\\s{2,}(\\w|\\d)", substituirPor);	
-				}
-*/
 				//remove interrogação quando estiver entre letras. ? proveniente de erro durante a conversão anterior
 				padrao = Pattern.compile("(\\w)\\Q?\\E(\\w)");
 				matcher = padrao.matcher(decreto);
@@ -195,10 +185,17 @@ public class RemovedorFormatacaoCaracteresEspHTML {
 					decreto += "Palácio do Campo das Princesas" + partes[k]; 
 				}
 
+				
+				//ano separado correção
+				padrao = Pattern.compile(" de (\\d{1,3})\\s+(\\d{1,3})");
+				matcher = padrao.matcher(decreto);
+				while (matcher.find()){
+					substituirPor = " de " + matcher.group(1) + matcher.group(2);
+					decreto = decreto.replaceFirst(" de (\\d{1,3})\\s+(\\d{1,3})", substituirPor);	
+				}
 
 				//correção de formatação
 				decreto = decreto.replaceFirst("\\s{2,}DE", " DE");	
-				//decreto = decreto.replaceAll("(<\\w{1,6}>\\s*)?(<\\w{1,6}>\\s*)?<\\w{1,6}>\\s*</\\w{1,6}>(\\s*</\\w{1,6}>)?(\\s*</\\w{1,6}>)?", "");				
 				decreto = decreto.replaceAll("( )+,", ",");
 				decreto = decreto.replaceAll("( )+\\.", ".");
 				decreto = decreto.replaceAll("( )+;", ";");
@@ -209,6 +206,8 @@ public class RemovedorFormatacaoCaracteresEspHTML {
 				decreto = decreto.replaceAll("CON S I D E R AN DO", "CONSIDERANDO");
 				decreto = decreto.replaceAll("GVERNO|GPVERNO", "GOVERNO");
 				decreto = decreto.replaceAll("GVERNADOR", "GOVERNADOR");
+				decreto = decreto.replaceAll("MEORIAL", "MEMORIAL");
+				decreto = decreto.replaceAll("daLei", "da Lei");
 				decreto = decreto.replaceAll("O G O VER N ADOR DO E S T ADO", "O GOVERNADOR DO ESTADO");
 				decreto = decreto.replaceAll("D\\s*E\\s*C\\s*R\\s*E\\s*T\\s*A", "DECRETA");
 				decreto = decreto.replaceAll("SETMBRO", "SETEMBRO");
