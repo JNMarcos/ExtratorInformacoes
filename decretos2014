@@ -1,6 +1,6 @@
-Cria    15
+Cria    16
 Abre    598
-Declara    108
+Declara    109
 Transforma    2
 Ativa    0
 Transfere    13
@@ -13,7 +13,7 @@ Aprova    3
 Qualifica    6
 Desativa    1
 Aloca    23
-Relaciona    0
+Relaciona    1
 Decreta    5
 Delega    0
 Renova    5
@@ -23,7 +23,7 @@ Dispõe    36
 Concede    86
 Convoca    3
 Homologa    0
-Revoga    22
+Revoga    18
 Altera    66
 Autoriza    24
 Interpreta    0
@@ -32,7 +32,7 @@ Estabelece    3
 Amplia    1
 Reabre    1
 Disciplina    0
-Prorroga    2
+Prorroga    3
 Incorpora    0
 Acrescenta    0
 Promove    1

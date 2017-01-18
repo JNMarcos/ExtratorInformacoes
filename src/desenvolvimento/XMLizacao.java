@@ -97,13 +97,21 @@ public class XMLizacao {
 		String regexAnexos = "(NO )?(ANEXO)([0-9A-Za-zÁ„‡·‚ÈÍÌÛÙı˙¬√¡¿… Õ”‘’⁄«\"\'\\Q()!?&$ß%:@#;=/,∫∞™.<>-_\\\\E \n\t\u00A7\u002D]+)";
 		String regexAnexos2 = "(NO )?(ANEXO)([0-9A-Za-zÁ„‡·‚ÈÍÌÛÙı˙¬√¡¿… Õ”‘’⁄«\"\'\\Q()!?&$ß%:@#;=/,∫∞™.<>-_\\\\E \n\t\u00A7\u002D]+)(ERRATA [^PUBLI]+)";
 		String regexErrata = "(ERRATA)([0-9A-Za-zÁ„‡·‚ÈÍÌÛÙı˙¬√¡¿… Õ”‘’⁄«\"\'\\Q()!?&$ß%:@#;=/,∫∞™.<>-_\\\\E \n\t\u00A7\u002D]+)";
-		String regexInfo = "(\\Q(ERRATA PUBLICADA NO DI¡RIO OFICIAL DE \\E\\d{1,2} DE [A-Z«]{4,10} DE \\d{4}\\Q)\\E|\\Q(REPUBLICADO POR HAVER SAÕDO COM INCORRE«√O NO ORIGINAL)\\E)";
+		String regexInfo = "(\\Q(ERRATA PUBLICADA NO DI¡RIO OFICIAL DE \\E\\d{1,2} DE [A-Z«]{4,10} DE \\d{4}\\Q)\\E|\\Q(REPUBLICADO POR HAVER SAÕDO COM INCORRE«√O NO ORIGINAL)\\E|\\Q(Revogado\\E [0-9A-Za-zÁ„‡·‚ÈÍÌÛÙı˙¬√¡¿… Õ”‘’⁄«\"\'\\Q!?&$%:@#;,/ß∫∞™.<>-_\\\\E \n\t\u00A7\u002D]{5,70}\\))";
 
 		//REMOVER O TANTO DE CARACTERES QUE TEM EM ASSINATURA
 		String regexConsiderando = "<CONSIDERACOES>([0-9A-Za-zÁ„‡·‚ÈÍÌÛÙı˙¬√¡¿… Õ”‘’⁄«\"\'\\Q()!?&$ß%:@#;=/,∫∞™.<>-_\\\\E \n\t\u00A7\u002D]+)</CONSIDERACOES>";
-		String regexAssinatura = "<ASSINATURAS>([A-Za-zÁ„‡·‚ÈÍÌÛÙı˙¬√¡¿… Õ”‘’⁄«\'\\Q()=,.<>-\\\\E \n\t]+)</ASSINATURAS>";
-		String regexLeis = "( Decreto| \\QDecreto-Lei\\E| Decreto Lei| Decreto Lei Federal| Decreto-Lei Federal| Lei Federal| Lei Complementar| Lei| ResoluÁ„o| Emenda Constitucional| Ad Referendum| OfÌcio| Parecer| Parecer Conjunto| Portaria Conjunta| Portaria)([A-Z \\Q/-\\E]{0,16})( (n∫|n∞) (\\d{1,3}\\.\\d{3}|\\d{3}|\\d{2}|\\d{2,4}/\\d{2,4}[A-Z/ -]{0,10}),(( de (\\d{1,2}|1∫|1∞) de ([a-zÁA-Z«]{4,9}))? de (\\d{4}))?)( da ConstituiÁ„o Estadual)?";
-		String regexDinheiro = " R\\$\\s+[0-9.]+,\\d{2} ";
+		String regexAssinatura = "<ASS>([A-Za-zÁ„‡·‚ÈÍÌÛÙı˙¬√¡¿… Õ”‘’⁄«\'\\Q()=,.<>-\\\\E \n\t]+)</ASS>";
+		String regexLeis = "(( Decreto| \\QDecreto-Lei\\E| Decreto Lei| Decreto Lei Federal| Decreto-Lei Federal| Lei Federal| Lei Complementar| Lei Complementar Federal| Lei| ResoluÁ„o| Emenda Constitucional| Ad Referendum| OfÌcio| Parecer| Parecer Conjunto| Portaria Conjunta| Portaria| Ato DeclaratÛrio| Termo| Ordem Banc·ria| Ordens Banc·rias| Di·rio Oficial (do Estado))([A-Z \\Q/-\\E]{0,16})( (n∫|n∞) (\\d{1,3}\\.\\d{3}|\\d{3}|\\d{2}|\\d{2,4}/\\d{2,4}[A-Z/ -]{0,10})(,)((( de)? (\\d{1,2})(∞|∫)? de ([a-zÁA-Z«]{4,9}))? de (\\d{4}))?)( da ConstituiÁ„o Estadual)?)(,|\\Q.\\E|;|:)";
+		String regexDinheiro = " R\\$\\s+[0-9.]+,\\d{2}";
+		String regexPorcentagem = " [0-9]+(,\\d{1,})?( )?%";
+
+		String regexEmpresa = "( (a |‡ |pela |da |da|denominaÁ„o atual È|atualmente denominada)(empresa|EMPRESA|Empresa)?( (([0-9A-Z¬¡… Õ”‘⁄]|de |da |do |das |dos )[0-9A-Za-z\\QÁ„‡·‚ÈÍÌÛÙı˙¬√¡¿… Õ”‘’⁄«&\\E]*[\\Q-., \\E]{1,3})+(\\QLTDA.\\E|LTDA)( ME)?(\\s*(-| |/)\\s*[A-Z]([A-Z¬√¡… Õ”‘’⁄«&]+|[a-zÁ„‡·‚ÈÍÌÛÙı˙&]+))*))(,|\\.|;|:| [a-z]|, [a-z])";
+		String regexEmpresa2 = "( (a |‡ |pela |da |da|denominaÁ„o atual È|atualmente denominada)(empresa|EMPRESA|Empresa)?( (([0-9A-Z¬¡… Õ”‘⁄]|de |da |do |das |dos )[0-9A-Za-z\\QÁ„‡·‚ÈÍÌÛÙı˙¬√¡¿… Õ”‘’⁄«&\\E]*[\\Q-., \\E]{1,3})+(\\QS/A\\E|\\QS.A.\\E)(\\s*(-| |/)\\s*[A-Z]([A-Z¬√¡… Õ”‘’⁄«&]+|[a-zÁ„‡·‚ÈÍÌÛÙı˙&]+))*))(,|\\Q.\\E|;|:)";
+		String regexEmpresa3 = "( (a |‡ |pela |da |da|denominaÁ„o atual È|atualmente denominada)(empresa|EMPRESA|Empresa)( (([0-9A-Z¬¡… Õ”‘⁄]|de |da |do |das |dos )[0-9A-Za-z\\QÁ„‡·‚ÈÍÌÛÙı˙¬√¡¿… Õ”‘’⁄«&\\E]*[\\Q-., \\E]{1,3})+(\\s*(-| |/)\\s*[A-Z]([A-Z¬√¡… Õ”‘’⁄«&]+|[a-zÁ„‡·‚ÈÍÌÛÙı˙&]+))*))(,|\\Q.\\E|;|:)";
+		String regexEmpresa4 = "( (a|‡|pela|da|denominaÁ„o atual È|atualmente denominada)( empresa| EMPRESA| Empresa)( (([0-9A-Z¬¡… Õ”‘⁄]|de |da |do |das |dos )[0-9A-Za-z\\QÁ„‡·‚ÈÍÌÛÙı˙¬√¡¿… Õ”‘’⁄«&\\E]*[\\Q-., \\E]{1,3})+))(,|\\Q.\\E|;|:)";
+		String regexOrgao = "(( FundaÁ„o| EscritÛrio| ”rg„o| OrganizaÁ„o| Secretaria(s)?| Instituto| Departamento| Procuradoria| AgÍncia| Comiss„o| Junta| Assembleia| C‚mara| ConsÛrcio| Defensoria| Tribunal| Companhia| Controladoria| Gabinete| GerÍncia| ComitÍ| Contadoria| Unidade| Grupo| Central| Conselho| Banco| PolÌcia)( (e )?(de |do |dos |da |das |‡ |a |ao |aos |pelo |pelos |pelas |pela |por |em |no |nos |nas |na |para )?[A-Z¬¡… Õ”‘⁄]([A-Z¬√¡… Õ”‘’⁄«]+|[a-zÁ„‡·‚ÈÍÌÛÙı˙]+)[\\Q-,\\E]{0,3})+(\\s*(-| |/)\\s*[A-Z][A-Za-z\\QÁ„‡·‚ÈÍÌÛÙı˙¬√¡¿… Õ”‘’⁄«&\\E]+)*)(,|\\Q.\\E|;|:)";
+		String regexProgProj = "(( Projeto| Programa| Fundo| PolÌtica| GratificaÁ„o| ConsolidaÁ„o| Sistema| Plano(s)?| Regulamento| ConvÍnio)( (e )?(de |do |dos |da |das |‡ |a |ao |aos |pelo |pelos |pelas |pela |por |em |no |nos |nas |na |para )?[A-Z¬¡¿… Õ”‘⁄]([A-Z¬√¡… Õ”‘’⁄«]+|[a-zÁ„‡·‚ÈÍÌÛÙı˙]+)[\\Q-.,\\E]{0,3})+(\\s*(-| |/)\\s*[A-Z][A-Za-z\\QÁ„‡·‚ÈÍÌÛÙı˙¬√¡¿… Õ”‘’⁄«&\\E]+)*)(,|\\Q.\\E|;|:)";
 		String regexAnexo = "<ANEXOS>([0-9A-Za-zÁ„‡·‚ÈÍÌÛÙı˙¬√¡¿… Õ”‘’⁄«\"\'\\Q()!?&$ß%:@#=;/,∫∞™.<>-_\\\\E \n\t\u00A7\u002D]+)</ANEXOS>";//sÛ esse tem sinal igual
 
 		//Padrıes e Matchers
@@ -130,6 +138,13 @@ public class XMLizacao {
 		Pattern padraoAssinatura = Pattern.compile(regexAssinatura);
 		Pattern padraoLeis = Pattern.compile(regexLeis);
 		Pattern padraoDinheiro = Pattern.compile(regexDinheiro);
+		Pattern padraoPorcentagem = Pattern.compile(regexPorcentagem);
+		Pattern padraoEmpresa = Pattern.compile(regexEmpresa);
+		Pattern padraoEmpresa2 = Pattern.compile(regexEmpresa2);
+		Pattern padraoEmpresa3 = Pattern.compile(regexEmpresa3);
+		Pattern padraoEmpresa4 = Pattern.compile(regexEmpresa4);
+		Pattern padraoProgProj = Pattern.compile(regexProgProj);
+		Pattern padraoOrgao = Pattern.compile(regexOrgao);
 		Pattern padraoAnexo = Pattern.compile(regexAnexo);
 
 		Matcher matcher;
@@ -152,6 +167,14 @@ public class XMLizacao {
 		tiposDocumentos.put("Parecer Conjunto", "PC");
 		tiposDocumentos.put("Portaria", "Pt");
 		tiposDocumentos.put("Portaria  Conjunta", "PtC");
+		tiposDocumentos.put("Ato DeclaratÛrio", "AD");
+		tiposDocumentos.put("Termo", "TE");
+		tiposDocumentos.put("Lei Complementar Federal", "LCF");
+		tiposDocumentos.put("Di·rio Oficial", "DO");
+		tiposDocumentos.put("Di·rio Oficial do Estado", "DO");
+		//n„o t· pegando
+		tiposDocumentos.put("Ordem Banc·ria", "OB");
+		tiposDocumentos.put("Ordens Banc·rias", "OB");
 
 		Hashtable<String, String> numeracaoMeses = new Hashtable<>();
 		numeracaoMeses.put("janeiro", "01");
@@ -265,7 +288,7 @@ public class XMLizacao {
 		quantidadeAnexosTabela.put("Revoga", 0);
 		quantidadeAnexosTabela.put("Transfere", 0);
 		quantidadeAnexosTabela.put("Transforma", 0);
-		
+
 		quantidadeTabelaOrcamentarias.put("Abre", 0);
 		quantidadeTabelaOrcamentarias.put("Acrescenta", 0);
 		quantidadeTabelaOrcamentarias.put("Aloca", 0);
@@ -309,6 +332,9 @@ public class XMLizacao {
 
 		String tipo = "";
 		String nomePessoa;
+		String entreTags;
+		String textoModificado;
+		String[] segmentosConsAss;
 		//AQUI COME«A A REMO«√O DA FORMATA«√O
 		File b = new File("anexos");
 		File c = new File("tabelas");
@@ -329,7 +355,7 @@ public class XMLizacao {
 
 			fwd = new FileWriter(d);
 			bwd = new BufferedWriter(fwd);
-			
+
 			fwf = new FileWriter(f);
 			bwf = new BufferedWriter(fwf);
 		} catch (IOException e1) {
@@ -389,7 +415,7 @@ public class XMLizacao {
 
 			for (int j = 0; j < arquivos[i].length; j++){
 				nomeArquivo = (arquivos[i][j]).getName(); //obtÈm o nome do arquivo
-				System.out.println(nomeArquivo);
+				//System.out.println(nomeArquivo);
 				decreto = "";
 				//Arquivo de leitura a partir do caminhoTemporario (string)
 				try {
@@ -408,19 +434,24 @@ public class XMLizacao {
 
 					decretoIntermediario = decreto;
 					decretoSaida = "";
+
+
+
 					matcher = padraoInfo.matcher(decretoIntermediario);
-					
+
 					decretoSaida+= "<DECRETO>\n";
 					if (matcher.find()){
 						decretoSaida += "<INFO>" + matcher.group(0) + "</INFO>";
+						decretoIntermediario = decretoIntermediario.replace(matcher.group(0), "");
 					}
 
 					matcher = padraoIdentificacao.matcher(decretoIntermediario);
 					matcherAuxiliar = null;
 
 					if (matcher.find()){
-						decretoSaida += "<IDENTIFICACAO numeracao=" + matcher.group(3) + " data=" + (matcher.group(6).length() < 2? "0" + matcher.group(6) : matcher.group(6)) + "-" + numeracaoMeses.get(matcher.group(8).toLowerCase())
-						+ "-" + matcher.group(9) + ">" + matcher.group(1).trim() + " " + matcher.group(2) + "</IDENTIFICACAO>\n<CORPO>";
+						decretoSaida += "<ID numeracao=" + matcher.group(3) + " data=" + (matcher.group(6).length() < 2? "0" + matcher.group(6) : matcher.group(6)) + "-" + numeracaoMeses.get(matcher.group(8).toLowerCase())
+						+ "-" + matcher.group(9) + ">" + matcher.group(1).trim() + " " + matcher.group(2) + "</ID>\n<CORPO>";
+						decretoIntermediario = decretoIntermediario.replace(matcher.group(0), "");
 					} else{
 						bwarq.write(i + "     " + nomeArquivo + "     " + "IDENTIFICACAO");
 						bwarq.newLine();
@@ -430,18 +461,17 @@ public class XMLizacao {
 					matcherAuxiliar = padraoTipoDecreto2.matcher(decretoIntermediario);
 
 					if (matcherAuxiliar.find()){
-						decretoSaida += "<DESCRICAO>" +
-								matcherAuxiliar.group(1) + " " + matcherAuxiliar.group(2) + "<";
+						entreTags = matcherAuxiliar.group(1) + " " + matcherAuxiliar.group(2);
+						decretoSaida += "<DESCR>" +	entreTags + "<";
 						tipo = matcherAuxiliar.group(1);
-						contadorTiposDecreto.containsKey(matcherAuxiliar.group(1));
 						contadorTiposDecreto.put(matcherAuxiliar.group(1), contadorTiposDecreto.get(matcherAuxiliar.group(1)) + 1);
+						decretoIntermediario = decretoIntermediario.replace(entreTags, "");
 					} else if (matcher.find()){
-						decretoSaida += "<DESCRICAO>" +
-								matcher.group(1) + " " + matcher.group(2) + "<";
+						entreTags = matcher.group(1) + " " + matcher.group(2);
+						decretoSaida += "<DESCR>" + entreTags + "<";
 						tipo = matcher.group(1);
-						contadorTiposDecreto.containsKey(matcher.group(1));
 						contadorTiposDecreto.put(matcher.group(1), contadorTiposDecreto.get(matcher.group(1)) + 1);
-
+						decretoIntermediario = decretoIntermediario.replace(entreTags, "");
 					} else{
 						bwarq.write(i + "     " + nomeArquivo + "     " + "DESCRICAO");
 						bwarq.newLine();
@@ -450,12 +480,12 @@ public class XMLizacao {
 					decretoSaida = decretoSaida.replaceFirst("O\\s*<", " ");
 					String[] partes = decretoSaida.split("GOVERNADOR D(O|E) ESTADO|GOVERNO DO ESTADO|Governador do Estado de Pernambuco|PRESIDENTE DA ASSEMBLEIA LEGISLATIVA DO ESTADO DE PERNAMBUCO");
 					decretoSaida = partes[0].trim();
-					decretoSaida += "</DESCRICAO>";
+					decretoSaida += "</DESCR>";
 
 					matcher = padraoAtribuicoes.matcher(decretoIntermediario);
 					matcherAuxiliar = padraoAtribuicoes2.matcher(decretoIntermediario);
 
-					decretoSaida += "<ATRIBUICAO>";
+					decretoSaida += "<ATRIB>";
 					if (matcher.find()){
 						if (matcher.group(1) != null)
 							decretoSaida += matcher.group(1).trim() + " ";
@@ -479,7 +509,7 @@ public class XMLizacao {
 					//se pegar os considerandos para no primeiro
 					partes = decretoSaida.split("CONSIDERANDO");
 					decretoSaida = partes[0].trim();
-					decretoSaida += "</ATRIBUICAO>";
+					decretoSaida += "</ATRIB>";
 
 					matcher = padraoConsideracoes.matcher(decretoIntermediario);
 					matcherAuxiliar = null;
@@ -498,7 +528,6 @@ public class XMLizacao {
 					if (matcher.find()){
 						decretoSaida += "<DECRETAMENTO>" + matcher.group(1).trim() + " "
 								+ matcher.group(2).trim() + "</DECRETAMENTO>";
-
 					} else if (matcherAuxiliar.find()){
 						decretoSaida += "<DECRETAMENTO>" + matcherAuxiliar.group(1).trim() + " "
 								+ matcherAuxiliar.group(2).trim() + "</DECRETAMENTO>";
@@ -510,7 +539,7 @@ public class XMLizacao {
 									+ matcher.group(2).trim() + "</DECRETAMENTO>";
 						} else if (matcherAuxiliar.find()){
 							decretoSaida += "<DECRETAMENTO>" + matcherAuxiliar.group(1).trim() + " "
-									+ matcherAuxiliar.group(2).trim() + "</DECRETAMENTO>";			
+									+ matcherAuxiliar.group(2).trim() + "</DECRETAMENTO>";	
 						}else{
 							bwarq.write(i + "     " + nomeArquivo + "     " + "DECRETAMENTO");
 							bwarq.newLine();
@@ -535,15 +564,15 @@ public class XMLizacao {
 					matcherAuxiliar = padraoAssinaturas2.matcher(decretoIntermediario);
 
 					if (matcherAuxiliar.find()){
-						decretoSaida += "<ASSINATURAS>" + matcherAuxiliar.group(1).trim() + " " 
+						decretoSaida += "<ASS>" + matcherAuxiliar.group(1).trim() + " " 
 								+ matcherAuxiliar.group(2);
 						if (matcherAuxiliar.group(3) != null) decretoSaida += " " + matcherAuxiliar.group(3);
-						decretoSaida += "  " + matcherAuxiliar.group(4).replaceFirst("ERRATA[ A-Z¬√¡¿… Õ”‘’⁄«]+","").trim() + "</ASSINATURAS>";
+						decretoSaida += "  " + matcherAuxiliar.group(4).replaceFirst("ERRATA[ A-Z¬√¡¿… Õ”‘’⁄«]+","").trim() + "</ASS>";
 					} else if (matcher.find()){
-						decretoSaida += "<ASSINATURAS>" + matcher.group(1).trim() + " "
+						decretoSaida += "<ASS>" + matcher.group(1).trim() + " "
 								+ matcher.group(2);
 						if (matcher.group(3) != null) decretoSaida += " " + matcher.group(3);
-						decretoSaida +=  "  " + matcher.group(4).replaceFirst("ERRATA[ A-Z¬√¡¿… Õ”‘’⁄«]+","").trim() + "</ASSINATURAS>";
+						decretoSaida +=  "  " + matcher.group(4).replaceFirst("ERRATA[ A-Z¬√¡¿… Õ”‘’⁄«]+","").trim() + "</ASS>";
 					} else{
 						bwarq.write(i + "     " + nomeArquivo + "     " + "ASSINATURAS");
 						bwarq.newLine();
@@ -572,24 +601,21 @@ public class XMLizacao {
 					matcherAuxiliar = null;
 
 					if (matcher.find()){
-						decretoSaida += "<ERRATA>" + matcher.group(1).trim() + " "
+						decretoSaida += "<ERR>" + matcher.group(1).trim() + " "
 								+ matcher.group(2).replaceFirst("(\\Q(ERRATA PUBLICADA NO DI¡RIO OFICIAL DE \\E\\d{1,2} DE [A-Z«]{4,10} DE \\d{4}\\Q)\\E|\\Q(REPUBLICADO POR HAVER SAÕDO COM INCORRE«√O NO ORIGINAL)\\E)" , "").trim()
-								+ "</ERRATA>";
+								+ "</ERR>";
 					} 
 
 					matcher = padraoConsiderando.matcher(decretoSaida);
-					String entreTags;
-					String textoModificado;
-					String[] segmentosConsAss;
 					if (matcher.find()){
 						entreTags = matcher.group(1);
 						segmentosConsAss = entreTags.split("( )+CONSIDERANDO");
 						textoModificado = "";
 						for (int k = 0; k < segmentosConsAss.length; k++){
 							if (k != 0)
-								textoModificado += "<CONSIDERANDO>" + ("CONSIDERANDO" + segmentosConsAss[k]).trim() + "</CONSIDERANDO>";
+								textoModificado += "<CONS>" + ("CONSIDERANDO" + segmentosConsAss[k]).trim() + "</CONS>";
 							else
-								textoModificado += "<CONSIDERANDO>" + segmentosConsAss[k].trim() + "</CONSIDERANDO>";
+								textoModificado += "<CONS>" + segmentosConsAss[k].trim() + "</CONS>";
 						}
 						decretoSaida = decretoSaida.replaceFirst(entreTags, textoModificado);
 					}
@@ -600,7 +626,7 @@ public class XMLizacao {
 						segmentosConsAss = entreTags.split("( ){2,}");
 						textoModificado = "";
 						nomePessoa = segmentosConsAss[0].replaceFirst("Governador do Estado|GOVERNADOR DO ESTADO", "").trim();
-						textoModificado += "<ASSINATURA_GOV>" + nomePessoa + "</ASSINATURA_GOV>" + segmentosConsAss[0].replaceFirst(nomePessoa, "").trim();
+						textoModificado += "<ASS_GOV>" + nomePessoa + "</ASS_GOV>" + segmentosConsAss[0].replaceFirst(nomePessoa, "").trim();
 
 						if (nomePessoas.containsKey(nomePessoa)){
 							nomePessoas.replace(nomePessoa, nomePessoas.get(nomePessoa) + 1);
@@ -610,41 +636,142 @@ public class XMLizacao {
 						for (int k = 1; k < segmentosConsAss.length; k++){
 							//System.out.println(segmentosConsAss[k]);
 							nomePessoa = segmentosConsAss[k].trim();
-							textoModificado += "<ASSINATURA_OUTRO>" + nomePessoa + "</ASSINATURA_OUTRO>";
+							textoModificado += "<ASS_OUTRO>" + nomePessoa + "</ASS_OUTRO>";
 							if (nomePessoas.containsKey(nomePessoa)){
 								nomePessoas.replace(nomePessoa, nomePessoas.get(nomePessoa) + 1);
 							} else {
 								nomePessoas.put(nomePessoa, 1);
 							}
 						}
-						decretoSaida = decretoSaida.replace(entreTags, textoModificado);
+						decretoSaida = decretoSaida.replaceFirst("\\Q" + entreTags +"\\E", textoModificado);
 					}
 
 					matcher = padraoLeis.matcher(decretoSaida);
-
 					while (matcher.find()){
-						entreTags = matcher.group(0);
+						entreTags = matcher.group(1);
 						//System.out.println(entreTags);
-						textoModificado = " <" +  tiposDocumentos.get(matcher.group(1).trim())+ " numeracao=" + matcher.group(5);
-						if (matcher.group(7) != null){
-							textoModificado += " data=" + (matcher.group(8).length() < 2? "0" + matcher.group(8) : matcher.group(8))
-									+ "-" + numeracaoMeses.get(matcher.group(9).toLowerCase()) + "-" + matcher.group(10);
-						} else {
-							textoModificado += " ano=" + matcher.group(10);
+						textoModificado = " <" +  tiposDocumentos.get(matcher.group(2).trim())+ " numeracao=" + matcher.group(7);
+						if (matcher.group(10) != null){
+							textoModificado += " data=" + (matcher.group(12).length() < 2? "0" + matcher.group(12) : matcher.group(12))
+									+ "-" + numeracaoMeses.get(matcher.group(14).toLowerCase()) + "-" + matcher.group(15);
+						} else if (matcher.group(9) != null){
+							textoModificado += " ano=" + matcher.group(15);
 						}
-						textoModificado+= ">" + matcher.group(0).trim() + "</" + tiposDocumentos.get(matcher.group(1).trim()) + ">";
-						decretoSaida = decretoSaida.replace(entreTags, textoModificado);
+						textoModificado+= ">" + (matcher.group(9) != null? matcher.group(1).trim(): matcher.group(1).replace(",","").trim()) + "</" + tiposDocumentos.get(matcher.group(2).trim()) + ">" + ((matcher.group(9) != null? "": ","));
+						decretoSaida = decretoSaida.replaceFirst("\\Q"+entreTags+"\\E", textoModificado);
 					}
 
 					matcher = padraoDinheiro.matcher(decretoSaida);
-
 					while (matcher.find()){
 						//System.out.println(nomeArquivo);
 						entreTags = matcher.group(0);
-						textoModificado = " <DINHEIRO>" + matcher.group(0).trim() + "</DINHEIRO> ";
+						textoModificado = " <DIN>" + matcher.group(0).trim() + "</DIN> ";
 						decretoSaida = decretoSaida.replace(entreTags, textoModificado);
 					}
 
+					matcher = padraoPorcentagem.matcher(decretoSaida);
+					while (matcher.find()){
+						//System.out.println(nomeArquivo);
+						entreTags = matcher.group(0);
+						textoModificado = " <PORC>" + matcher.group(0).trim() + "</PORC> ";
+						decretoSaida = decretoSaida.replaceFirst("\\Q" + entreTags +"\\E", textoModificado);
+					}
+
+					matcher = padraoEmpresa.matcher(decretoSaida);
+
+					while (matcher.find()){
+						//System.out.println(nomeArquivo);
+						if (nomeArquivo.contains("41.347"))
+						System.out.println(matcher.group(1));
+					
+						if (matcher.group(3) == null){
+							entreTags = matcher.group(3);
+							textoModificado = " <EMP>" + matcher.group(4).trim() + "</EMP>";
+							decretoSaida = decretoSaida.replaceFirst("\\Q" + entreTags +"\\E", textoModificado);
+						} else if (matcher.group(3).equals("Empresa")||matcher.group(3).equals("EMPRESA")){
+							entreTags = matcher.group(3) + matcher.group(4);
+							textoModificado = " <EMP>" + (matcher.group(3) + matcher.group(4)).trim() + "</EMP>";
+							decretoSaida = decretoSaida.replaceFirst("\\Q" + entreTags +"\\E", textoModificado);
+						} else if (matcher.group(3).equals("empresa") && matcher.group(4).charAt(0) == matcher.group(4).toUpperCase().charAt(0)){
+							entreTags = matcher.group(4);
+							textoModificado = " <EMP>" + matcher.group(4).trim() + "</EMP>";
+							decretoSaida = decretoSaida.replaceFirst("\\Q" + entreTags +"\\E", textoModificado);
+						}		
+					}
+					
+					matcher = padraoEmpresa2.matcher(decretoSaida);
+
+					while (matcher.find()){
+						//System.out.println(nomeArquivo);
+						if (matcher.group(3) == null){
+							entreTags = matcher.group(4);
+							textoModificado = " <EMP>" + matcher.group(4).trim() + "</EMP>";
+							decretoSaida = decretoSaida.replaceFirst("\\Q" + entreTags +"\\E", textoModificado);
+						} else if (matcher.group(3).equals("Empresa")||matcher.group(3).equals("EMPRESA")){
+							entreTags = matcher.group(3) + matcher.group(4);
+							textoModificado = " <EMP>" + (matcher.group(3) + matcher.group(4)).trim() + "</EMP>";
+							decretoSaida = decretoSaida.replaceFirst("\\Q" + entreTags +"\\E", textoModificado);
+						} else if (matcher.group(3).equals("empresa") && matcher.group(4).charAt(0) == matcher.group(4).toUpperCase().charAt(0)){
+							entreTags = matcher.group(4);
+							textoModificado = " <EMP>" + matcher.group(4).trim() + "</EMP>";
+							decretoSaida = decretoSaida.replaceFirst("\\Q" + entreTags +"\\E", textoModificado);
+						}	
+					}
+					
+					matcher = padraoEmpresa3.matcher(decretoSaida);
+
+					while (matcher.find()){
+						//System.out.println(nomeArquivo);
+						if (matcher.group(3) == null){
+							entreTags = matcher.group(4);
+							textoModificado = " <EMP>" + matcher.group(4).trim() + "</EMP>";
+							decretoSaida = decretoSaida.replaceFirst("\\Q" + entreTags +"\\E", textoModificado);
+						} else if (matcher.group(3).equals("Empresa")||matcher.group(3).equals("EMPRESA")){
+							entreTags = matcher.group(3) + matcher.group(4);
+							textoModificado = " <EMP>" + (matcher.group(3) + matcher.group(4)).trim() + "</EMP>";
+							decretoSaida = decretoSaida.replaceFirst("\\Q" + entreTags +"\\E", textoModificado);
+						} else if (matcher.group(3).equals("empresa") && matcher.group(4).charAt(0) == matcher.group(4).toUpperCase().charAt(0)){
+							entreTags = matcher.group(4);
+							textoModificado = " <EMP>" + matcher.group(4).trim() + "</EMP>";
+							decretoSaida = decretoSaida.replaceFirst("\\Q" + entreTags +"\\E", textoModificado);
+						}				
+					}
+					
+					matcher = padraoEmpresa4.matcher(decretoSaida);
+
+					while (matcher.find()){
+						//System.out.println(nomeArquivo);
+						if (matcher.group(3) == null){
+							entreTags = matcher.group(4);
+							textoModificado = " <EMP>" + matcher.group(4).trim() + "</EMP>";
+							decretoSaida = decretoSaida.replaceFirst("\\Q" + entreTags +"\\E", textoModificado);
+						} else if (matcher.group(3).equals("Empresa")||matcher.group(3).equals("EMPRESA")){
+							entreTags = matcher.group(3) + matcher.group(4);
+							textoModificado = " <EMP>" + (matcher.group(3) + matcher.group(4)).trim() + "</EMP>";
+							decretoSaida = decretoSaida.replaceFirst("\\Q" + entreTags +"\\E", textoModificado);
+						} else if (matcher.group(3).equals("empresa") && matcher.group(4).charAt(0) == matcher.group(4).toUpperCase().charAt(0)){
+							entreTags = matcher.group(4);
+							textoModificado = " <EMP>" + matcher.group(4).trim() + "</EMP>";
+							decretoSaida = decretoSaida.replaceFirst("\\Q" + entreTags +"\\E", textoModificado);
+						}			
+					}
+					
+					matcher = padraoProgProj.matcher(decretoSaida);
+					while (matcher.find()){
+						//System.out.println(nomeArquivo);
+						entreTags = matcher.group(1);
+						textoModificado = " <PROG>" + matcher.group(1).trim() + "</PROG>";
+						decretoSaida = decretoSaida.replaceFirst("\\Q" + entreTags +"\\E", textoModificado);			
+					}
+					
+					matcher = padraoOrgao.matcher(decretoSaida);
+					while (matcher.find()){
+						//System.out.println(nomeArquivo);
+						entreTags = matcher.group(1);
+						textoModificado = " <ORG>" + matcher.group(1).trim() + "</ORG>";
+						decretoSaida = decretoSaida.replaceFirst("\\Q" + entreTags +"\\E", textoModificado);			
+					}
+					
 					matcher = padraoAnexo.matcher(decretoSaida);
 					textoModificado = "";
 
@@ -657,21 +784,27 @@ public class XMLizacao {
 							//System.out.println(entreTags);
 							if (entreTags.contains("MEMORIAL DESCRITIVO")){
 								textoModificado = "<MEMO>" + entreTags + "</MEMO>";
+								matcherAuxiliar = padraoDinheiro.matcher(entreTags);
 								if (entreTags.contains("table")){
 									quantidadeAnexosTabela.containsKey(tipo);
 									quantidadeAnexosTabela.put(tipo, quantidadeAnexosTabela.get(tipo) + 1);
-									
-									if (entreTags.contains("R$")){
+
+									if (entreTags.contains("R$") || matcher.find() || entreTags.contains("crÈdito") || entreTags.contains("CR…DITO")){
 										quantidadeTabelaOrcamentarias.containsKey(tipo);
 										quantidadeTabelaOrcamentarias.put(tipo, quantidadeTabelaOrcamentarias.get(tipo) + 1);
 									}
 								}
-							} else if (entreTags.contains("table")){
-								textoModificado = "<TABELAS>" + entreTags + "</TABELAS>";					
+							} else if (entreTags.contains("PLANO")){
+								textoModificado += "<«I>" + "ANEXO " + entreTags.trim() + "</«I>";
+							}else if (entreTags.contains("FORMUL¡RIO")){
+								textoModificado += "<«E>" + "ANEXO " + entreTags.trim() + "</«E>";
+							}
+							else if (entreTags.contains("table")){
+								textoModificado = "<TAB>" + entreTags + "</TAB>";					
 								quantidadeAnexosTabela.containsKey(tipo);
 								quantidadeAnexosTabela.put(tipo, quantidadeAnexosTabela.get(tipo) + 1);
-								
-								if (entreTags.contains("R$")){
+
+								if (entreTags.contains("R$") || matcher.find() || entreTags.contains("crÈdito") || entreTags.contains("CR…DITO")){
 									quantidadeTabelaOrcamentarias.containsKey(tipo);
 									quantidadeTabelaOrcamentarias.put(tipo, quantidadeTabelaOrcamentarias.get(tipo) + 1);
 								}
@@ -680,36 +813,42 @@ public class XMLizacao {
 								if (entreTags.contains("table")){
 									quantidadeAnexosTabela.containsKey(tipo);
 									quantidadeAnexosTabela.put(tipo, quantidadeAnexosTabela.get(tipo) + 1);
-									
-									if (entreTags.contains("R$")){
+
+									if (entreTags.contains("R$") || matcher.find() || entreTags.contains("crÈdito") || entreTags.contains("CR…DITO")){
 										quantidadeTabelaOrcamentarias.containsKey(tipo);
 										quantidadeTabelaOrcamentarias.put(tipo, quantidadeTabelaOrcamentarias.get(tipo) + 1);
 									}
 								}
 							}
 							decretoSaida = decretoSaida.replace(entreTags, textoModificado);
+							decretoSaida = decretoSaida.replace("<ANEXOS>", "<ANEXOS num_anexos=1>");
 						} else {
-							segmentosConsAss = entreTags.split("ANEXO [IVX]{1,3}");
+							segmentosConsAss = entreTags.split("ANEXO [IVX]{1,4}");
 
 							for (int k = 1; k < segmentosConsAss.length; k++){
 								if (segmentosConsAss[k].contains("MEMORIAL DESCRITIVO")){
 									textoModificado += "<MEMO>" + "ANEXO " + k + segmentosConsAss[k].trim() + "</MEMO>";
+								}else if (segmentosConsAss[k].contains("PLANO")){
+									textoModificado += "<«I>" + "ANEXO " + k + segmentosConsAss[k].trim() + "</«I>";
+								}else if (segmentosConsAss[k].contains("FORMUL¡RIO")){
+									textoModificado += "<«E>" + "ANEXO " + k + segmentosConsAss[k].trim() + "</«E>";
 								}else if (segmentosConsAss[k].contains("table")){
-									textoModificado += "<TABELAS>" + "ANEXO " + k + segmentosConsAss[k].trim() + "</TABELAS>";
+									textoModificado += "<TAB>" + "ANEXO " + k + segmentosConsAss[k].trim() + "</TAB>";
 								} else{
-									textoModificado += "<OUTRO>" + "ANEXO " + k + segmentosConsAss[k].trim() + "</OUTRO>";
+									//System.out.println(nomeArquivo);
 								}
 							}
 							if (entreTags.contains("table")){
 								quantidadeAnexosTabela.containsKey(tipo);
 								quantidadeAnexosTabela.put(tipo, quantidadeAnexosTabela.get(tipo) + 1);
-								
-								if (entreTags.contains("R$")){
+
+								if (entreTags.contains("R$") || matcher.find() || entreTags.contains("crÈdito") || entreTags.contains("CR…DITO") || entreTags.contains("ORCAMENT¡RIO")){
 									quantidadeTabelaOrcamentarias.containsKey(tipo);
 									quantidadeTabelaOrcamentarias.put(tipo, quantidadeTabelaOrcamentarias.get(tipo) + 1);
 								}
 							}
 							decretoSaida = decretoSaida.replace(entreTags, textoModificado);
+							//decretoSaida = decretoSaida.replace("<ANEXOS>", "<ANEXOS num_anexos=" + );
 						}
 					}
 
@@ -756,16 +895,30 @@ public class XMLizacao {
 			try {
 				bwb.write(contador.get(v) + "    " + quantidadeDecretosAnexos.get(contador.get(v)));
 				bwb.newLine();
-
+			} catch (IOException e) {
+				System.out.println("Erro na escrita tabela ou anexo");
+			}
+		}
+		contador = new ArrayList<>(quantidadeAnexosTabela.keySet());
+		for (int v = 0; v < contador.size(); v++){
+			try {
 				bwc.write(contador.get(v) + "    " + quantidadeAnexosTabela.get(contador.get(v)));
 				bwc.newLine();
-				
+			} catch (IOException e) {
+				System.out.println("Erro na escrita tabela ou anexo");
+			}
+		}
+
+		contador = new ArrayList<>(quantidadeTabelaOrcamentarias.keySet());
+		for (int v = 0; v < contador.size(); v++){
+			try {
 				bwf.write(contador.get(v) + "    " + quantidadeTabelaOrcamentarias.get(contador.get(v)));
 				bwf.newLine();
 			} catch (IOException e) {
 				System.out.println("Erro na escrita tabela ou anexo");
 			}
 		}
+
 		contador = new ArrayList<>(nomePessoas.keySet());
 		for (int v = 0; v < contador.size(); v++){
 			try {

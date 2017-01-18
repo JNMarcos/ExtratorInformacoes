@@ -144,7 +144,7 @@ public class RemovedorFormatacaoCaracteresEspHTML {
 				decreto = decreto.replaceAll("&acute; ", "\'");
 				decreto = decreto.replaceAll("&amp;", "&");
 				decreto = decreto.replaceAll("&hellip;", ".");
-				decreto = decreto.replaceAll("ï¬?", "fi");
+				decreto = decreto.replaceAll("\\Qï¬?\\E", "fi");
 				decreto = decreto.replaceAll(" ", " ");
 
 
@@ -204,6 +204,7 @@ public class RemovedorFormatacaoCaracteresEspHTML {
 				//correção de palavras
 				decreto = decreto.replaceAll("A( )+tiva", "Ativa");
 				decreto = decreto.replaceAll("CON S I D E R AN DO", "CONSIDERANDO");
+				decreto = decreto.replaceAll(" ONSIDERANDO", " CONSIDERANDO");
 				decreto = decreto.replaceAll("GVERNO|GPVERNO", "GOVERNO");
 				decreto = decreto.replaceAll("GVERNADOR", "GOVERNADOR");
 				decreto = decreto.replaceAll("MEORIAL", "MEMORIAL");
