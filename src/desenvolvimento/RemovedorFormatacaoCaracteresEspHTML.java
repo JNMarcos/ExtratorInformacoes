@@ -193,6 +193,13 @@ public class RemovedorFormatacaoCaracteresEspHTML {
 					substituirPor = " de " + matcher.group(1) + matcher.group(2);
 					decreto = decreto.replaceFirst(" de (\\d{1,3})\\s+(\\d{1,3})", substituirPor);	
 				}
+				
+				padrao = Pattern.compile("R\\$(\\d{1,3})");
+				matcher = padrao.matcher(decreto);
+				while (matcher.find()){
+					substituirPor = "R\\$ " + matcher.group(1);
+					decreto = decreto.replaceFirst("R\\$(\\d{1,3})", substituirPor);	
+				}
 
 				//correção de formatação
 				decreto = decreto.replaceFirst("\\s{2,}DE", " DE");	
