@@ -106,16 +106,18 @@ public class XMLizacao {
 		String regexDinheiro = " R\\$\\s+[0-9.]+,\\d{2}";
 		String regexPorcentagem = " [0-9]+(,\\d{1,})?( )?%";
 //[0-9A-Za-z\\QçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ&\\E]*
-		String regexEmpresa = "( (a|à|pela|da|da|denominação atual é|atualmente denominada)( empresa| EMPRESA| Empresa)?( (([0-9A-ZÂÁÉÊÍÓÔÚ&]|de |da |do |das |dos )[0-9A-Za-z\\QçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ&\\E]*[\\Q-., \\E]{1,3})+(\\QLTDA.\\E|LTDA)( ME)?(\\s*(-| |/)\\s*[A-Z]([A-ZÂÃÁÉÊÍÓÔÕÚÇ&]+|[a-zçãàáâéêíóôõú&]+))*))(,|\\Q.\\E|;|:| [a-z]|, [a-z])";
-		String regexEmpresa2 = "( (a|à|pela|da|da|denominação atual é|atualmente denominada)( empresa| EMPRESA| Empresa)?( (([0-9A-ZÂÁÉÊÍÓÔÚ&]|de |da |do |das |dos )[0-9A-Za-z\\QçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ&\\E]*[\\Q-., \\E]{1,3})+(\\QS/A\\E|\\QS.A.\\E)(\\s*(-| |/)\\s*[A-Z]([A-ZÂÃÁÉÊÍÓÔÕÚÇ&]+|[a-zçãàáâéêíóôõú&]+))*))(,|\\Q.\\E|;|:)";
-		String regexEmpresa3 = "( (a|à|pela|da|da|denominação atual é|atualmente denominada)( empresa| EMPRESA| Empresa)( (([0-9A-ZÂÁÉÊÍÓÔÚ&]|de |da |do |das |dos )[0-9A-Za-z\\QçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ&\\E]*[\\Q-., \\E]{1,3})+(\\s*(-| |/)\\s*[A-Z]([A-ZÂÃÁÉÊÍÓÔÕÚÇ&]+|[a-zçãàáâéêíóôõú&]+))*))(,|\\Q.\\E|;|:)";
-		String regexEmpresa4 = "( (a|à|pela|da|denominação atual é|atualmente denominada)( empresa| EMPRESA| Empresa)( (([0-9A-ZÂÁÉÊÍÓÔÚ&]|de |da |do |das |dos )[0-9A-Za-z\\QçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ&\\E]*[\\Q-., \\E]{0,3})+))(,|\\Q.\\E|;|:| [a-z])";
+		String regexEmpresa = "( (a|à|pela|da|da mesma|denominação atual é|atualmente denominada|antiga)( empresa| EMPRESA| Empresa)?( (([0-9A-ZÂÁÉÊÍÓÔÚ&]|de |da |do |das |dos )[0-9A-Za-z\\QçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ&\\E]*[\\Q-., \\E]{1,3})+(\\QLTDA.\\E|LTDA)( ME)?(\\s*(-| |/)\\s*[A-Z]([A-ZÂÃÁÉÊÍÓÔÕÚÇ&]+|[a-zçãàáâéêíóôõú&]+))*))(,|\\Q.\\E|;|:| [a-z]|, [a-z])";
+		String regexEmpresa2 = "( (a|à|pela|da|da mesma|denominação atual é|atualmente denominada|antiga)( empresa| EMPRESA| Empresa)?( (([0-9A-ZÂÁÉÊÍÓÔÚ&]|de |da |do |das |dos )[0-9A-Za-z\\QçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ&\\E]*[\\Q-., \\E]{1,3})+(\\QS/A\\E|\\QS.A.\\E|\\QS.A\\E)(\\s*(-| |/)\\s*[A-Z]([A-ZÂÃÁÉÊÍÓÔÕÚÇ&]+|[a-zçãàáâéêíóôõú&]+))*))(,|\\Q.\\E|;|:| [a-z])";
+		String regexEmpresa3 = "( (a|à|pela|da|da mesma|denominação atual é|atualmente denominada)( empresa| EMPRESA| Empresa)( (([0-9A-ZÂÁÉÊÍÓÔÚ&]|de |da |do |das |dos )[0-9A-Za-z\\QçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ&\\E]*[\\Q-., \\E]{1,3})+(\\s*(-| |/)\\s*[A-Z]([A-ZÂÃÁÉÊÍÓÔÕÚÇ&]+|[a-zçãàáâéêíóôõú&]+))*))(,|\\Q.\\E|;|:)";
+		String regexEmpresa4 = "( (a|à|pela|da|da mesma|denominação atual é|atualmente denominada)( empresa| EMPRESA| Empresa)( (([0-9A-ZÂÁÉÊÍÓÔÚ&]|de |da |do |das |dos )[0-9A-Za-z\\QçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ&\\E]*[\\Q-., \\E]{0,3})+))(,|\\Q.\\E|;|:| [a-z])";
 		String regexOrgao = "(( Fundação| Escritório| Órgão| Organização| Secretaria(s)?| Instituto| Departamento| Procuradoria| Agência| Comissão| Junta| Assembleia| Câmara| Consórcio| Defensoria| Tribunal| Companhia| Controladoria| Gabinete| Gerência| Comitê| Contadoria| Unidade| Grupo| Central| Conselho| Banco| Polícia)( (e )?(de |do |dos |da |das |à |a |ao |aos |pelo |pelos |pelas |pela |por |em |no |nos |nas |na |para )?[A-ZÂÁÉÊÍÓÔÚ]([A-ZÂÃÁÉÊÍÓÔÕÚÇ]+|[a-zçãàáâéêíóôõú]+)[\\Q-,\\E]{0,3})+(\\s*(-| |/)\\s*[A-Z][A-Za-z\\QçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ&\\E]+)*)(,|\\Q.\\E|;|:)";
 		String regexProgProj = "(( Projeto(s)?| Programa(s)?| Fundo| Política(s)?| Gratificação| Consolidação| Sistema(s)?| Plano(s)?| Regulamento(s)?| Convênio(s)?| Financiamento(s)?| Orçamento(s)?| Lei(s)?| Quadro(s)?) ((e )?(de |do |dos |da |das |à |a |ao |aos |pelo |pelos |pelas |pela |por |em |no |nos |nas |na |para )?[A-ZÂÁÀÉÊÍÓÔÚ]([A-ZÂÃÁÉÊÍÓÔÕÚÇ]+|[a-zçãàáâéêíóôõú]+)[\\Q-., /\\E]{1,3})+(\\s*(-| |/)\\s*[A-Z][A-Za-z\\QçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ&\\E]+)*)(,|\\Q.\\E|;|:|<)";
 		String regexData = " (\\d{1,2})(°|º)? de ([a-zçA-ZÇ]{4,9}) de (\\d{4})";
 		String regexIntervaloData = " <DAT>[0-9A-Za-z º°]+</DAT> a <DAT>[0-9A-Za-z º°]+</DAT>|\\d{1,2}(°|º)?[ A-Za-z] a <DAT>[0-9A-Za-z º°]+</DAT>";
 		String regexInfoEmp = " estabelecida n(a|o) ([0-9A-Za-zçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ\\Q() ,º°ª-.;/'\"\\E]+ CNPJ(/MF)? n(º|°) \\d{2}\\.\\d{3}\\.\\d{3}/\\d{4}-\\d{2} e CACEPE n(°|º) \\d{7}\\-\\d{2})";
-		String regexCNPJ = " CNPJ/MF n(º|°) (\\d{2}\\.\\d{3}\\.\\d{3}(/\\d{4}-\\d{2})?)";
+		String regexCNPJ = " CNPJ(/MF)?( \\d{2}\\.\\d{3}\\.\\d{3}(/\\d{4}-\\d{2})?)";
+		String regexIE = " (Inscrição Estadual|IE)( \\d{1,3}\\.\\d{3}\\.\\d{3}(\\-\\d{1,2}|\\.\\d{3})?)";
+		String regexCACEPE = " \\d{7}\\-\\d{2}";
 		String regexEnd = "<INF_EMP>([0-9A-Za-zçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ\\Q() ,º°ª-.;/'\"\\E]+), com CNPJ(/MF)?";
 		String regexAnexo = "<ANEXOS>([0-9A-Za-zçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ\"\'\\Q()!?&$§%:@#=;/,º°ª.<>-_\\\\E \n\t\u00A7\u002D]+)</ANEXOS>";//só esse tem sinal igual
 
@@ -153,6 +155,8 @@ public class XMLizacao {
 		Pattern padraoIntervaloData = Pattern.compile(regexIntervaloData);
 		Pattern padraoInfoEmp = Pattern.compile(regexInfoEmp);
 		Pattern padraoCNPJ = Pattern.compile(regexCNPJ);
+		Pattern padraoIE = Pattern.compile(regexIE);
+		Pattern padraoCACEPE = Pattern.compile(regexCACEPE);
 		Pattern padraoEnd = Pattern.compile(regexEnd);
 		Pattern padraoOrgao = Pattern.compile(regexOrgao);
 		Pattern padraoAnexo = Pattern.compile(regexAnexo);
@@ -823,10 +827,24 @@ public class XMLizacao {
 						decretoSaida = decretoSaida.replaceFirst("\\Q" + entreTags +"\\E", textoModificado);
 					}
 					
+					matcher = padraoIE.matcher(decretoSaida);
+					while (matcher.find()){
+						entreTags = matcher.group(2);
+						textoModificado = " <IE>" + matcher.group(2).trim() + "</IE>";
+						decretoSaida = decretoSaida.replaceFirst("\\Q" + entreTags +"\\E", textoModificado);
+					}
+					
 					matcher = padraoCNPJ.matcher(decretoSaida);
 					while (matcher.find()){
 						entreTags = matcher.group(2);
 						textoModificado = " <CNPJ>" + matcher.group(2).trim() + "</CNPJ>";
+						decretoSaida = decretoSaida.replaceFirst("\\Q" + entreTags +"\\E", textoModificado);
+					}
+					
+					matcher = padraoCACEPE.matcher(decretoSaida);
+					while (matcher.find()){
+						entreTags = matcher.group(0);
+						textoModificado = " <CACEPE>" + matcher.group(0).trim() + "</CACEPE>";
 						decretoSaida = decretoSaida.replaceFirst("\\Q" + entreTags +"\\E", textoModificado);
 					}
 					
