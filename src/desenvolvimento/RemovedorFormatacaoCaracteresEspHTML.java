@@ -200,7 +200,22 @@ public class RemovedorFormatacaoCaracteresEspHTML {
 					substituirPor = "R\\$ " + matcher.group(1);
 					decreto = decreto.replaceFirst("R\\$(\\d{1,3})", substituirPor);	
 				}
-
+				
+				padrao = Pattern.compile("(\\d+)m( |;|:|,|e)");
+				matcher = padrao.matcher(decreto);
+				while (matcher.find()){
+					substituirPor = matcher.group(1) + " m" + (matcher.group(2).equals("e")? " e": matcher.group(2));
+					decreto = decreto.replaceFirst("(\\d+)m( |;|:|,|e)", substituirPor);	
+				}
+				
+				/*
+				padrao = Pattern.compile(":([0-9A-Za-zãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚ])");
+				matcher = padrao.matcher(decreto);
+				while (matcher.find()){
+					substituirPor = ": " + matcher.group(1);
+					decreto = decreto.replaceFirst(":([0-9A-Za-zãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚ])", substituirPor);	
+				}
+*/
 				//correção de formatação
 				decreto = decreto.replaceFirst("\\s{2,}DE", " DE");	
 				decreto = decreto.replaceAll("( )+,", ",");
