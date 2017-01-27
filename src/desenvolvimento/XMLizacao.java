@@ -105,16 +105,16 @@ public class XMLizacao {
 		//antes junto com a vírgula, tinha espaço para escolher
 		// devido a isso, existia logo após a opção "de" sem espaço
 		//primeiro comentário deixa de ser escolha
-		String regexLeis = "(( Decreto| \\QDecreto-Lei\\E| Decreto Lei| Decreto Lei Federal| Decreto-Lei Federal| Lei Federal| Lei Complementar| Lei Complementar Federal| Lei| Resolução| Emenda Constitucional| Ad Referendum| Ofício| Parecer| Parecer Conjunto| Portaria Conjunta| Portaria| Ato( Declaratório)?| Termo| Ordem Bancária| Ajuste| Ordens Bancárias| Diário Oficial (do Estado|da União))([A-Z \\Q/-\\E]{0,16})((( nº| n°)? (\\d{1,2}\\.\\d{3}|\\d{3}|\\d{2}|\\d{2,4}/\\d{2,4}[A-Z\\Q	/ -\\E]{0,10}))?(,)?((( de| em)? (\\d{1,2})(°|º)?( de |[\\Q./-\\E])([a-zçA-ZÇ]{4,9}|\\d{1,2}[\\Q./-\\E]))?( de )?(\\d{4}))?)( da Constituição Estadual)?)(,|\\Q.\\E|;|\\Q:\\E| [a-z]|\\))";
+		String regexLeis = "(( Decreto| \\QDecreto-Lei\\E| Decreto Lei| Decreto Lei Federal| Decreto-Lei Federal| Lei Federal| Lei Complementar| Lei Complementar Federal| Lei| Resolução| Emenda Constitucional| Ad Referendum| Ofício| Parecer| Parecer Conjunto| Portaria Conjunta| Portaria| Ato( Declaratório)?| Termo| Ordem Bancária| Ajuste| Ordens Bancárias| Diário Oficial (do Estado|da União)| Ata)([A-Z \\Q/-\\E]{0,16})((( nº| n°)? (\\d{1,2}\\.\\d{3}|\\d{3}|\\d{2}|\\d{2,4}/\\d{2,4}[A-Z\\Q/ -\\E]{0,10}))?(,)?((( de| em)? (\\d{1,2})(°|º)?( de |[\\Q./-\\E])([a-zçA-ZÇ]{4,9}|\\d{1,2}[\\Q./-\\E]))?( de )?(\\d{4}))?)( da Constituição Estadual)?)(,|\\Q.\\E|;|\\Q:\\E| [a-z]|\\))";
 		String regexDinheiro = " R\\$\\s+[0-9.]+,\\d{2}";
 		String regexPorcentagem = " [0-9]+(,\\d{1,})?( )?%";
-//[0-9A-Za-z\\QçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ&\\E]*
+		//[0-9A-Za-z\\QçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ&\\E]*
 		String regexEmpresa = "( (a|à|pela|da|da mesma|denominação atual é|atualmente denominada|antiga|[IXV]{1,5} -)( empresa| EMPRESA| Empresa)?( (([0-9A-ZÂÁÉÊÍÓÔÚ&]|de |da |do |das |dos )[0-9A-Za-z\\QçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ&\\E]*[\\Q-., \\E]{1,3})+(\\QLTDA.\\E|LTDA)( ME)?(\\s*(-| |/)\\s*[A-Z]([A-ZÂÃÁÉÊÍÓÔÕÚÇ&]+|[a-zçãàáâéêíóôõú&]+))*))(,|\\Q.\\E|;|:| [a-z]|, [a-z])";
 		String regexEmpresa2 = "( (a|à|pela|da|da mesma|denominação atual é|atualmente denominada|antiga|[IXV]{1,5} -)( empresa| EMPRESA| Empresa)?( (([0-9A-ZÂÁÉÊÍÓÔÚ&]|de |da |do |das |dos )[0-9A-Za-z\\QçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ&\\E]*[\\Q-., \\E]{1,3})+(\\QS/A\\E|\\QS.A.\\E|\\QS.A\\E)(\\s*(-| |/)\\s*[A-Z]([A-ZÂÃÁÉÊÍÓÔÕÚÇ&]+|[a-zçãàáâéêíóôõú&]+))*))(,|\\Q.\\E|;|:| [a-z])";
 		String regexEmpresa3 = "( (a|à|pela|da|da mesma|denominação atual é|atualmente denominada|[IXV]{1,5} -)( empresa| EMPRESA| Empresa)( (([0-9A-ZÂÁÉÊÍÓÔÚ&]|de |da |do |das |dos )[0-9A-Za-z\\QçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ&\\E]*[\\Q-., \\E]{1,3})+(\\s*(-| |/)\\s*[A-Z]([A-ZÂÃÁÉÊÍÓÔÕÚÇ&]+|[a-zçãàáâéêíóôõú&]+))*))(,|\\Q.\\E|;|:)";
 		String regexEmpresa4 = "( (a|à|pela|da|da mesma|denominação atual é|atualmente denominada|[IXV]{1,5} -)( empresa| EMPRESA| Empresa)( (([0-9A-ZÂÁÉÊÍÓÔÚ&]|de |da |do |das |dos )[0-9A-Za-z\\QçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ&\\E]*[\\Q-., \\E]{0,3})+))(,|\\Q.\\E|;|:| [a-z])";
-		String regexOrgao = "(( Fundação| Escritório| Órgão| Organização| Secretaria(s)?| Instituto| Departamento| Procuradoria| Agência| Comissão| Junta| Assembleia| Câmara| Consórcio| Defensoria| Tribunal| Companhia| Controladoria| Gabinete| Gerência| Comitê| Contadoria| Inteligência| Unidade| Grupo| Grupamento| Corpo| Central| Conselho| Banco| Polícia| Diretoria| Receita| Delegacia| Autarquia) ((e )?(de |do |dos |da |das |à |a |ao |aos |pelo |pelos |pelas |pela |por |em |no |nos |nas |na |para )?[A-ZÂÁÉÊÍÓÔÚ]([A-ZÂÃÁÉÊÍÓÔÕÚÇ]+|[a-zçãàáâéêíóôõú]+)(,| )?)+(\\s*(-|/)\\s*[A-Z][A-Za-z\\QçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ&\\E]+)*)(,|,<|\\Q.\\E|;|:| [a-z])";
-		String regexProgProj = "(( Regime(s)?| Simples| Projeto(s)?| Programa(s)?| Fundo(s)?| Política(s)?| Gratificaç(ão|ões)| Consolidaç(ão|ões)| Sistema(s)?| Plano(s)?| Regulamento(s)?| Convênio(s)?| Financiamento(s)?| Orçamento(s)?| Quadro(s)?) ((e )?(de |do |dos |da |das |à |a |ao |aos |pelo |pelos |pelas |pela |por |em |no |nos |nas |na |para )?[A-ZÂÁÀÉÊÍÓÔÚ]([A-ZÂÃÁÉÊÍÓÔÕÚÇ]+|[a-zçãàáâéêíóôõú]+)[\\Q-., \\E]{0,3})+(\\s*(-|/)\\s*[A-Z][A-Za-z\\QçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ&\\E]+)*)(,|\\Q.\\E|;|:|<|[a-z]| [a-z])";
+		String regexOrgao = "(( Fundaç(ão|ões)| Escritório(s)?| Órgão(s)?| Organizaç(ão|ões)| Secretaria(s)?| Instituto(s)?| Departamento(s)?| Procuradoria(s)?| Agência(s)?| Comiss(ão|ões)?| Junta(s)?| Assembleia(s)?| Câmara(s)?| Consórcio(s)?| Defensoria(s)?| Tribuna(l|is)| Companhia(s)?| Controladoria(s)?| Gabinete(s)?| Gerência(s)?| Comitê(s)?| Contadoria(s)?| Inteligência(s)?| Unidade(s)?| Grupo(s)?| Grupamento(s)?| Corpo(s)?| Centra(l|is)| Conselho(s)?| Banco(s)?| Polícia(s)?| Diretoria(s)?| Receita| Delegacia(s)?| Autarquia(s)?| Coordenaç(ão|ões)| Assessoria(s)?) ((e )?(de |do |dos |da |das |à |a |ao |aos |pelo |pelos |pelas |pela |por |em |no |nos |nas |na |para )?[A-ZÂÁÉÊÍÓÔÚ]([A-ZÂÃÁÉÊÍÓÔÕÚÇ]+|[a-zçãàáâéêíóôõú]+)[\\Q-., \\E]{0,3})+(\\s*(-|/)\\s*[A-Z][A-Za-z\\QçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ&\\E]+)*)(,|,<|\\Q.\\E|;|:| [a-z])";
+		String regexProgProj = "(( Regime(s)?| Simples| Projeto(s)?| Programa(s)?| Fundo(s)?| Política(s)?| Gratificaç(ão|ões)| Consolidaç(ão|ões)| Sistema(s)?| Plano(s)?| Regulamento(s)?| Convênio(s)?| Financiamento(s)?| Quadro(s)?| Orçamento(s)?| Declaraç(ão|ões)| Certificado(s)?) ((e )?(de |do |dos |da |das |à |a |ao |aos |pelo |pelos |pelas |pela |por |em |no |nos |nas |na |para )?(<ORG>|<CAR>)?[A-ZÂÁÀÉÊÍÓÔÚ]([A-ZÂÃÁÉÊÍÓÔÕÚÇ]+|[a-zçãàáâéêíóôõú]+)[\\Q-., \\E]{0,3}(</ORG>|</CAR>)?)+(\\s*(-|/)\\s*[A-Z][A-Za-z\\QçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ&\\E]+)*)(,|\\Q.\\E|;|:|<|[a-z]| [a-z])";
 		String regexEvento = "(( [IVX]{1,5})?( Conferência| Evento| Show| Concerto| Simpósio| Debate| Fórum| Estudo)( (e )?(de |do |dos |da |das |à |a |ao |aos |pelo |pelos |pelas |pela |por |em |no |nos |nas |na |para )?[A-ZÂÁÉÊÍÓÔÚ]([A-ZÂÃÁÉÊÍÓÔÕÚÇ]+|[a-zçãàáâéêíóôõú]+)(,|:)?)+(\\s*(-|/)\\s*[A-Z][A-Za-z\\QçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ&\\E]+)*)(,|\\Q.\\E|;|:|<| [a-z])";
 		String regexData = " (\\d{1,2})(°|º)? de ([a-zçA-ZÇ]{4,9}) (de )?(\\d{4})| \\d{1,2}[\\Q./\\E]\\d{1,2}[\\Q./\\E]\\d{2,4}";
 		String regexIntervaloData = " <DAT>[0-9A-Za-z \\Qº°/.\\E]+</DAT> a <DAT>[0-9A-Za-z \\Qº°/.\\E]+</DAT>| \\d{1,2}(°|º)?([ A-Za-z]{4,10})? (a|e) <DAT>[0-9A-Za-z \\Qº°./\\E]+</DAT>";
@@ -122,9 +122,9 @@ public class XMLizacao {
 		String regexCNPJ = " CNPJ(/MF)?( n°| nº)?( \\d{2}\\.\\d{3}\\.\\d{3}(/\\d{4}-\\d{2})?)";
 		String regexIE = " (Inscrição Estadual|IE)( n°| nº)?( \\d{1,3}\\.\\d{3}\\.\\d{3}(\\-\\d{1,2}|\\.\\d{3})?)";
 		String regexCACEPE = " \\d{7}\\-\\d{2}";
-		String regexMunicipio = "( (M|m)unicípio)( [A-ZÂÁÀÉÊÍÓÔÚ][A-Za-zçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ]+)";
-		String regexCargo = "(( Comandante( Geral)?| Chefe| Sargent(o|a)| Tenente| Secretári(o|a)| Presidência| Diretor(\\-Presidente|\\-Geral)?| Agente(s)?)( (e )?(de |do |dos |da |das |à |a |ao |aos |pelo |pelos |pelas |pela |por |em |no |nos |nas |na |para )?[A-ZÂÁÉÊÍÓÔÚ]([A-ZÂÃÁÉÊÍÓÔÕÚÇ]+|[a-zçãàáâéêíóôõú]+)[\\Q-., \\E]{0,3})+)(,|\\Q.\\E|;|:| [a-z])";
-		String regexCargo2 = "( Delegad(o|a)(s)?| Escriv(ão|ães)| Agente(s)?| Diretor(es|a|as)?)(,| [a-z ]{1,8}[^A-Z]|\\.)";
+		String regexMunicipio = "( (M|m)unicípio)( de)?( [A-ZÂÁÀÉÊÍÓÔÚ][A-Za-zçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ]+)";
+		String regexCargo = "(( Primeiro| Segundo| Terceiro| (1|2|3)(º|°|ª))?( Comandante( Geral)?| Chefe(s)?| Sargent(o|a)| Tenente(s)?| Subtenente(s)?| (\\QTenente\\E( |-))?Corone(l|éis)| Cabo(s)?| Capitã(o)?(s)?| Major| Secretári(o|a)| Presidência| Diretor(\\-Presidente|\\-Geral)?| Agente(s)?| Gerente(s)?| Assistente(s)?| Assessor(a|es|as)?)( (e )?(de |do |dos |da |das |à |a |ao |aos |pelo |pelos |pelas |pela |por |em |no |nos |nas |na |para )?(<ORG>)?[A-ZÂÁÉÊÍÓÔÚ]([A-ZÂÃÁÉÊÍÓÔÕÚÇ]+|[a-zçãàáâéêíóôõú]+)(</ORG>)?[\\Q-., \\E]{0,3})+)(,|\\Q.\\E|;|:| [a-z])";
+		String regexCargo2 = "( Delegad(o|a)(s)?| Escriv(ão|ães)| Agente(s)?| Diretor(es|a|as)?| Assessor(a|as|es)?)(,| [a-z ]{1,8}[^A-Z]|\\.)";
 		String regexImp = "(( Índice| Taxa| Imposto| Tributo)( ((e )?(de |do |dos |da |das |à |a |ao |aos |pelo |pelos |pelas |pela |por |em |no |nos |nas |na |para )?[A-ZÂÁÉÊÍÓÔÚ]([A-ZÂÃÁÉÊÍÓÔÕÚÇ]+|[a-zçãàáâéêíóôõú]+)(,|:)?))+(\\s*(-|/)\\s*[A-Z]([A-ZÂÃÁÉÊÍÓÔÕÚÇ&]+|[a-zçãàáâéêíóôõú&]+))*)(,|\\Q.\\E|;|:)";
 		String regexSite = " www(\\d)?((\\.[a-z]+))+((/)?|/( )?[A-Za-z]+)";
 		String regexEnd = "<INF_EMP>([0-9A-Za-zçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ\\Q() ,º°ª-.;/'\"\\E]+), com CNPJ(/MF)?";
@@ -198,6 +198,7 @@ public class XMLizacao {
 		tiposDocumentos.put("Portaria Conjunta", "PtC");
 		tiposDocumentos.put("Ato", "At");
 		tiposDocumentos.put("Ato Declaratório", "AD");
+		tiposDocumentos.put("Ata", "ATA");
 		tiposDocumentos.put("Ajuste", "Aj");
 		tiposDocumentos.put("Termo", "Te");
 		tiposDocumentos.put("Lei Complementar Federal", "LCF");
@@ -683,14 +684,14 @@ public class XMLizacao {
 						entreTags = matcher.group(1);
 						textoModificado = " <" +  tiposDocumentos.get(matcher.group(2).trim());
 						System.out.println(entreTags);
-						
-						 if (matcher.group(11) == null && matcher.group(7) != null){
-							 if (matcher.group(9).contains("/")){
-								 textoModificado += " numeracao=" + matcher.group(9).split("/")[0] + " ano=" + matcher.group(9).split("/")[1];
-							 } else{
-								 textoModificado += " numeracao=" + matcher.group(9);
-							 }
-							
+
+						if (matcher.group(11) == null && matcher.group(7) != null){
+							if (matcher.group(9).contains("/")){
+								textoModificado += " numeracao=" + matcher.group(9).split("/")[0] + " ano=" + matcher.group(9).split("/")[1];
+							} else{
+								textoModificado += " numeracao=" + matcher.group(9);
+							}
+
 						} else if(matcher.group(7) == null && matcher.group(14) != null){
 							textoModificado += " data=" + (matcher.group(14).length() < 2? "0" + matcher.group(14) : matcher.group(14))
 									+ "-";
@@ -714,7 +715,15 @@ public class XMLizacao {
 							textoModificado += " ano=" + matcher.group(19);
 						}
 
-						textoModificado+= ">" + (matcher.group(11) != null? matcher.group(1).trim(): matcher.group(1).replace(",", "").trim()) + "</" + tiposDocumentos.get(matcher.group(2).trim()) + ">";//+ (matcher.group(10) != null? "": ",") + (matcher.group(19) == matcher.group(19).toLowerCase()? " " : "");
+						String tipoDoc = tiposDocumentos.get(matcher.group(2).trim());
+						textoModificado+= ">" + matcher.group(1).trim() + "</" + tipoDoc + ">";
+						if (textoModificado.contains(",<")){
+							textoModificado.replace(",</" + tipoDoc +  ">", "</" + tipoDoc +  ">,");
+						} else if (textoModificado.contains(";<")){
+							textoModificado.replace(";</" + tipoDoc +  ">", "</" + tipoDoc +  ">;");
+						} else if (textoModificado.contains(":<")){
+							textoModificado.replace(":</" + tipoDoc +  ">", "</" + tipoDoc +  ">:");
+						}
 						decretoSaida = decretoSaida.replaceFirst("\\Q"+entreTags+"\\E", textoModificado);
 					}
 
@@ -740,14 +749,35 @@ public class XMLizacao {
 						if (matcher.group(3) == null){
 							entreTags = matcher.group(3);
 							textoModificado = " <EMP>" + matcher.group(4).trim() + "</EMP>";
+							if (textoModificado.contains(",<")){
+								textoModificado = textoModificado.replace(",</EMP>", "</EMP>,");
+							} else if (textoModificado.contains(";<")){
+								textoModificado = textoModificado.replace(";</EMP>", "</EMP>;");
+							} else if (textoModificado.contains(":<")){
+								textoModificado = textoModificado.replace(":</EMP>", "</EMP>:");
+							}
 							decretoSaida = decretoSaida.replaceFirst("\\Q" + entreTags +"\\E", textoModificado);
 						} else if (matcher.group(3).contains("Empresa")||matcher.group(3).contains("EMPRESA")){
 							entreTags = matcher.group(3) + matcher.group(4);
 							textoModificado = " <EMP>" + (matcher.group(3) + matcher.group(4)).trim() + "</EMP>";
+							if (textoModificado.contains(",<")){
+								textoModificado = textoModificado.replace(",</EMP>", "</EMP>,");
+							} else if (textoModificado.contains(";<")){
+								textoModificado = textoModificado.replace(";</EMP>", "</EMP>;");
+							} else if (textoModificado.contains(":<")){
+								textoModificado = textoModificado.replace(":</EMP>", "</EMP>:");
+							}
 							decretoSaida = decretoSaida.replaceFirst("\\Q" + entreTags +"\\E", textoModificado);
 						} else if (matcher.group(3).contains("empresa") && matcher.group(4).charAt(0) == matcher.group(4).toUpperCase().charAt(0)){
 							entreTags = matcher.group(4);
 							textoModificado = " <EMP>" + matcher.group(4).trim() + "</EMP>";
+							if (textoModificado.contains(",<")){
+								textoModificado = textoModificado.replace(",</EMP>", "</EMP>,");
+							} else if (textoModificado.contains(";<")){
+								textoModificado = textoModificado.replace(";</EMP>", "</EMP>;");
+							} else if (textoModificado.contains(":<")){
+								textoModificado = textoModificado.replace(":</EMP>", "</EMP>:");
+							}
 							decretoSaida = decretoSaida.replaceFirst("\\Q" + entreTags +"\\E", textoModificado);
 						}		
 					}
@@ -759,14 +789,35 @@ public class XMLizacao {
 						if (matcher.group(3) == null){
 							entreTags = matcher.group(4);
 							textoModificado = " <EMP>" + matcher.group(4).trim() + "</EMP>";
+							if (textoModificado.contains(",<")){
+								textoModificado = textoModificado.replace(",</EMP>", "</EMP>,");
+							} else if (textoModificado.contains(";<")){
+								textoModificado = textoModificado.replace(";</EMP>", "</EMP>;");
+							} else if (textoModificado.contains(":<")){
+								textoModificado = textoModificado.replace(":</EMP>", "</EMP>:");
+							}
 							decretoSaida = decretoSaida.replaceFirst("\\Q" + entreTags +"\\E", textoModificado);
 						} else if (matcher.group(3).contains("Empresa")||matcher.group(3).contains("EMPRESA")){
 							entreTags = matcher.group(3) + matcher.group(4);
 							textoModificado = " <EMP>" + (matcher.group(3) + matcher.group(4)).trim() + "</EMP>";
+							if (textoModificado.contains(",<")){
+								textoModificado = textoModificado.replace(",</EMP>", "</EMP>,");
+							} else if (textoModificado.contains(";<")){
+								textoModificado = textoModificado.replace(";</EMP>", "</EMP>;");
+							} else if (textoModificado.contains(":<")){
+								textoModificado = textoModificado.replace(":</EMP>", "</EMP>:");
+							}
 							decretoSaida = decretoSaida.replaceFirst("\\Q" + entreTags +"\\E", textoModificado);
 						} else if (matcher.group(3).contains("empresa") && matcher.group(4).charAt(0) == matcher.group(4).toUpperCase().charAt(0)){
 							entreTags = matcher.group(4);
 							textoModificado = " <EMP>" + matcher.group(4).trim() + "</EMP>";
+							if (textoModificado.contains(",<")){
+								textoModificado = textoModificado.replace(",</EMP>", "</EMP>,");
+							} else if (textoModificado.contains(";<")){
+								textoModificado = textoModificado.replace(";</EMP>", "</EMP>;");
+							} else if (textoModificado.contains(":<")){
+								textoModificado = textoModificado.replace(":</EMP>", "</EMP>:");
+							}
 							decretoSaida = decretoSaida.replaceFirst("\\Q" + entreTags +"\\E", textoModificado);
 						}	
 					}
@@ -777,14 +828,35 @@ public class XMLizacao {
 						if (matcher.group(3) == null){
 							entreTags = matcher.group(4);
 							textoModificado = " <EMP>" + matcher.group(4).trim() + "</EMP>";
+							if (textoModificado.contains(",<")){
+								textoModificado = textoModificado.replace(",</EMP>", "</EMP>,");
+							} else if (textoModificado.contains(";<")){
+								textoModificado = textoModificado.replace(";</EMP>", "</EMP>;");
+							} else if (textoModificado.contains(":<")){
+								textoModificado = textoModificado.replace(":</EMP>", "</EMP>:");
+							}
 							decretoSaida = decretoSaida.replaceFirst("\\Q" + entreTags +"\\E", textoModificado);
 						} else if (matcher.group(3).contains("Empresa")||matcher.group(3).contains("EMPRESA")){
 							entreTags = matcher.group(3) + matcher.group(4);
 							textoModificado = " <EMP>" + (matcher.group(3) + matcher.group(4)).trim() + "</EMP>";
+							if (textoModificado.contains(",<")){
+								textoModificado = textoModificado.replace(",</EMP>", "</EMP>,");
+							} else if (textoModificado.contains(";<")){
+								textoModificado = textoModificado.replace(";</EMP>", "</EMP>;");
+							} else if (textoModificado.contains(":<")){
+								textoModificado = textoModificado.replace(":</EMP>", "</EMP>:");
+							}
 							decretoSaida = decretoSaida.replaceFirst("\\Q" + entreTags +"\\E", textoModificado);
 						} else if (matcher.group(3).contains("empresa") && matcher.group(4).charAt(0) == matcher.group(4).toUpperCase().charAt(0)){
 							entreTags = matcher.group(4);
 							textoModificado = " <EMP>" + matcher.group(4).trim() + "</EMP>";
+							if (textoModificado.contains(",<")){
+								textoModificado = textoModificado.replace(",</EMP>", "</EMP>,");
+							} else if (textoModificado.contains(";<")){
+								textoModificado = textoModificado.replace(";</EMP>", "</EMP>;");
+							} else if (textoModificado.contains(":<")){
+								textoModificado = textoModificado.replace(":</EMP>", "</EMP>:");
+							}
 							decretoSaida = decretoSaida.replaceFirst("\\Q" + entreTags +"\\E", textoModificado);
 						}				
 					}
@@ -794,18 +866,55 @@ public class XMLizacao {
 						//System.out.println(nomeArquivo);
 						if (matcher.group(3) == null){
 							entreTags = matcher.group(4);
-
 							textoModificado = " <EMP>" + matcher.group(4).trim() + "</EMP>";
+							if (textoModificado.contains(",<")){
+								textoModificado = textoModificado.replace(",</EMP>", "</EMP>,");
+							} else if (textoModificado.contains(";<")){
+								textoModificado = textoModificado.replace(";</EMP>", "</EMP>;");
+							} else if (textoModificado.contains(":<")){
+								textoModificado = textoModificado.replace(":</EMP>", "</EMP>:");
+							}
 							decretoSaida = decretoSaida.replaceFirst("\\Q" + entreTags +"\\E", textoModificado);
 						} else if (matcher.group(3).contains("Empresa")||matcher.group(3).contains("EMPRESA")){
 							entreTags = matcher.group(3) + matcher.group(4);
 							textoModificado = " <EMP>" + (matcher.group(3) + matcher.group(4)).trim() + "</EMP>";
+							if (textoModificado.contains(",<")){
+								textoModificado = textoModificado.replace(",</EMP>", "</EMP>,");
+							} else if (textoModificado.contains(";<")){
+								textoModificado = textoModificado.replace(";</EMP>", "</EMP>;");
+							} else if (textoModificado.contains(":<")){
+								textoModificado = textoModificado.replace(":</EMP>", "</EMP>:");
+							}
 							decretoSaida = decretoSaida.replaceFirst("\\Q" + entreTags +"\\E", textoModificado);
 						} else if (matcher.group(3).contains("empresa") && matcher.group(4).charAt(0) == matcher.group(4).toUpperCase().charAt(0)){
 							entreTags = matcher.group(4);
 							textoModificado = " <EMP>" + matcher.group(4).trim() + "</EMP>";
+							if (textoModificado.contains(",<")){
+								textoModificado = textoModificado.replace(",</EMP>", "</EMP>,");
+							} else if (textoModificado.contains(";<")){
+								textoModificado = textoModificado.replace(";</EMP>", "</EMP>;");
+							} else if (textoModificado.contains(":<")){
+								textoModificado = textoModificado.replace(":</EMP>", "</EMP>:");
+							}
 							decretoSaida = decretoSaida.replaceFirst("\\Q" + entreTags +"\\E", textoModificado);
 						}			
+					}
+
+					matcher = padraoOrgao.matcher(decretoSaida);
+					while (matcher.find()){
+						//System.out.println(nomeArquivo);
+						if (!(matcher.group(0).contains("Unidade da Federação") || matcher.group(0).contains("Unidade Federativa"))){
+							entreTags = matcher.group(1);
+							textoModificado = " <ORG>" + matcher.group(1).trim() + "</ORG>";
+							if (textoModificado.contains(",<")){
+								textoModificado = textoModificado.replace(",</ORG>", "</ORG>,");
+							} else if (textoModificado.contains(";<")){
+								textoModificado = textoModificado.replace(";</ORG>", "</ORG>;");
+							} else if (textoModificado.contains(":<")){
+								textoModificado = textoModificado.replace(":</ORG>", "</ORG>:");
+							}
+							decretoSaida = decretoSaida.replaceFirst("\\Q" + entreTags +"\\E", textoModificado);			
+						}
 					}
 					
 					matcher = padraoCargo.matcher(decretoSaida);
@@ -813,6 +922,28 @@ public class XMLizacao {
 						//System.out.println(nomeArquivo);
 						entreTags = matcher.group(1);
 						textoModificado = " <CAR>" + matcher.group(1).trim() + "</CAR>";
+						if (textoModificado.contains(",<")){
+							textoModificado = textoModificado.replace(",</CAR>", "</CAR>,");
+						} else if (textoModificado.contains(";<")){
+							textoModificado = textoModificado.replace(";</CAR>", "</CAR>;");
+						} else if (textoModificado.contains(":<")){
+							textoModificado = textoModificado.replace(":</CAR>", "</CAR>:");
+						}
+						decretoSaida = decretoSaida.replaceFirst("\\Q" + entreTags +"\\E", textoModificado);			
+					}
+
+					matcher = padraoCargo2.matcher(decretoSaida);
+					while (matcher.find()){
+						//System.out.println(nomeArquivo);
+						entreTags = matcher.group(1);
+						textoModificado = " <CAR>" + matcher.group(1).trim() + "</CAR>";
+						if (textoModificado.contains(",<")){
+							textoModificado = textoModificado.replace(",</CAR>", "</CAR>,");
+						} else if (textoModificado.contains(";<")){
+							textoModificado = textoModificado.replace(";</CAR>", "</CAR>;");
+						} else if (textoModificado.contains(":<")){
+							textoModificado = textoModificado.replace(":</CAR>", "</CAR>:");
+						}
 						decretoSaida = decretoSaida.replaceFirst("\\Q" + entreTags +"\\E", textoModificado);			
 					}
 					
@@ -821,17 +952,16 @@ public class XMLizacao {
 						//System.out.println(nomeArquivo);
 						entreTags = matcher.group(1);
 						textoModificado = " <EV>" + matcher.group(1).trim() + "</EV>";
+						if (textoModificado.contains(",<")){
+							textoModificado = textoModificado.replace(",</EV>", "</EV>,");
+						} else if (textoModificado.contains(";<")){
+							textoModificado = textoModificado.replace(";</EV>", "</EV>;");
+						} else if (textoModificado.contains(":<")){
+							textoModificado = textoModificado.replace(":</EV>", "</EV>:");
+						}
 						decretoSaida = decretoSaida.replaceFirst("\\Q" + entreTags +"\\E", textoModificado);			
 					}
-					
-					matcher = padraoCargo2.matcher(decretoSaida);
-					while (matcher.find()){
-						//System.out.println(nomeArquivo);
-						entreTags = matcher.group(1);
-						textoModificado = " <CAR>" + matcher.group(1).trim() + "</CAR>";
-						decretoSaida = decretoSaida.replaceFirst("\\Q" + entreTags +"\\E", textoModificado);			
-					}
-					
+
 					matcher = padraoImp.matcher(decretoSaida);
 					while (matcher.find()){
 						//System.out.println(nomeArquivo);
@@ -840,19 +970,21 @@ public class XMLizacao {
 						decretoSaida = decretoSaida.replaceFirst("\\Q" + entreTags +"\\E", textoModificado);			
 					}
 
-					matcher = padraoOrgao.matcher(decretoSaida);
-					while (matcher.find()){
-						//System.out.println(nomeArquivo);
-						entreTags = matcher.group(1);
-						textoModificado = " <ORG>" + matcher.group(1).trim() + "</ORG>";
-						decretoSaida = decretoSaida.replaceFirst("\\Q" + entreTags +"\\E", textoModificado);			
-					}
-					
 					matcher = padraoProgProj.matcher(decretoSaida);
 					while (matcher.find()){
 						//System.out.println(nomeArquivo);
 						entreTags = matcher.group(1);
 						textoModificado = " <PROG>" + matcher.group(1).trim() + "</PROG>";
+						if (textoModificado.contains(",<")){
+							textoModificado = textoModificado.replace(",</PROG>", "</PROG>,");
+						} else if (textoModificado.contains(";<")){
+							textoModificado = textoModificado.replace(";</PROG>", "</PROG>;");
+						} else if (textoModificado.contains(":<")){
+							textoModificado = textoModificado.replace(":</PROG>", "</PROG>:");
+						}
+						if (textoModificado.split("</CAR>").length != textoModificado.split("<CAR>").length){
+							textoModificado = textoModificado.replace("</CAR></PROG>", "</PROG></CAR>");
+						}
 						decretoSaida = decretoSaida.replaceFirst("\\Q" + entreTags +"\\E", textoModificado);			
 					}
 
@@ -863,7 +995,7 @@ public class XMLizacao {
 						textoModificado = " <DAT>" + matcher.group(0).trim() + "</DAT>";
 						decretoSaida = decretoSaida.replaceFirst("\\Q" + entreTags +"\\E", textoModificado);
 					}
-					
+
 					matcher = padraoIntervaloData.matcher(decretoSaida);
 					while (matcher.find()){
 						//System.out.println(nomeArquivo);
@@ -871,14 +1003,14 @@ public class XMLizacao {
 						textoModificado = " <INT_DAT>" + matcher.group(0).trim() + "</INT_DAT>";
 						decretoSaida = decretoSaida.replaceFirst("\\Q" + entreTags +"\\E", textoModificado);
 					}
-					
+
 					matcher = padraoInfoEmp.matcher(decretoSaida);
 					while (matcher.find()){
 						entreTags = matcher.group(2);
 						textoModificado = " <INF_EMP>" + matcher.group(2).trim() + "</INF_EMP>";
 						decretoSaida = decretoSaida.replaceFirst("\\Q" + entreTags +"\\E", textoModificado);
 					}
-					
+
 					matcher = padraoEnd.matcher(decretoSaida);
 					while (matcher.find()){
 						//System.out.println(matcher.group(1));
@@ -886,35 +1018,35 @@ public class XMLizacao {
 						textoModificado = "<END>" + matcher.group(1).trim() + "</END>";
 						decretoSaida = decretoSaida.replaceFirst("\\Q" + entreTags +"\\E", textoModificado);
 					}
-					
+
 					matcher = padraoIE.matcher(decretoSaida);
 					while (matcher.find()){
 						entreTags = matcher.group(3);
 						textoModificado = " <IE>" + matcher.group(3).trim() + "</IE>";
 						decretoSaida = decretoSaida.replaceFirst("\\Q" + entreTags +"\\E", textoModificado);
 					}
-					
+
 					matcher = padraoCNPJ.matcher(decretoSaida);
 					while (matcher.find()){
 						entreTags = matcher.group(3);
 						textoModificado = " <CNPJ>" + matcher.group(3).trim() + "</CNPJ>";
 						decretoSaida = decretoSaida.replaceFirst("\\Q" + entreTags +"\\E", textoModificado);
 					}
-					
+
 					matcher = padraoCACEPE.matcher(decretoSaida);
 					while (matcher.find()){
 						entreTags = matcher.group(0);
 						textoModificado = " <CACEPE>" + matcher.group(0).trim() + "</CACEPE>";
 						decretoSaida = decretoSaida.replaceFirst("\\Q" + entreTags +"\\E", textoModificado);
 					}
-					
+
 					matcher = padraoMunicipio.matcher(decretoSaida);
 					while (matcher.find()){
-						entreTags = matcher.group(3);
-						textoModificado = " <MUN>" + matcher.group(3).trim() + "</MUN>";
+						entreTags = matcher.group(4);
+						textoModificado = " <MUN>" + matcher.group(4).trim() + "</MUN>";
 						decretoSaida = decretoSaida.replaceFirst("\\Q" + entreTags +"\\E", textoModificado);
 					}
-					
+
 					matcher = padraoSite.matcher(decretoSaida);
 					while (matcher.find()){
 						System.out.println(matcher.group(1));
@@ -922,8 +1054,8 @@ public class XMLizacao {
 						textoModificado = " <SITE>" + matcher.group(0).trim() + "</SITE>";
 						decretoSaida = decretoSaida.replaceFirst("\\Q" + entreTags +"\\E", textoModificado);
 					}
-					
-					
+
+
 					matcher = padraoAnexo.matcher(decretoSaida);
 					textoModificado = "";
 
