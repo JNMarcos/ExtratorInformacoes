@@ -150,12 +150,12 @@ public class RemovedorFormatacaoCaracteresEspHTML {
 
 				//conserta a numeração do decreto
 				
-				padrao = Pattern.compile("(\\d{2,3})\\s*\\.\\s+(\\d{3})[^º]");
+				padrao = Pattern.compile("(\\d{1,3})\\s*\\.\\s+(\\d{3})[^º]");
 				matcher = padrao.matcher(decreto);
 				if (matcher.find()){
 					//System.out.println(nomeArquivo + "  numeracaoDecreto" + "   "+ matcher.group(1) + matcher.group(2));
 					substituirPor = matcher.group(1) + "." + matcher.group(2);
-					decreto = decreto.replaceFirst("\\d{2,3}\\s*\\.\\s+(\\d{3})[^º]", substituirPor);
+					decreto = decreto.replaceFirst("\\d{1,3}\\s*\\.\\s+(\\d{3})[^º]", substituirPor);
 				}
 
 				//remove interrogação quando estiver entre letras. ? proveniente de erro durante a conversão anterior
@@ -201,11 +201,11 @@ public class RemovedorFormatacaoCaracteresEspHTML {
 					decreto = decreto.replaceFirst("R\\$(\\d{1,3})", substituirPor);	
 				}
 				
-				padrao = Pattern.compile("(\\d+)m( |;|:|,|e)");
+				padrao = Pattern.compile("(\\d+)(mm|cm|dm|hm|km|m|ha)( |;|:|,|e|E|N|O|L|S|\\Q(\\E|\\.)");
 				matcher = padrao.matcher(decreto);
 				while (matcher.find()){
-					substituirPor = matcher.group(1) + " m" + (matcher.group(2).equals("e")? " e": matcher.group(2));
-					decreto = decreto.replaceFirst("(\\d+)m( |;|:|,|e)", substituirPor);	
+					substituirPor = matcher.group(1) + " " + matcher.group(2) + (matcher.group(3).matches("[ENOLSe]")? " " + matcher.group(3): matcher.group(3));
+					decreto = decreto.replaceFirst("(\\d+)(mm|cm|dm|hm|km|m|ha)( |;|:|,|e|E|N|O|L|S|\\Q(\\E|\\.)", substituirPor);	
 				}
 				
 				/*
