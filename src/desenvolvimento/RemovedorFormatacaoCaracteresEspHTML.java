@@ -149,7 +149,7 @@ public class RemovedorFormatacaoCaracteresEspHTML {
 
 
 				//conserta a numeração do decreto
-				
+
 				padrao = Pattern.compile("(\\d{1,3})\\s*\\.\\s+(\\d{3})[^º]");
 				matcher = padrao.matcher(decreto);
 				if (matcher.find()){
@@ -170,7 +170,7 @@ public class RemovedorFormatacaoCaracteresEspHTML {
 				String[] partes = decreto.split("Palácio do Campo das Princesas");
 
 				padrao = Pattern.compile("( ){2,}(\\w)");
-				
+
 				for (int k = 0; k < partes.length && k != 1; k++){
 					matcher = padrao.matcher(partes[k]);
 					while (matcher.find()){
@@ -185,7 +185,7 @@ public class RemovedorFormatacaoCaracteresEspHTML {
 					decreto += "Palácio do Campo das Princesas" + partes[k]; 
 				}
 
-				
+
 				//ano separado correção
 				padrao = Pattern.compile(" de (\\d{1,3})\\s+(\\d{1,3})");
 				matcher = padrao.matcher(decreto);
@@ -193,21 +193,37 @@ public class RemovedorFormatacaoCaracteresEspHTML {
 					substituirPor = " de " + matcher.group(1) + matcher.group(2);
 					decreto = decreto.replaceFirst(" de (\\d{1,3})\\s+(\\d{1,3})", substituirPor);	
 				}
-				
+
 				padrao = Pattern.compile("R\\$(\\d{1,3})");
 				matcher = padrao.matcher(decreto);
 				while (matcher.find()){
 					substituirPor = "R\\$ " + matcher.group(1);
 					decreto = decreto.replaceFirst("R\\$(\\d{1,3})", substituirPor);	
 				}
-				
+
 				padrao = Pattern.compile("(\\d+)(mm|cm|dm|hm|km|m|ha)( |;|:|,|e|E|N|O|L|S|\\Q(\\E|\\.)");
 				matcher = padrao.matcher(decreto);
 				while (matcher.find()){
 					substituirPor = matcher.group(1) + " " + matcher.group(2) + (matcher.group(3).matches("[ENOLSe]")? " " + matcher.group(3): matcher.group(3));
 					decreto = decreto.replaceFirst("(\\d+)(mm|cm|dm|hm|km|m|ha)( |;|:|,|e|E|N|O|L|S|\\Q(\\E|\\.)", substituirPor);	
 				}
-				
+
+				padrao = Pattern.compile(" ([A-Za-zçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ]*[a-zéàáíóúêâô]+)([A-Z][A-Za-zçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ]*)");
+				matcher = padrao.matcher(decreto);
+				while (matcher.find()){
+					if (!matcher.group(0).contains("DeSTDA")){
+						substituirPor = matcher.group(1) + " " + matcher.group(2);
+						decreto = decreto.replaceFirst("([A-Za-zçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ]*[a-zéàáíóúêâô]+)([A-Z][A-Za-zçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ]*)", substituirPor);	
+					}
+				}
+
+				padrao = Pattern.compile("([0-9])([A-Za-zçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ])");
+				matcher = padrao.matcher(decreto);
+				while (matcher.find()){
+					substituirPor = matcher.group(1) + " " + matcher.group(2);
+					decreto = decreto.replaceFirst("[A-Za-zçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ]", substituirPor);	
+				}
+
 				/*
 				padrao = Pattern.compile(":([0-9A-Za-zãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚ])");
 				matcher = padrao.matcher(decreto);
@@ -215,7 +231,7 @@ public class RemovedorFormatacaoCaracteresEspHTML {
 					substituirPor = ": " + matcher.group(1);
 					decreto = decreto.replaceFirst(":([0-9A-Za-zãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚ])", substituirPor);	
 				}
-*/
+				 */
 				//correção de formatação
 				decreto = decreto.replaceFirst("\\s{2,}DE", " DE");	
 				decreto = decreto.replaceAll("( )+,", ",");
@@ -225,6 +241,7 @@ public class RemovedorFormatacaoCaracteresEspHTML {
 
 				//correção de palavras
 				decreto = decreto.replaceAll("A( )+tiva", "Ativa");
+				decreto = decreto.replaceAll("Policia", "Polícia");
 				decreto = decreto.replaceAll("CON S I D E R AN DO", "CONSIDERANDO");
 				decreto = decreto.replaceAll(" ONSIDERANDO", " CONSIDERANDO");
 				decreto = decreto.replaceAll("GVERNO|GPVERNO", "GOVERNO");
