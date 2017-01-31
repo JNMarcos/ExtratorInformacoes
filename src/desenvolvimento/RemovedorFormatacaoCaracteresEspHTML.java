@@ -247,7 +247,8 @@ public class RemovedorFormatacaoCaracteresEspHTML {
 				decreto = decreto.replaceAll("GVERNO|GPVERNO", "GOVERNO");
 				decreto = decreto.replaceAll("GVERNADOR", "GOVERNADOR");
 				decreto = decreto.replaceAll("MEORIAL", "MEMORIAL");
-				decreto = decreto.replaceAll("daLei", "da Lei");
+				decreto = decreto.replaceAll(" de do ", " do ");
+				decreto = decreto.replaceAll("Oficio", "Ofício");
 				decreto = decreto.replaceAll("O G O VER N ADOR DO E S T ADO", "O GOVERNADOR DO ESTADO");
 				decreto = decreto.replaceAll("D\\s*E\\s*C\\s*R\\s*E\\s*T\\s*A", "DECRETA");
 				decreto = decreto.replaceAll("SETMBRO", "SETEMBRO");
