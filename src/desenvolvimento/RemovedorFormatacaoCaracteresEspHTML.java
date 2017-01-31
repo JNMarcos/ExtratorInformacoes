@@ -221,7 +221,7 @@ public class RemovedorFormatacaoCaracteresEspHTML {
 				matcher = padrao.matcher(decreto);
 				while (matcher.find()){
 					substituirPor = matcher.group(1) + " " + matcher.group(2);
-					decreto = decreto.replaceFirst("[A-Za-zçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ]", substituirPor);	
+					decreto = decreto.replaceFirst("([0-9])([A-Za-zçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ])", substituirPor);	
 				}
 
 				/*
