@@ -223,7 +223,14 @@ public class RemovedorFormatacaoCaracteresEspHTML {
 					substituirPor = matcher.group(1) + " " + matcher.group(2);
 					decreto = decreto.replaceFirst("([0-9])([A-Za-zçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ])", substituirPor);	
 				}
-
+				
+				padrao = Pattern.compile(" m (2|3)( |;|,|\\.|\\))");
+				matcher = padrao.matcher(decreto);
+				while (matcher.find()){
+					substituirPor = " m" + matcher.group(1) + matcher.group(2);
+					decreto = decreto.replaceFirst(" m (2|3)( |;|,|\\.|\\))", substituirPor);	
+				}
+				
 				/*
 				padrao = Pattern.compile(":([0-9A-Za-zãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚ])");
 				matcher = padrao.matcher(decreto);

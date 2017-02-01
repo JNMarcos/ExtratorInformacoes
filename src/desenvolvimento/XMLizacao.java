@@ -110,7 +110,7 @@ public class XMLizacao {
 		//antes junto com a vírgula, tinha espaço para escolher
 		// devido a isso, existia logo após a opção "de" sem espaço
 		//primeiro comentário deixa de ser escolha
-		String regexLeis = "(( |\"|\\()(Decreto|\\QDecreto-Lei\\E|Decreto Lei|Decreto Lei Federal|Decreto-Lei Federal|Lei Federal|Lei Complementar|Lei Complementar Federal|Lei|Resolução|Emenda Constitucional|Ad Referendum|Ofício|Parecer|Parecer Conjunto|Portaria Conjunta|Portaria|Ato|Ato DeclaratórioTermo|Ajuste|Ata)( do| da)?[A-Z \\Q/-\\E]{0,16}((( nº| n°)? (\\d{1,2}\\.\\d{3}|\\d{3}|\\d{2}|\\d{2,4}/\\d{2,4}[A-Z\\Q/ -\\E]{0,10}))?(,)?((( de| em)? (\\d{1,2})(°|º)?( de |[\\Q./-\\E])([a-zçA-ZÇ]{4,9}|\\d{1,2}[\\Q./-\\E]))?( de )?(\\d{4}))?))(,|<|\\Q.\\E|;|:|\"|\\Q)\\E| [a-zéàáíóúêâô])";
+		String regexLeis = "(( |\"|\\()(Decreto|\\QDecreto-Lei\\E|Decreto Lei|Decreto Lei Federal|\\QDecreto-Lei\\E Federal|Lei Federal|Lei Complementar|Lei Complementar Federal|Lei|Resolução|Emenda Constitucional|Ad Referendum|Ofício|Parecer|Parecer Conjunto|Portaria Conjunta|Portaria|Ato|Ato DeclaratórioTermo|Ajuste|Ata)( do| da)?[A-Z \\Q/-\\E]{0,16}((( nº| n°)? (\\d{1,2}\\.\\d{3}|\\d{3}|\\d{2}|\\d{2,4}/\\d{2,4}[A-Z\\Q/ -\\E]{0,10}))?(,)?((( de| em)? (\\d{1,2})(°|º)?( de |[\\Q./-\\E])([a-zçA-ZÇ]{4,9}|\\d{1,2}[\\Q./-\\E]))?( de )?(\\d{4}))?))(,|<|\\Q.\\E|;|:|\"|\\Q)\\E| [a-zéàáíóúêâô])";
 		String regexDoc = "(( |\"|\\()(Código(s)?|Constituiç(ão|ões)|Estatuto(s)?|Orçamento(s)?|Termo(s)?|Documento(s)?|Cadastro(s)?|Quadro(s)?|Declaraç(ão|ões)|Certificado(s)?|Regimento(s)?|Regulamento(s)?|Regime(s)?|Ato(s)?|Ata(s)?|Termo(s)?|Orde(m|ns) Bancária(s)?|Diário Oficial|Contrato(s)?|Balanço(s)?|Despesa(s)?|Nota(s)?|Resoluç(ão|ões)|Anexo(s)?|Memoria(l|is)) ((de |do |dos |da |das |à |a |ao |aos |pelo |pelos |pelas |pela |por |em |para |com |com os |com as )?[A-ZÂÁÉÊÍÓÔÚ]([A-ZÂÃÁÉÊÍÓÔÕÚÇ]+|[a-zçãàáâéêíóôõú]+)(, | - | )?)+(\\s*(-|/)\\s*[A-Z][A-Za-z\\QçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ&-\\E]+)*)\\s*(,|<|\\Q.\\E|;|:|\"|\\Q)\\E| [a-zéàáíóúêâô]|  )";
 		String regexDinheiro = " R\\$\\s+[0-9.]+,\\d{2}";
 		String regexPorcentagem = " [0-9]+(,\\d{1,})?( )?%";
@@ -132,7 +132,7 @@ public class XMLizacao {
 		String regexEvento = "(( [IVX]{1,5})?( Conferência| Evento| Show| Concerto| Simpósio| Debate| Fórum| Estudo) ((e )?(de |do |dos |da |das |à |a |ao |aos |pelo |pelos |pelas |pela |por |em |no |nos |nas |na |para |com |com os |com as )?[A-ZÂÁÉÊÍÓÔÚ]([A-ZÂÃÁÉÊÍÓÔÕÚÇ]+|[a-zçãàáâéêíóôõú]+)(\\. |, | - | )?)+(\\s*(-|/)\\s*[A-Z][A-Za-z\\QçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ&\\E]+)*)\\s*(,|<|\\Q.\\E|;|:|\"|\\Q)\\E| [a-zéàáíóúêâô])";
 		String regexData = "( (\\d{1,2})(°|º)? de ([a-zçA-ZÇ]{4,9}) (de )?(\\d{4})| \\d{1,2}[\\Q./\\E]\\d{1,2}[\\Q./\\E](\\d{2}|\\d{4}))( |\\. |,|;|:|( )?<|\"|\\))";
 		String regexIntervaloData = " <DAT>[0-9A-Za-z \\Qº°/.\\E]+</DAT> a <DAT>[0-9A-Za-z \\Qº°/.\\E]+</DAT>| \\d{1,2}(°|º)?([ A-Za-z]{4,10})? (a|e) <DAT>[0-9A-Za-z \\Qº°./\\E]+</DAT>";
-		String regexInfoEmp = " (estabelecida na|estabelecida no)( [0-9A-Za-zçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ\\Q() ,º°ª-.;/'\"\\E]+ CNPJ(/MF)? n(º|°) \\d{2}\\.\\d{3}\\.\\d{3}/\\d{4}-\\d{2} e CACEPE n(°|º) \\d{7}\\-\\d{2})";
+		String regexInfoEmp = " (estabelecid|situad|localizad)(a na|o no)( [0-9A-Za-zçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ\\Q() ,º°ª-.;/'\"\\E]+ CNPJ(/MF)? n(º|°) \\d{2}\\.\\d{3}\\.\\d{3}/\\d{4}-\\d{2} e CACEPE n(°|º) \\d{7}\\-\\d{2})";
 		String regexCNPJ = " CNPJ(/MF)?( n°| nº)?( \\d{2}\\.\\d{3}\\.\\d{3}(/\\d{4}-\\d{2})?)";
 		String regexIE = " (Inscrição Estadual|IE)( n°| nº)?( \\d{1,3}\\.\\d{3}\\.\\d{3}(\\-\\d{1,2}|\\.\\d{3})?)";
 		String regexCACEPE = " \\d{7}\\-\\d{2}";
@@ -141,7 +141,7 @@ public class XMLizacao {
 		String regexCargo2 = "[^(Unidades|Unidade|Comitê|Comissão)]( Delegad(o|a)(s)?| Escriv(ão|ães)| Agente(s)?| Diretor(es|a|as)?| Assessor(a|as|es)?| Gestor(a|as|es)?| Coordenador(es|a|as)?)(,| [a-z ]{1,8}[^A-Z]|\\.)";
 		String regexTributo = "(( |\"|\\()(Taxa(s)?|Imposto(s)?|Tributo(s)?|Contribuiç(ão|ões)|Empréstimo(s)? Compulsório(s)?) (((e )?(de |do |dos |da |das |à |a |ao |aos |pelo |pelos |pelas |pela |por |em |no |nos |nas |na |para |com |com os |com as |destinada à| destinado ao)?[A-ZÂÁÉÊÍÓÔÚ]([A-ZÂÃÁÉÊÍÓÔÕÚÇ]+|[a-zçãàáâéêíóôõú]+)(, | - | )?))+(\\s*(-|/)\\s*[A-Z]([A-ZÂÃÁÉÊÍÓÔÕÚÇ&]+|[a-zçãàáâéêíóôõú&]+))*)\\s*(,|<|\\Q.\\E|;|:|\"|\\Q)\\E| [a-zéàáíóúêâô])";
 		String regexIndice = "(( |\"|\\()(Índice) (((e )?(de |do |dos |da |das |à |a |ao |aos |pelo |pelos |pelas |pela |por |em |no |nos |nas |na |para |com |com os |com as |destinada à| destinado ao)?[A-ZÂÁÉÊÍÓÔÚ]([A-ZÂÃÁÉÊÍÓÔÕÚÇ]+|[a-zçãàáâéêíóôõú]+)(, | - | )?))+(\\s*(-|/)\\s*[A-Z]([A-ZÂÃÁÉÊÍÓÔÕÚÇ&]+|[a-zçãàáâéêíóôõú&]+))*)\\s*(,|<|\\Q.\\E|;|:|\"|\\Q)\\E| [a-zéàáíóúêâô])";
-		String regexLugar = "(( |\"|\\()(Estaç(ão|ões)|Coletor(es|a|as)?|Monumento(s)?|Riacho(s)?|Parque(s)|Praça(s)?|Cartório(s)?) ((de |do |dos |da |das |à |a |ao |aos |pelo |pelos |pelas |pela |por |em |no |nos |nas |na |para |com |com os |com as )?([A-ZÂÁÉÊÍÓÔÚ]([A-ZÂÃÁÉÊÍÓÔÕÚÇ]+|[a-zçãàáâéêíóôõú]+)|[0-9 e]+)(, | - | )?)+(\\s*(-|/)\\s*[A-Z][A-Za-z\\QçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ&\\E]+)*)\\s*(,|<|\\Q.\\E|;|:|\"|\\Q)\\E| [a-zéàáíóúêâô])";
+		String regexLugar = "(( |\"|\\()(Estaç(ão|ões)|Coletor(es|a|as)?|Reservatório(s)?|Sítio(s)?|Monumento(s)?|Riacho(s)?|Parque(s)|Praça(s)?|Cartório(s)?) ((de |do |dos |da |das |à |a |ao |aos |pelo |pelos |pelas |pela |por |em |no |nos |nas |na |para |com |com os |com as )?[A-ZÂÁÉÊÍÓÔÚ]([A-ZÂÃÁÉÊÍÓÔÕÚÇ]+|[a-zçãàáâéêíóôõú]+)(, | - | )?|[0-9 e]+)+(\\s*(-|/)\\s*[A-Z][A-Za-z\\QçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ&\\E]+)*)\\s*(,|<|\\Q.\\E|;|:|\"|\\Q)\\E| [a-zéàáíóúêâô])";
 		String regexSite = " www(\\d)?((\\.[a-z]+))+(/( )?([A-Za-z]+)?)?";
 		String regexEnd = " <INF_EMP>([0-9A-Za-zçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ\\Q() ,º°ª-.;/'\"\\E]+), com CNPJ(/MF)?";
 		String regexAnexo = "<ANEXOS>([0-9A-Za-zçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ\"\'\\Q()!?&$§%:@#=;/,º°ª.<>-_\\\\E \n\t\u00A7\u002D]+)</ANEXOS>";//só esse tem sinal igual
@@ -1283,7 +1283,8 @@ public class XMLizacao {
 
 					decretoSaida = decretoSaida.replaceAll("&middot;", "\u00B7");
 					decretoSaida = decretoSaida.replaceAll("&sup2;","\u00B2");
-					decretoSaida = decretoSaida.replaceAll(" m 2;"," m\u00B2");
+					decretoSaida = decretoSaida.replaceAll(" m2"," m\u00B2");
+					decretoSaida = decretoSaida.replaceAll(" m3"," m\u00B3");
 					decretoSaida = decretoSaida.replaceAll("&sup3;","\u00B3");
 					decretoSaida+= "</DECRETO>";
 
