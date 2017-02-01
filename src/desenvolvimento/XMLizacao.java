@@ -136,7 +136,7 @@ public class XMLizacao {
 		String regexCargo2 = "[^(Unidades|Unidade|ComitÍ|Comiss„o)]( Delegad(o|a)(s)?| Escriv(„o|„es)| Agente(s)?| Diretor(es|a|as)?| Assessor(a|as|es)?| Gestor(a|as|es)?| Coordenador(es|a|as)?)(,| [a-z ]{1,8}[^A-Z]|\\.)";
 		String regexTributo = "(( |\"|\\()(Taxa(s)?|Imposto(s)?|Tributo(s)?|ContribuiÁ(„o|ıes)|EmprÈstimo(s)? CompulsÛrio(s)?) (((e )?(de |do |dos |da |das |‡ |a |ao |aos |pelo |pelos |pelas |pela |por |em |no |nos |nas |na |para |com |com os |com as |destinada ‡| destinado ao)?[A-Z¬¡… Õ”‘⁄]([A-Z¬√¡… Õ”‘’⁄«]+|[a-zÁ„‡·‚ÈÍÌÛÙı˙]+)(\\. |, | - | )?))+(\\s*(-|/)\\s*[A-Z]([A-Z¬√¡… Õ”‘’⁄«&]+|[a-zÁ„‡·‚ÈÍÌÛÙı˙&]+))*)\\s*(,|<|\\Q.\\E|;|:|\"|\\Q)\\E| [a-zÈ‡·ÌÛ˙Í‚Ù])";
 		String regexIndice = "(( |\"|\\()(Õndice) (((e )?(de |do |dos |da |das |‡ |a |ao |aos |pelo |pelos |pelas |pela |por |em |no |nos |nas |na |para |com |com os |com as |destinada ‡| destinado ao)?[A-Z¬¡… Õ”‘⁄]([A-Z¬√¡… Õ”‘’⁄«]+|[a-zÁ„‡·‚ÈÍÌÛÙı˙]+)(\\. |, | - | )?))+(\\s*(-|/)\\s*[A-Z]([A-Z¬√¡… Õ”‘’⁄«&]+|[a-zÁ„‡·‚ÈÍÌÛÙı˙&]+))*)\\s*(,|<|\\Q.\\E|;|:|\"|\\Q)\\E| [a-zÈ‡·ÌÛ˙Í‚Ù])";
-		String regexLugar = "(( |\"|\\()(EstaÁ(„o|ıes)|Coletor(es|a|as)?|Monumento(s)?|Riacho|Parque(s)|PraÁa(s)?|CartÛrio(s)?) ((de |do |dos |da |das |‡ |a |ao |aos |pelo |pelos |pelas |pela |por |em |no |nos |nas |na |para |com |com os |com as )?([A-Z¬¡… Õ”‘⁄]([A-Z¬√¡… Õ”‘’⁄«]+|[a-zÁ„‡·‚ÈÍÌÛÙı˙]+)|[0-9 e]+)(\\. |, | - | )?)+(\\s*(-|/)\\s*[A-Z][A-Za-z\\QÁ„‡·‚ÈÍÌÛÙı˙¬√¡¿… Õ”‘’⁄«&\\E]+)*)\\s*(,|<|\\Q.\\E|;|:|\"|\\Q)\\E| [a-zÈ‡·ÌÛ˙Í‚Ù])";
+		String regexLugar = "(( |\"|\\()(EstaÁ(„o|ıes)|Coletor(es|a|as)?|Monumento(s)?|Riacho(s)?|Parque(s)|PraÁa(s)?|CartÛrio(s)?) ((de |do |dos |da |das |‡ |a |ao |aos |pelo |pelos |pelas |pela |por |em |no |nos |nas |na |para |com |com os |com as )?([A-Z¬¡… Õ”‘⁄]([A-Z¬√¡… Õ”‘’⁄«]+|[a-zÁ„‡·‚ÈÍÌÛÙı˙]+)|[0-9 e]+)(\\. |, | - | )?)+(\\s*(-|/)\\s*[A-Z][A-Za-z\\QÁ„‡·‚ÈÍÌÛÙı˙¬√¡¿… Õ”‘’⁄«&\\E]+)*)\\s*(,|<|\\Q.\\E|;|:|\"|\\Q)\\E| [a-zÈ‡·ÌÛ˙Í‚Ù])";
 		String regexSite = " www(\\d)?((\\.[a-z]+))+(/( )?([A-Za-z]+)?)?";
 		String regexEnd = " <INF_EMP>([0-9A-Za-zÁ„‡·‚ÈÍÌÛÙı˙¬√¡¿… Õ”‘’⁄«\\Q() ,∫∞™-.;/'\"\\E]+), com CNPJ(/MF)?";
 		String regexAnexo = "<ANEXOS>([0-9A-Za-zÁ„‡·‚ÈÍÌÛÙı˙¬√¡¿… Õ”‘’⁄«\"\'\\Q()!?&$ß%:@#=;/,∫∞™.<>-_\\\\E \n\t\u00A7\u002D]+)</ANEXOS>";//sÛ esse tem sinal igual
@@ -385,34 +385,19 @@ public class XMLizacao {
 		String textoModificado;
 		String[] segmentosConsAss;
 		//AQUI COME«A A REMO«√O DA FORMATA«√O
-		File b = new File("anexos");
-		File c = new File("tabelas");
-		File d = new File("nomePessoas");
-		File f = new File("tabelaOrcamentaria");
-
-		try {
-			b.createNewFile();
-			c.createNewFile();
-			d.createNewFile();
-			f.createNewFile();
-
-			fwb = new FileWriter(b);
-			bwb = new BufferedWriter(fwb);
-
-			fwc = new FileWriter(c);
-			bwc = new BufferedWriter(fwc);
-
-			fwd = new FileWriter(d);
-			bwd = new BufferedWriter(fwd);
-
-			fwf = new FileWriter(f);
-			bwf = new BufferedWriter(fwf);
-		} catch (IOException e1) {
-			System.out.println("Os arquivos est„o defeituosos.");
-		}
+		
+		
 
 		for (int i = 0; i < anosDecretos.length; i++){
 			File a = new File("decretos" + anosDecretos[i]);
+			File b;
+			File c;
+			File d;
+			File f;
+			b = new File("anexos");
+			c = new File ("tabelas");
+			d = new File("nomePessoas");
+			f = new File("tabelaOrcamentaria");
 
 
 			arquivoPasta = new File(caminhoDecretos + anosDecretos[i] + "\\" + pastaDestino);
@@ -464,7 +449,7 @@ public class XMLizacao {
 
 			for (int j = 0; j < arquivos[i].length; j++){
 				nomeArquivo = (arquivos[i][j]).getName(); //obtÈm o nome do arquivo
-				System.out.println(nomeArquivo);
+				//System.out.println(nomeArquivo);
 				decreto = "";
 				//Arquivo de leitura a partir do caminhoTemporario (string)
 				try {
@@ -701,7 +686,7 @@ public class XMLizacao {
 						entreTags = matcher.group(1);
 						String tipoDoc = tiposDocumentos.get(matcher.group(3).trim());
 						textoModificado = " <" +  tipoDoc;
-						System.out.println(entreTags);
+						//System.out.println(entreTags);
 
 						if (matcher.group(10) == null && matcher.group(6) != null){
 							if (matcher.group(8).contains("/")){
@@ -746,8 +731,6 @@ public class XMLizacao {
 						decretoSaida = decretoSaida.replaceFirst("\\Q"+entreTags+"\\E", textoModificado);
 					}
 
-
-
 					matcher = padraoDinheiro.matcher(decretoSaida);
 					while (matcher.find()){
 						//System.out.println(nomeArquivo);
@@ -764,10 +747,6 @@ public class XMLizacao {
 						decretoSaida = decretoSaida.replaceFirst("\\Q" + entreTags +"\\E", textoModificado);
 					}
 					
-					if (nomeArquivo.contains("42.151")){
-						System.out.println("porc");
-					}
-
 					matcher = padraoEmpresa.matcher(decretoSaida);
 					while (matcher.find()){
 						//System.out.println(nomeArquivo);
@@ -949,10 +928,6 @@ public class XMLizacao {
 						}			
 					}
 
-					if (nomeArquivo.contains("42.151")){
-						System.out.println("emp");
-					}
-
 					matcher = padraoUnidade.matcher(decretoSaida);
 					while (matcher.find()){
 						//System.out.println(nomeArquivo);
@@ -999,10 +974,6 @@ public class XMLizacao {
 						decretoSaida = decretoSaida.replaceFirst("\\Q" + entreTags +"\\E", textoModificado);			
 					}
 					
-					if (nomeArquivo.contains("42.151")){
-						System.out.println("inst2");
-					}
-
 					matcher = padraoInst.matcher(decretoSaida);
 					while (matcher.find()){
 						//System.out.println(nomeArquivo);
@@ -1027,10 +998,6 @@ public class XMLizacao {
 						decretoSaida = decretoSaida.replaceFirst("\\Q" + entreTags +"\\E", textoModificado);			
 					}
 
-					if (nomeArquivo.contains("42.151")){
-						System.out.println("serv");
-					}
-					
 					matcher = padraoCargo.matcher(decretoSaida);
 					while (matcher.find()){
 						//System.out.println(nomeArquivo);
@@ -1052,7 +1019,6 @@ public class XMLizacao {
 					while (matcher.find()){
 						//System.out.println(nomeArquivo);
 						entreTags = matcher.group(1);
-						System.out.println(entreTags);
 						textoModificado = " <CAR>" + matcher.group(1).trim() + "</CAR>";
 						if (textoModificado.contains(",<")){
 							textoModificado = textoModificado.replace(",</CAR>", "</CAR>,");
@@ -1082,20 +1048,17 @@ public class XMLizacao {
 						}
 						decretoSaida = decretoSaida.replaceFirst("\\Q" + entreTags +"\\E", textoModificado);			
 					}
-
+/*
 					if (nomeArquivo.contains("42.151")){
 						System.out.println("ev");
 					}
+	*/
 					matcher = padraoTributo.matcher(decretoSaida);
 					while (matcher.find()){
 						//System.out.println(nomeArquivo);
 						entreTags = matcher.group(1);
 						textoModificado = " <TRIB>" + matcher.group(1).trim() + "</TRIB>";
 						decretoSaida = decretoSaida.replaceFirst("\\Q" + entreTags +"\\E", textoModificado);			
-					}
-					
-					if (nomeArquivo.contains("42.151")){
-						System.out.println("tax");
 					}
 					
 					matcher = padraoIndice.matcher(decretoSaida);
@@ -1119,11 +1082,7 @@ public class XMLizacao {
 						textoModificado = " <SIST>" + entreTags.trim() + "</SIST>";
 						decretoSaida = decretoSaida.replaceFirst("\\Q" + entreTags +"\\E", textoModificado);			
 					}
-					
-					if (nomeArquivo.contains("42.151")){
-						System.out.println("sist");
-					}
-
+				
 					matcher = padraoProgProj.matcher(decretoSaida);
 					while (matcher.find()){
 						//System.out.println(nomeArquivo);
@@ -1143,10 +1102,6 @@ public class XMLizacao {
 						}
 						decretoSaida = decretoSaida.replaceFirst("\\Q" + entreTags +"\\E", textoModificado);			
 					}
-					
-					if (nomeArquivo.contains("42.151")){
-						System.out.println("proj");
-					}
 
 					matcher = padraoDoc.matcher(decretoSaida);
 					while (matcher.find()){
@@ -1156,9 +1111,6 @@ public class XMLizacao {
 						decretoSaida = decretoSaida.replace(entreTags, textoModificado);
 					}
 
-					if (nomeArquivo.contains("40.271")){
-						System.out.println("doc");
-					}
 					
 					matcher = padraoData.matcher(decretoSaida);
 					while (matcher.find()){
@@ -1244,7 +1196,6 @@ public class XMLizacao {
 						decretoSaida = decretoSaida.replaceFirst("\\Q" + entreTags +"\\E", textoModificado);
 					}
 
-
 					matcher = padraoAnexo.matcher(decretoSaida);
 					textoModificado = "";
 
@@ -1262,22 +1213,25 @@ public class XMLizacao {
 									quantidadeAnexosTabela.containsKey(tipo);
 									quantidadeAnexosTabela.put(tipo, quantidadeAnexosTabela.get(tipo) + 1);
 
-									if (entreTags.contains("R$") || matcher.find() || entreTags.contains("crÈdito") || entreTags.contains("CR…DITO")){
+									if (entreTags.contains("R$") || matcherAuxiliar.find() ||entreTags.contains("CR…DITO SUPLEMENTAR") || entreTags.contains("CR…DITO")){
+										System.out.println("NOSSSSSSSSSSSSSSSSSA");
 										quantidadeTabelaOrcamentarias.containsKey(tipo);
 										quantidadeTabelaOrcamentarias.put(tipo, quantidadeTabelaOrcamentarias.get(tipo) + 1);
 									}
 								}
 							} else if (entreTags.contains("PLANO")){
-								textoModificado += "<«I>" + "ANEXO " + entreTags.trim() + "</«I>";
+								textoModificado += "<PLAN>" + "ANEXO " + entreTags.trim() + "</PLAN>";
 							}else if (entreTags.contains("FORMUL¡RIO")){
-								textoModificado += "<«E>" + "ANEXO " + entreTags.trim() + "</«E>";
+								textoModificado += "<FORM>" + "ANEXO " + entreTags.trim() + "</FORM>";
 							}
 							else if (entreTags.contains("table")){
 								textoModificado = "<TAB>" + entreTags + "</TAB>";					
 								quantidadeAnexosTabela.containsKey(tipo);
 								quantidadeAnexosTabela.put(tipo, quantidadeAnexosTabela.get(tipo) + 1);
+								matcherAuxiliar = padraoDinheiro.matcher(entreTags);
 
-								if (entreTags.contains("R$") || matcher.find() || entreTags.contains("crÈdito") || entreTags.contains("CR…DITO")){
+								if (entreTags.contains("R$") || matcherAuxiliar.find() || entreTags.contains("crÈdito") || entreTags.contains("CR…DITO")){
+									System.out.println("NOSSSSSSSSSSSSSSSSSA");
 									quantidadeTabelaOrcamentarias.containsKey(tipo);
 									quantidadeTabelaOrcamentarias.put(tipo, quantidadeTabelaOrcamentarias.get(tipo) + 1);
 								}
@@ -1286,8 +1240,10 @@ public class XMLizacao {
 								if (entreTags.contains("table")){
 									quantidadeAnexosTabela.containsKey(tipo);
 									quantidadeAnexosTabela.put(tipo, quantidadeAnexosTabela.get(tipo) + 1);
+									matcherAuxiliar = padraoDinheiro.matcher(entreTags);
 
-									if (entreTags.contains("R$") || matcher.find() || entreTags.contains("crÈdito") || entreTags.contains("CR…DITO")){
+									if (entreTags.contains("R$") || matcherAuxiliar.find() || entreTags.contains("crÈdito") || entreTags.contains("CR…DITO")){
+										System.out.println("NOSSSSSSSSSSSSSSSSSA");
 										quantidadeTabelaOrcamentarias.containsKey(tipo);
 										quantidadeTabelaOrcamentarias.put(tipo, quantidadeTabelaOrcamentarias.get(tipo) + 1);
 									}
@@ -1302,9 +1258,9 @@ public class XMLizacao {
 								if (segmentosConsAss[k].contains("MEMORIAL DESCRITIVO")){
 									textoModificado += "<MEMO>" + "ANEXO " + k + segmentosConsAss[k].trim() + "</MEMO>";
 								}else if (segmentosConsAss[k].contains("PLANO")){
-									textoModificado += "<«I>" + "ANEXO " + k + segmentosConsAss[k].trim() + "</«I>";
+									textoModificado += "<PLAN>" + "ANEXO " + k + segmentosConsAss[k].trim() + "</PLAN>";
 								}else if (segmentosConsAss[k].contains("FORMUL¡RIO")){
-									textoModificado += "<«E>" + "ANEXO " + k + segmentosConsAss[k].trim() + "</«E>";
+									textoModificado += "<FORM>" + "ANEXO " + k + segmentosConsAss[k].trim() + "</FORM>";
 								}else if (segmentosConsAss[k].contains("table")){
 									textoModificado += "<TAB>" + "ANEXO " + k + segmentosConsAss[k].trim() + "</TAB>";
 								} else{
@@ -1314,8 +1270,10 @@ public class XMLizacao {
 							if (entreTags.contains("table")){
 								quantidadeAnexosTabela.containsKey(tipo);
 								quantidadeAnexosTabela.put(tipo, quantidadeAnexosTabela.get(tipo) + 1);
+								matcherAuxiliar = padraoDinheiro.matcher(entreTags);
 
 								if (entreTags.contains("R$") || matcher.find() || entreTags.contains("crÈdito") || entreTags.contains("CR…DITO") || entreTags.contains("ORCAMENT¡RIO")){
+									System.out.println("NOSSSSSSSSSSSSSSSSSA");
 									quantidadeTabelaOrcamentarias.containsKey(tipo);
 									quantidadeTabelaOrcamentarias.put(tipo, quantidadeTabelaOrcamentarias.get(tipo) + 1);
 								}
@@ -1343,6 +1301,73 @@ public class XMLizacao {
 					bw.flush();
 					bw.close();
 
+					
+					//b.createNewFile();
+					b.createNewFile();
+					fwb = new FileWriter(b);
+					bwb = new BufferedWriter(fwb);
+					contador = new ArrayList<>(quantidadeDecretosAnexos.keySet());
+					for (int v = 0; v < contador.size(); v++){
+						try {
+							bwb.write(contador.get(v) + "    " + quantidadeDecretosAnexos.get(contador.get(v)));
+							bwb.newLine();
+						} catch (IOException e) {
+							System.out.println("Erro na escrita tabela ou anexo");
+						}
+					}
+
+					bwb.flush();
+					bwb.close();
+					
+					//c.createNewFile();
+					fwc = new FileWriter(c);
+					bwc = new BufferedWriter(fwc);
+					contador = new ArrayList<>(quantidadeAnexosTabela.keySet());
+					for (int v = 0; v < contador.size(); v++){
+						try {
+							bwc.write(contador.get(v) + "    " + quantidadeAnexosTabela.get(contador.get(v)));
+							bwc.newLine();
+						} catch (IOException e) {
+							System.out.println("Erro na escrita tabela ou anexo");
+						}
+					}
+
+					bwc.flush();
+					bwc.close();
+					
+					f.createNewFile();
+					fwf = new FileWriter(f);
+					bwf = new BufferedWriter(fwf);
+					contador = new ArrayList<>(quantidadeTabelaOrcamentarias.keySet());
+					System.out.println("PASSOU AQUI");
+					for (int v = 0; v < contador.size(); v++){
+						try {
+							bwf.write(contador.get(v) + "    " + quantidadeTabelaOrcamentarias.get(contador.get(v)));
+							bwf.newLine();
+						} catch (IOException e) {
+							System.out.println("Erro na escrita tabela ou anexo");
+						}
+					}
+					
+					bwf.flush();
+					bwf.close();
+					
+					d.createNewFile();
+					fwd = new FileWriter(d);
+					bwd = new BufferedWriter(fwd);
+					contador = new ArrayList<>(nomePessoas.keySet());
+					for (int v = 0; v < contador.size(); v++){
+						try {
+							bwd.write(contador.get(v) + "    " + nomePessoas.get(contador.get(v)));
+							bwd.newLine();
+						} catch (IOException e) {
+							System.out.println("Erro na escrita nome de pessoas");
+						}
+					}
+					bwd.flush();
+					bwd.close();
+
+
 				} catch (FileNotFoundException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -1362,60 +1387,7 @@ public class XMLizacao {
 					e.printStackTrace();
 				}
 			}
-		}
-		List<String> contador = new ArrayList<>(quantidadeDecretosAnexos.keySet());
-		for (int v = 0; v < contador.size(); v++){
-			try {
-				bwb.write(contador.get(v) + "    " + quantidadeDecretosAnexos.get(contador.get(v)));
-				bwb.newLine();
-			} catch (IOException e) {
-				System.out.println("Erro na escrita tabela ou anexo");
-			}
-		}
-		contador = new ArrayList<>(quantidadeAnexosTabela.keySet());
-		for (int v = 0; v < contador.size(); v++){
-			try {
-				bwc.write(contador.get(v) + "    " + quantidadeAnexosTabela.get(contador.get(v)));
-				bwc.newLine();
-			} catch (IOException e) {
-				System.out.println("Erro na escrita tabela ou anexo");
-			}
-		}
-
-		contador = new ArrayList<>(quantidadeTabelaOrcamentarias.keySet());
-		for (int v = 0; v < contador.size(); v++){
-			try {
-				bwf.write(contador.get(v) + "    " + quantidadeTabelaOrcamentarias.get(contador.get(v)));
-				bwf.newLine();
-			} catch (IOException e) {
-				System.out.println("Erro na escrita tabela ou anexo");
-			}
-		}
-
-		contador = new ArrayList<>(nomePessoas.keySet());
-		for (int v = 0; v < contador.size(); v++){
-			try {
-				bwd.write(contador.get(v) + "    " + nomePessoas.get(contador.get(v)));
-				bwd.newLine();
-			} catch (IOException e) {
-				System.out.println("Erro na escrita nome de pessoas");
-			}
-		}
-
-		try {
-			bwb.flush();
-			bwb.close();
-			bwc.flush();
-			bwc.close();
-			bwd.flush();
-			bwd.close();
-			bwarq.flush();
-			bwarq.close();
-		} catch (IOException e) {
-			System.out.println("Erro no fechamento do streaming.");
-		}
-
-
+			
+		}	
 	}
-
 }
