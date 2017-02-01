@@ -37,6 +37,11 @@ public class XMLizacao {
 		String caminhoDecretos = "C:\\Users\\JN\\Documents\\DecretosAlepe\\";
 		int[] anosDecretos = {2014, 2015, 2016};
 
+		File b = new File("anexos");
+		File c = new File ("tabelas");
+		File d = new File("nomePessoas");
+		File f = new File("tabelaOrcamentaria");
+
 		//"Cria-se" os Files que apontam para as pastas dos decretos
 		File[] pastas = new File[3];
 		pastas[0] = new File(caminhoDecretos + anosDecretos[0] + "\\" + pastaOrigem);
@@ -106,7 +111,7 @@ public class XMLizacao {
 		// devido a isso, existia logo após a opção "de" sem espaço
 		//primeiro comentário deixa de ser escolha
 		String regexLeis = "(( |\"|\\()(Decreto|\\QDecreto-Lei\\E|Decreto Lei|Decreto Lei Federal|Decreto-Lei Federal|Lei Federal|Lei Complementar|Lei Complementar Federal|Lei|Resolução|Emenda Constitucional|Ad Referendum|Ofício|Parecer|Parecer Conjunto|Portaria Conjunta|Portaria|Ato|Ato DeclaratórioTermo|Ajuste|Ata)( do| da)?[A-Z \\Q/-\\E]{0,16}((( nº| n°)? (\\d{1,2}\\.\\d{3}|\\d{3}|\\d{2}|\\d{2,4}/\\d{2,4}[A-Z\\Q/ -\\E]{0,10}))?(,)?((( de| em)? (\\d{1,2})(°|º)?( de |[\\Q./-\\E])([a-zçA-ZÇ]{4,9}|\\d{1,2}[\\Q./-\\E]))?( de )?(\\d{4}))?))(,|<|\\Q.\\E|;|:|\"|\\Q)\\E| [a-zéàáíóúêâô])";
-		String regexDoc = "(( |\"|\\()(Código(s)?|Constituiç(ão|ões)|Estatuto(s)?|Orçamento(s)?|Termo(s)?|Documento(s)?|Cadastro(s)?|Quadro(s)?|Declaraç(ão|ões)|Certificado(s)?|Regimento(s)?|Regulamento(s)?|Regime(s)?|Ato(s)?|Ata(s)?|Termo(s)?|Orde(m|ns) Bancária(s)?|Diário Oficial|Contrato(s)?|Balanço(s)?|Despesa(s)?|Nota(s)?|Resoluç(ão|ões)|Anexo(s)?|Memoria(l|is)) ((e )?(de |do |dos |da |das |à |a |ao |aos |pelo |pelos |pelas |pela |por |em |no |nos |nas |na |para |com |com os |com as )?[A-ZÂÁÉÊÍÓÔÚ]([A-ZÂÃÁÉÊÍÓÔÕÚÇ]+|[a-zçãàáâéêíóôõú]+)(, | - | )?)+(\\s*(-|/)\\s*[A-Z][A-Za-z\\QçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ&\\E]+)*)\\s*(,|<|\\Q.\\E|;|:|\"|\\Q)\\E| [a-zéàáíóúêâô])";
+		String regexDoc = "(( |\"|\\()(Código(s)?|Constituiç(ão|ões)|Estatuto(s)?|Orçamento(s)?|Termo(s)?|Documento(s)?|Cadastro(s)?|Quadro(s)?|Declaraç(ão|ões)|Certificado(s)?|Regimento(s)?|Regulamento(s)?|Regime(s)?|Ato(s)?|Ata(s)?|Termo(s)?|Orde(m|ns) Bancária(s)?|Diário Oficial|Contrato(s)?|Balanço(s)?|Despesa(s)?|Nota(s)?|Resoluç(ão|ões)|Anexo(s)?|Memoria(l|is)) ((de |do |dos |da |das |à |a |ao |aos |pelo |pelos |pelas |pela |por |em |para |com |com os |com as )?[A-ZÂÁÉÊÍÓÔÚ]([A-ZÂÃÁÉÊÍÓÔÕÚÇ]+|[a-zçãàáâéêíóôõú]+)(, | - | )?)+(\\s*(-|/)\\s*[A-Z][A-Za-z\\QçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ&-\\E]+)*)\\s*(,|<|\\Q.\\E|;|:|\"|\\Q)\\E| [a-zéàáíóúêâô]|  )";
 		String regexDinheiro = " R\\$\\s+[0-9.]+,\\d{2}";
 		String regexPorcentagem = " [0-9]+(,\\d{1,})?( )?%";
 		//[\\Q-., \\E]{0,3}
@@ -118,12 +123,12 @@ public class XMLizacao {
 		String regexInst2 = "( AD Diper| Adagro| Arquivo Público Digital| Porto Digital| Porto de Recife| ProRural| Complexo Industrial Portuário| Universidade de Pernambuco| Pernambuco Participações e Investimento S/A( - Perpart)?| Serviço de Proteção ao Consumidor( - PROCON)?)";
 		String regexGrupo = "(( |\"|\\()(Comiss(ão|ões)|Comitê(s)?|Grupo(s)?|Grupamento(s)?|Conselho(s)?) ((e )?(de |do |dos |da |das |à |a |ao |aos |pelo |pelos |pelas |pela |por |em |no |nos |nas |na |para |com |com os |com as )?[A-ZÂÁÉÊÍÓÔÚ]([A-ZÂÃÁÉÊÍÓÔÕÚÇ]+|[a-zçãàáâéêíóôõú]+)(, | - | )?)+(\\s*(-|/)\\s*[A-Z][A-Za-z\\QçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ&\\E]+)*)\\s*(,|<|\\Q.\\E|;|:|\"|\\Q)\\E| [a-zéàáíóúêâô])";
 		String regexUnidade = "(( |\"|\\()((?i)Unidade) ((e )?(de |do |dos |da |das |à |a |ao |aos |pelo |pelos |pelas |pela |por |em |no |nos |nas |na |para |com |com os |com as )?[A-ZÂÁÉÊÍÓÔÚ]([A-ZÂÃÁÉÊÍÓÔÕÚÇ]+|[a-zçãàáâéêíóôõú]+)(, | - | )?)+(\\s*(-|/)\\s*[A-Z][A-Za-z\\QçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ&\\E]+)*)\\s*(,|<|\\Q.\\E|;|:|\"|\\Q)\\E| [a-zéàáíóúêâô])"; 
-		String regexSecretaria = "(( |\"|\\()((?i)(Secretaria)|(?i)(Gabinete)) ((e )?(de |do |dos |da |das |à |a |ao |aos |pelo |pelos |pelas |pela |por |em |no |nos |nas |na |para |com |com os |com as )?[A-ZÂÁÀÉÊÍÓÔÚ]([A-ZÂÃÁÉÊÍÓÔÕÚÇ]+|[a-zçãàáâéêíóôõú]+)(, | - | )?)+(\\s*(-|/)\\s*[A-Z][A-Za-z\\QçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ&\\E]+)*)\\s*(,|<|\\Q.\\E|;|:|\"|\\Q)\\E| [a-zéàáíóúêâô])";
+		String regexSecretaria = "(( |\"|\\()((?i)(Secretaria)|(?i)(Gabinete)) ((e )?(de |do |dos |da |das |à |a |ao |aos |pelo |pelos |pelas |pela |por |em |para |com |com os |com as )?[A-ZÂÁÀÉÊÍÓÔÚ]([A-ZÂÃÁÉÊÍÓÔÕÚÇ]+|[a-zçãàáâéêíóôõú]+)(, | - | )?)+(\\s*(-|/)\\s*[A-Z][A-Za-z\\QçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ&\\E]+)*)\\s*(,|<|\\Q.\\E|;|:|\"|\\Q)\\E| [a-zéàáíóúêâô])";
 		String regexSecretaria2 = "( Assessoria Especial| Casa Militar| Vice-Governadoria| Procuradoria Geral do Estado| Liderança do Governo na Assembleia Legislativa)";
 		String regexServico2 = "( Delegacia Virtual| Certidão Negativa| Bolsa de Empregos| Imposto de Renda)";
 		String regexServico = "(( |\"|\\()Serviço ((e )?(de |do |dos |da |das |à |a |ao |aos |pelo |pelos |pelas |pela |por |em |no |nos |nas |na |para |com |com os |com as )?[A-ZÂÁÀÉÊÍÓÔÚ]([A-ZÂÃÁÉÊÍÓÔÕÚÇ]+|[a-zçãàáâéêíóôõú]+)(, | - | )?)+(\\s*(-|/)\\s*[A-Z][A-Za-z\\QçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ&\\E]+)*)\\s*(,|<|\\Q.\\E|;|:|\"|\\Q)\\E| [a-zéàáíóúêâô])";
-		String regexProgProj = "(( |\"|\\()(Regime(s)?|Projeto(s)?|Programa(s)?|Fundo(s)?|Política(s)?|Gratificaç(ão|ões)|Consolidaç(ão|ões)|Plano(s)?|Regulamento(s)?|Convênio(s)?|Financiamento(s)?) ((e )?(de |do |dos |da |das |à |a |ao |aos |pelo |pelos |pelas |pela |por |em |no |nos |nas |na |para |com |com os |com as )?(<CAR>|<ORG>)?[A-ZÂÁÀÉÊÍÓÔÚ]([A-ZÂÃÁÉÊÍÓÔÕÚÇ]+|[a-zçãàáâéêíóôõú]+)(\\. |, | - | )?(</CAR>|</ORG>)?)+(\\s*(-|/)\\s*[A-Z][A-Za-z\\QçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ&\\E]+)*| Simples Nacional)\\s*(,|<|\\Q.\\E|;|:|\"|\\Q)\\E| [a-zéàáíóúêâô])";
-		String regexSistema = "(( |\"|\\()(Sistema|sistema|SISTEMA) ((e )?(de |do |dos |da |das |à |a |ao |aos |pelo |pelos |pelas |pela |por |em |no |nos |nas |na |para |com |com os |com as )?(\\Qe-\\E)?[A-ZÂÁÀÉÊÍÓÔÚ]([A-ZÂÃÁÉÊÍÓÔÕÚÇ]+|[a-zçãàáâéêíóôõú]+)(\\. |, | - | )?)+(\\s*(-|/)\\s*[A-Z][A-Za-z\\QçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ&\\E]+)*)\\s*(,|<|\\Q.\\E|;|:|\"|\\Q)\\E| [a-zéàáíóúêâô])";
+		String regexProgProj = "(( |\"|\\()(Regime(s)?|Projeto(s)?|Programa(s)?|Fundo(s)?|Política(s)?|Gratificaç(ão|ões)|Consolidaç(ão|ões)|Plano(s)?|Regulamento(s)?|Convênio(s)?|Financiamento(s)?) ((e )?(de |do |dos |da |das |à |a |ao |aos |pelo |pelos |pelas |pela |por |em |no |nos |nas |na |para |com |com os |com as )?(<CAR>|<ORG>)?[A-ZÂÁÀÉÊÍÓÔÚ]([A-ZÂÃÁÉÊÍÓÔÕÚÇ]+|[a-zçãàáâéêíóôõú]+)(, | - | )?(</CAR>|</ORG>)?)+(\\s*(-|/)\\s*[A-Z][A-Za-z\\QçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ&\\E]+)*| Simples Nacional)\\s*(,|<|\\Q.\\E|;|:|\"|\\Q)\\E| [a-zéàáíóúêâô])";
+		String regexSistema = "(( |\"|\\()(Sistema|sistema|SISTEMA) ((e )?(de |do |dos |da |das |à |a |ao |aos |pelo |pelos |pelas |pela |por |em |no |nos |nas |na |para |com |com os |com as )?(\\Qe-\\E)?[A-ZÂÁÀÉÊÍÓÔÚ]([A-ZÂÃÁÉÊÍÓÔÕÚÇ]+|[a-zçãàáâéêíóôõú]+)(, | - | )?)+(\\s*(-|/)\\s*[A-Z][A-Za-z\\QçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ&\\E]+)*)\\s*(,|<|\\Q.\\E|;|:|\"|\\Q)\\E| [a-zéàáíóúêâô])";
 		String regexEvento = "(( [IVX]{1,5})?( Conferência| Evento| Show| Concerto| Simpósio| Debate| Fórum| Estudo) ((e )?(de |do |dos |da |das |à |a |ao |aos |pelo |pelos |pelas |pela |por |em |no |nos |nas |na |para |com |com os |com as )?[A-ZÂÁÉÊÍÓÔÚ]([A-ZÂÃÁÉÊÍÓÔÕÚÇ]+|[a-zçãàáâéêíóôõú]+)(\\. |, | - | )?)+(\\s*(-|/)\\s*[A-Z][A-Za-z\\QçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ&\\E]+)*)\\s*(,|<|\\Q.\\E|;|:|\"|\\Q)\\E| [a-zéàáíóúêâô])";
 		String regexData = "( (\\d{1,2})(°|º)? de ([a-zçA-ZÇ]{4,9}) (de )?(\\d{4})| \\d{1,2}[\\Q./\\E]\\d{1,2}[\\Q./\\E](\\d{2}|\\d{4}))( |\\. |,|;|:|( )?<|\"|\\))";
 		String regexIntervaloData = " <DAT>[0-9A-Za-z \\Qº°/.\\E]+</DAT> a <DAT>[0-9A-Za-z \\Qº°/.\\E]+</DAT>| \\d{1,2}(°|º)?([ A-Za-z]{4,10})? (a|e) <DAT>[0-9A-Za-z \\Qº°./\\E]+</DAT>";
@@ -132,11 +137,11 @@ public class XMLizacao {
 		String regexIE = " (Inscrição Estadual|IE)( n°| nº)?( \\d{1,3}\\.\\d{3}\\.\\d{3}(\\-\\d{1,2}|\\.\\d{3})?)";
 		String regexCACEPE = " \\d{7}\\-\\d{2}";
 		String regexMunicipio = "( (M|m)unicípio(s)?)( de| do| da)?((( e)?( de| do| dos| da| das)? [A-ZÂÁÀÉÊÍÓÔÚ][A-Za-zçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ]+(,)?)+)";
-		String regexCargo = "[^(Unidades|Unidade|Comitê|Comissão)](( Primeiro| Segundo| Terceiro| (1|2|3)(º|°|ª))?( Auditor| Comandante( Geral)?| Chefe(s)?| Sargent(o|a)(s)?| Tenente(s)?| Subtenente(s)?| (\\QTenente\\E( |-))?Corone(l|éis)| Cabo(s)?| Capitã(o)?(s)?| Major| Secretári(o|a)| Presidência| Diretor(\\-Presidente|\\-Geral)?| Agente(s)?| Gerente(s)?| Assistente(s)?| Assessor(a|es|as)?| Superintendente(s)?| Coordenador(a|as|es)?| Gestor(es|a|as)?) ((de |do |dos |da |das |à |a |ao |aos |pelo |pelos |pelas |pela |por |em |no |nos |nas |na |para |com |com os |com as )?(<ORG>)?[A-ZÂÁÉÊÍÓÔÚ]([A-ZÂÃÁÉÊÍÓÔÕÚÇ]+|[a-zçãàáâéêíóôõú]+)(</ORG>)?(, | - | )?)+)\\s*(,|<|\\Q.\\E|;|:|\"|\\Q)\\E| [a-zéàáíóúêâô])";
+		String regexCargo = "[^(Unidades|Unidade|Comitê|Comissão)](( Primeiro| Segundo| Terceiro| (1|2|3)(º|°|ª))?( Auditor| Comandante( Geral)?| Chefe(s)?| Sargent(o|a)(s)?| Tenente(s)?| Subtenente(s)?| (\\QTenente\\E( |-))?Corone(l|éis)| Cabo(s)?| Capitã(o)?(s)?| Major| Secretári(o|a)| Presidência| Diretor(es)?| Diretor(es)?-Presidente(s)?| Diretor(es)-Gera(l|is)| Agente(s)?| Gerente(s)?| Assistente(s)?| Assessor(a|es|as)?| Superintendente(s)?| Coordenador(a|as|es)?| Gestor(es|a|as)?) ((de |do |dos |da |das |à |a |ao |aos |pelo |pelos |pelas |pela |por |em |no |nos |nas |na |para |com |com os |com as )?(<ORG>)?[A-ZÂÁÉÊÍÓÔÚ]([A-ZÂÃÁÉÊÍÓÔÕÚÇ]+|[a-zçãàáâéêíóôõú]+)(</ORG>)?(, | - | )?)+)\\s*(,|<|\\Q.\\E|;|:|\"|\\Q)\\E| [a-zéàáíóúêâô])";
 		String regexCargo2 = "[^(Unidades|Unidade|Comitê|Comissão)]( Delegad(o|a)(s)?| Escriv(ão|ães)| Agente(s)?| Diretor(es|a|as)?| Assessor(a|as|es)?| Gestor(a|as|es)?| Coordenador(es|a|as)?)(,| [a-z ]{1,8}[^A-Z]|\\.)";
-		String regexTributo = "(( |\"|\\()(Taxa(s)?|Imposto(s)?|Tributo(s)?|Contribuiç(ão|ões)|Empréstimo(s)? Compulsório(s)?) (((e )?(de |do |dos |da |das |à |a |ao |aos |pelo |pelos |pelas |pela |por |em |no |nos |nas |na |para |com |com os |com as |destinada à| destinado ao)?[A-ZÂÁÉÊÍÓÔÚ]([A-ZÂÃÁÉÊÍÓÔÕÚÇ]+|[a-zçãàáâéêíóôõú]+)(\\. |, | - | )?))+(\\s*(-|/)\\s*[A-Z]([A-ZÂÃÁÉÊÍÓÔÕÚÇ&]+|[a-zçãàáâéêíóôõú&]+))*)\\s*(,|<|\\Q.\\E|;|:|\"|\\Q)\\E| [a-zéàáíóúêâô])";
-		String regexIndice = "(( |\"|\\()(Índice) (((e )?(de |do |dos |da |das |à |a |ao |aos |pelo |pelos |pelas |pela |por |em |no |nos |nas |na |para |com |com os |com as |destinada à| destinado ao)?[A-ZÂÁÉÊÍÓÔÚ]([A-ZÂÃÁÉÊÍÓÔÕÚÇ]+|[a-zçãàáâéêíóôõú]+)(\\. |, | - | )?))+(\\s*(-|/)\\s*[A-Z]([A-ZÂÃÁÉÊÍÓÔÕÚÇ&]+|[a-zçãàáâéêíóôõú&]+))*)\\s*(,|<|\\Q.\\E|;|:|\"|\\Q)\\E| [a-zéàáíóúêâô])";
-		String regexLugar = "(( |\"|\\()(Estaç(ão|ões)|Coletor(es|a|as)?|Monumento(s)?|Riacho(s)?|Parque(s)|Praça(s)?|Cartório(s)?) ((de |do |dos |da |das |à |a |ao |aos |pelo |pelos |pelas |pela |por |em |no |nos |nas |na |para |com |com os |com as )?([A-ZÂÁÉÊÍÓÔÚ]([A-ZÂÃÁÉÊÍÓÔÕÚÇ]+|[a-zçãàáâéêíóôõú]+)|[0-9 e]+)(\\. |, | - | )?)+(\\s*(-|/)\\s*[A-Z][A-Za-z\\QçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ&\\E]+)*)\\s*(,|<|\\Q.\\E|;|:|\"|\\Q)\\E| [a-zéàáíóúêâô])";
+		String regexTributo = "(( |\"|\\()(Taxa(s)?|Imposto(s)?|Tributo(s)?|Contribuiç(ão|ões)|Empréstimo(s)? Compulsório(s)?) (((e )?(de |do |dos |da |das |à |a |ao |aos |pelo |pelos |pelas |pela |por |em |no |nos |nas |na |para |com |com os |com as |destinada à| destinado ao)?[A-ZÂÁÉÊÍÓÔÚ]([A-ZÂÃÁÉÊÍÓÔÕÚÇ]+|[a-zçãàáâéêíóôõú]+)(, | - | )?))+(\\s*(-|/)\\s*[A-Z]([A-ZÂÃÁÉÊÍÓÔÕÚÇ&]+|[a-zçãàáâéêíóôõú&]+))*)\\s*(,|<|\\Q.\\E|;|:|\"|\\Q)\\E| [a-zéàáíóúêâô])";
+		String regexIndice = "(( |\"|\\()(Índice) (((e )?(de |do |dos |da |das |à |a |ao |aos |pelo |pelos |pelas |pela |por |em |no |nos |nas |na |para |com |com os |com as |destinada à| destinado ao)?[A-ZÂÁÉÊÍÓÔÚ]([A-ZÂÃÁÉÊÍÓÔÕÚÇ]+|[a-zçãàáâéêíóôõú]+)(, | - | )?))+(\\s*(-|/)\\s*[A-Z]([A-ZÂÃÁÉÊÍÓÔÕÚÇ&]+|[a-zçãàáâéêíóôõú&]+))*)\\s*(,|<|\\Q.\\E|;|:|\"|\\Q)\\E| [a-zéàáíóúêâô])";
+		String regexLugar = "(( |\"|\\()(Estaç(ão|ões)|Coletor(es|a|as)?|Monumento(s)?|Riacho(s)?|Parque(s)|Praça(s)?|Cartório(s)?) ((de |do |dos |da |das |à |a |ao |aos |pelo |pelos |pelas |pela |por |em |no |nos |nas |na |para |com |com os |com as )?([A-ZÂÁÉÊÍÓÔÚ]([A-ZÂÃÁÉÊÍÓÔÕÚÇ]+|[a-zçãàáâéêíóôõú]+)|[0-9 e]+)(, | - | )?)+(\\s*(-|/)\\s*[A-Z][A-Za-z\\QçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ&\\E]+)*)\\s*(,|<|\\Q.\\E|;|:|\"|\\Q)\\E| [a-zéàáíóúêâô])";
 		String regexSite = " www(\\d)?((\\.[a-z]+))+(/( )?([A-Za-z]+)?)?";
 		String regexEnd = " <INF_EMP>([0-9A-Za-zçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ\\Q() ,º°ª-.;/'\"\\E]+), com CNPJ(/MF)?";
 		String regexAnexo = "<ANEXOS>([0-9A-Za-zçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ\"\'\\Q()!?&$§%:@#=;/,º°ª.<>-_\\\\E \n\t\u00A7\u002D]+)</ANEXOS>";//só esse tem sinal igual
@@ -385,19 +390,11 @@ public class XMLizacao {
 		String textoModificado;
 		String[] segmentosConsAss;
 		//AQUI COMEÇA A REMOÇÃO DA FORMATAÇÃO
-		
-		
+
 
 		for (int i = 0; i < anosDecretos.length; i++){
 			File a = new File("decretos" + anosDecretos[i]);
-			File b;
-			File c;
-			File d;
-			File f;
-			b = new File("anexos");
-			c = new File ("tabelas");
-			d = new File("nomePessoas");
-			f = new File("tabelaOrcamentaria");
+
 
 
 			arquivoPasta = new File(caminhoDecretos + anosDecretos[i] + "\\" + pastaDestino);
@@ -746,7 +743,7 @@ public class XMLizacao {
 						textoModificado = " <PORC>" + matcher.group(0).trim() + "</PORC> ";
 						decretoSaida = decretoSaida.replaceFirst("\\Q" + entreTags +"\\E", textoModificado);
 					}
-					
+
 					matcher = padraoEmpresa.matcher(decretoSaida);
 					while (matcher.find()){
 						//System.out.println(nomeArquivo);
@@ -973,7 +970,7 @@ public class XMLizacao {
 						textoModificado = " <INST>" + matcher.group(1).trim() + "</INST>";
 						decretoSaida = decretoSaida.replaceFirst("\\Q" + entreTags +"\\E", textoModificado);			
 					}
-					
+
 					matcher = padraoInst.matcher(decretoSaida);
 					while (matcher.find()){
 						//System.out.println(nomeArquivo);
@@ -1048,11 +1045,11 @@ public class XMLizacao {
 						}
 						decretoSaida = decretoSaida.replaceFirst("\\Q" + entreTags +"\\E", textoModificado);			
 					}
-/*
+					/*
 					if (nomeArquivo.contains("42.151")){
 						System.out.println("ev");
 					}
-	*/
+					 */
 					matcher = padraoTributo.matcher(decretoSaida);
 					while (matcher.find()){
 						//System.out.println(nomeArquivo);
@@ -1060,7 +1057,7 @@ public class XMLizacao {
 						textoModificado = " <TRIB>" + matcher.group(1).trim() + "</TRIB>";
 						decretoSaida = decretoSaida.replaceFirst("\\Q" + entreTags +"\\E", textoModificado);			
 					}
-					
+
 					matcher = padraoIndice.matcher(decretoSaida);
 					while (matcher.find()){
 						//System.out.println(nomeArquivo);
@@ -1082,7 +1079,7 @@ public class XMLizacao {
 						textoModificado = " <SIST>" + entreTags.trim() + "</SIST>";
 						decretoSaida = decretoSaida.replaceFirst("\\Q" + entreTags +"\\E", textoModificado);			
 					}
-				
+
 					matcher = padraoProgProj.matcher(decretoSaida);
 					while (matcher.find()){
 						//System.out.println(nomeArquivo);
@@ -1107,11 +1104,11 @@ public class XMLizacao {
 					while (matcher.find()){
 						//System.out.println(nomeArquivo);
 						entreTags = matcher.group(1);
-						textoModificado = " <DOC>" + matcher.group(1).trim() + "</DOC> ";
-						decretoSaida = decretoSaida.replace(entreTags, textoModificado);
+						textoModificado = " <DOC>" + matcher.group(1).trim() + "</DOC>";
+						decretoSaida = decretoSaida.replaceFirst("\\Q" + entreTags + "\\E", textoModificado);
 					}
 
-					
+
 					matcher = padraoData.matcher(decretoSaida);
 					while (matcher.find()){
 						//System.out.println(nomeArquivo);
@@ -1180,7 +1177,7 @@ public class XMLizacao {
 						}
 						decretoSaida = decretoSaida.replaceFirst("\\Q" + entreTags +"\\E", textoModificado);
 					}
-					
+
 					matcher = padraoLugar.matcher(decretoSaida);
 					while (matcher.find()){
 						entreTags = matcher.group(1);
@@ -1190,7 +1187,7 @@ public class XMLizacao {
 
 					matcher = padraoSite.matcher(decretoSaida);
 					while (matcher.find()){
-						System.out.println(matcher.group(1));
+						//System.out.println(matcher.group(1));
 						entreTags = matcher.group(0);
 						textoModificado = " <SITE>" + matcher.group(0).trim() + "</SITE>";
 						decretoSaida = decretoSaida.replaceFirst("\\Q" + entreTags +"\\E", textoModificado);
@@ -1259,7 +1256,7 @@ public class XMLizacao {
 									textoModificado += "<MEMO>" + "ANEXO " + k + segmentosConsAss[k].trim() + "</MEMO>";
 								}else if (segmentosConsAss[k].contains("PLANO")){
 									textoModificado += "<PLAN>" + "ANEXO " + k + segmentosConsAss[k].trim() + "</PLAN>";
-								}else if (segmentosConsAss[k].contains("FORMULÁRIO")){
+								}else if (segmentosConsAss[k].contains("FORMULÁRIO") || segmentosConsAss[k].contains("Eu")||segmentosConsAss[k].contains("----") || segmentosConsAss[k].contains("____")){
 									textoModificado += "<FORM>" + "ANEXO " + k + segmentosConsAss[k].trim() + "</FORM>";
 								}else if (segmentosConsAss[k].contains("table")){
 									textoModificado += "<TAB>" + "ANEXO " + k + segmentosConsAss[k].trim() + "</TAB>";
@@ -1272,13 +1269,14 @@ public class XMLizacao {
 								quantidadeAnexosTabela.put(tipo, quantidadeAnexosTabela.get(tipo) + 1);
 								matcherAuxiliar = padraoDinheiro.matcher(entreTags);
 
-								if (entreTags.contains("R$") || matcher.find() || entreTags.contains("crédito") || entreTags.contains("CRÉDITO") || entreTags.contains("ORCAMENTÁRIO")){
+								if (entreTags.contains("R$") || matcherAuxiliar.find() || entreTags.contains("crédito") || entreTags.contains("CRÉDITO") || entreTags.contains("ORCAMENTÁRIO")){
 									System.out.println("NOSSSSSSSSSSSSSSSSSA");
 									quantidadeTabelaOrcamentarias.containsKey(tipo);
 									quantidadeTabelaOrcamentarias.put(tipo, quantidadeTabelaOrcamentarias.get(tipo) + 1);
 								}
 							}
 							decretoSaida = decretoSaida.replace(entreTags, textoModificado);
+							//ALTERAR ISSO O MAIS RÁPIDO POSSÍVEL
 							//decretoSaida = decretoSaida.replace("<ANEXOS>", "<ANEXOS num_anexos=" + );
 						}
 					}
@@ -1301,73 +1299,6 @@ public class XMLizacao {
 					bw.flush();
 					bw.close();
 
-					
-					//b.createNewFile();
-					b.createNewFile();
-					fwb = new FileWriter(b);
-					bwb = new BufferedWriter(fwb);
-					contador = new ArrayList<>(quantidadeDecretosAnexos.keySet());
-					for (int v = 0; v < contador.size(); v++){
-						try {
-							bwb.write(contador.get(v) + "    " + quantidadeDecretosAnexos.get(contador.get(v)));
-							bwb.newLine();
-						} catch (IOException e) {
-							System.out.println("Erro na escrita tabela ou anexo");
-						}
-					}
-
-					bwb.flush();
-					bwb.close();
-					
-					//c.createNewFile();
-					fwc = new FileWriter(c);
-					bwc = new BufferedWriter(fwc);
-					contador = new ArrayList<>(quantidadeAnexosTabela.keySet());
-					for (int v = 0; v < contador.size(); v++){
-						try {
-							bwc.write(contador.get(v) + "    " + quantidadeAnexosTabela.get(contador.get(v)));
-							bwc.newLine();
-						} catch (IOException e) {
-							System.out.println("Erro na escrita tabela ou anexo");
-						}
-					}
-
-					bwc.flush();
-					bwc.close();
-					
-					f.createNewFile();
-					fwf = new FileWriter(f);
-					bwf = new BufferedWriter(fwf);
-					contador = new ArrayList<>(quantidadeTabelaOrcamentarias.keySet());
-					System.out.println("PASSOU AQUI");
-					for (int v = 0; v < contador.size(); v++){
-						try {
-							bwf.write(contador.get(v) + "    " + quantidadeTabelaOrcamentarias.get(contador.get(v)));
-							bwf.newLine();
-						} catch (IOException e) {
-							System.out.println("Erro na escrita tabela ou anexo");
-						}
-					}
-					
-					bwf.flush();
-					bwf.close();
-					
-					d.createNewFile();
-					fwd = new FileWriter(d);
-					bwd = new BufferedWriter(fwd);
-					contador = new ArrayList<>(nomePessoas.keySet());
-					for (int v = 0; v < contador.size(); v++){
-						try {
-							bwd.write(contador.get(v) + "    " + nomePessoas.get(contador.get(v)));
-							bwd.newLine();
-						} catch (IOException e) {
-							System.out.println("Erro na escrita nome de pessoas");
-						}
-					}
-					bwd.flush();
-					bwd.close();
-
-
 				} catch (FileNotFoundException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -1387,7 +1318,56 @@ public class XMLizacao {
 					e.printStackTrace();
 				}
 			}
-			
-		}	
+
+		}
+		try {
+			fwb = new FileWriter(b);
+			bwb = new BufferedWriter(fwb);
+			List<String> contador = new ArrayList<>(quantidadeDecretosAnexos.keySet());
+			for (int v = 0; v < contador.size(); v++){	
+					bwb.write(contador.get(v) + "    " + quantidadeDecretosAnexos.get(contador.get(v)));
+					bwb.newLine();
+			}
+
+			bwb.flush();
+			bwb.close();
+
+			fwc = new FileWriter(c);
+			bwc = new BufferedWriter(fwc);
+			contador = new ArrayList<>(quantidadeAnexosTabela.keySet());
+			for (int v = 0; v < contador.size(); v++){
+					bwc.write(contador.get(v) + "    " + quantidadeAnexosTabela.get(contador.get(v)));
+					bwc.newLine();
+			}
+
+			bwc.flush();
+			bwc.close();
+
+			fwf = new FileWriter(f);
+			bwf = new BufferedWriter(fwf);
+			contador = new ArrayList<>(quantidadeTabelaOrcamentarias.keySet());
+			System.out.println("PASSOU AQUI");
+			for (int v = 0; v < contador.size(); v++){
+					bwf.write(contador.get(v) + "    " + quantidadeTabelaOrcamentarias.get(contador.get(v)));
+					bwf.newLine();
+			}
+
+			bwf.flush();
+			bwf.close();
+
+			fwd = new FileWriter(d);
+			bwd = new BufferedWriter(fwd);
+			contador = new ArrayList<>(nomePessoas.keySet());
+			for (int v = 0; v < contador.size(); v++){
+				bwd.write(contador.get(v) + "    " + nomePessoas.get(contador.get(v)));
+				bwd.newLine();
+			}
+			bwd.flush();
+			bwd.close();
+		}  catch (IOException e) {
+			System.out.println("Erro na escrita tabela ou anexo");
+		}
+
+
 	}
 }
