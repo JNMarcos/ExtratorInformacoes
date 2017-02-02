@@ -115,10 +115,10 @@ public class XMLizacao {
 		String regexDinheiro = " R\\$\\s+[0-9.]+,\\d{2}";
 		String regexPorcentagem = " [0-9]+(,\\d{1,})?( )?%";
 		//[\\Q-., \\E]{0,3}
-		String regexEmpresa = "( (a|à|pela|da|da mesma|denominação atual é|atualmente denominada|antiga|[IXV]{1,5} -)( empresa| EMPRESA| Empresa)?( (([0-9A-ZÂÁÉÊÍÓÔÚ&]|de |da |do |das |dos )[0-9A-Za-z\\QçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ&\\E]*[\\Q-., \\E]{1,3})+(\\QLTDA.\\E|LTDA)( ME)?(\\s*(-| |/)\\s*[A-Z]([A-ZÂÃÁÉÊÍÓÔÕÚÇ&]+|[a-zçãàáâéêíóôõú&]+))*))(,|\\Q.\\E|;|:|\"| [a-zéàáíóúêâô]|, [a-z]|\\))";
-		String regexEmpresa2 = "( (a|à|pela|da|da mesma|denominação atual é|atualmente denominada|antiga|[IXV]{1,5} -)( empresa| EMPRESA| Empresa)?( (([0-9A-ZÂÁÉÊÍÓÔÚ&]|de |da |do |das |dos )[0-9A-Za-z\\QçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ&\\E]*[\\Q-., \\E]{1,3})+(\\QS/A\\E|\\QS.A.\\E|\\QS.A\\E)(\\s*(-| |/)\\s*[A-Z]([A-ZÂÃÁÉÊÍÓÔÕÚÇ&]+|[a-zçãàáâéêíóôõú&]+))*))(,|\\Q.\\E|;|:|\"| [a-zéàáíóúêâô]|\\))";
-		String regexEmpresa3 = "( (a|à|pela|da|da mesma|denominação atual é|atualmente denominada|[IXV]{1,5} -)( empresa| EMPRESA| Empresa)( (([0-9A-ZÂÁÉÊÍÓÔÚ&]|de |da |do |das |dos )[0-9A-Za-z\\QçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ&\\E]*[\\Q-., \\E]{1,3})+(\\s*(-| |/)\\s*[A-Z]([A-ZÂÃÁÉÊÍÓÔÕÚÇ&]+|[a-zçãàáâéêíóôõú&]+))*))(,|\\Q.\\E|;|:|\"|\\))";
-		String regexEmpresa4 = "( (a|à|pela|da|da mesma|denominação atual é|atualmente denominada|[IXV]{1,5} -)( empresa| EMPRESA| Empresa)( (([0-9A-ZÂÁÉÊÍÓÔÚ&]|de |da |do |das |dos )[0-9A-Za-z\\QçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ&\\E]*[\\Q-., \\E]{0,3})+))(,|\\Q.\\E|;|:|\"| [a-z])";
+		String regexEmpresaLTDA = "( (a|à|pela|da|da mesma|denominação atual é|atualmente denominada|antiga|[IXV]{1,5} -)( empresa| EMPRESA| Empresa)?( (([0-9A-ZÂÁÉÊÍÓÔÚ&]|de |da |do |das |dos )[0-9A-Za-z\\QçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ&\\E]*[\\Q-., \\E]{1,3})+(\\QLTDA.\\E|LTDA)( ME)?(\\s*(-| |/)\\s*[A-Z]([A-ZÂÃÁÉÊÍÓÔÕÚÇ&]+|[a-zçãàáâéêíóôõú&]+))*))(,|\\Q.\\E|;|:|\"| [a-zéàáíóúêâô]|, [a-z]|\\))";
+		String regexEmpresaSA = "( (a|à|pela|da|da mesma|denominação atual é|atualmente denominada|antiga|[IXV]{1,5} -)( empresa| EMPRESA| Empresa)?( (([0-9A-ZÂÁÉÊÍÓÔÚ&]|de |da |do |das |dos )[0-9A-Za-z\\QçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ&\\E]*[\\Q-., \\E]{1,3})+(\\QS/A\\E|\\QS.A.\\E|\\QS.A\\E)(\\s*(-| |/)\\s*[A-Z]([A-ZÂÃÁÉÊÍÓÔÕÚÇ&]+|[a-zçãàáâéêíóôõú&]+))*))(,|\\Q.\\E|;|:|\"| [a-zéàáíóúêâô]|\\))";
+		String regexEmpresaNaoSALTDA = "( (a|à|pela|da|da mesma|denominação atual é|atualmente denominada|[IXV]{1,5} -)( empresa| EMPRESA| Empresa)( (([0-9A-ZÂÁÉÊÍÓÔÚ&]|de |da |do |das |dos )[0-9A-Za-z\\QçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ&\\E]*[\\Q-., \\E]{1,3})+(\\s*(-| |/)\\s*[A-Z]([A-ZÂÃÁÉÊÍÓÔÕÚÇ&]+|[a-zçãàáâéêíóôõú&]+))*))(,|\\Q.\\E|;|:|\"|\\))";
+		String regexEmpresaNaoSALTDASemSilga = "( (a|à|pela|da|da mesma|denominação atual é|atualmente denominada|[IXV]{1,5} -)( empresa| EMPRESA| Empresa)( (([0-9A-ZÂÁÉÊÍÓÔÚ&]|de |da |do |das |dos )[0-9A-Za-z\\QçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ&\\E]*[\\Q-., \\E]{0,3})+))(,|\\Q.\\E|;|:|\"| [a-z])";
 		String regexInst = "(( |\"|\\()(Fundaç(ão|ões)|Escritório(s)?|Órgão(s)?|Organizaç(ão|ões)|Instituto(s)?|Departamento(s)?|Procuradoria(s)?|Agência(s)?|Junta(s)?|Assembleia(s)?|Câmara(s)?|Consórcio(s)?|Defensoria(s)?|Tribuna(l|is)|Companhia(s)?|Conservatório(s)?|Controladoria(s)?|Gerência(s)?|Contadoria(s)?|Inteligência(s)?|Corpo(s)?|Centra(l|is)|Banco(s)?|Polícia(s)?|Diretoria(s)?|Receita|Delegacia(s)?|Autarquia(s)?|Coordenaç(ão|ões)|Coordenadoria|Assessoria(s)?|Apoio(s)?|Administraç(ão|ões)|Superintendência(s)?|Laboratório(s)?) ((e )?(de |do |dos |da |das |à |a |ao |aos |pelo |pelos |pelas |pela |por |em |no |nos |nas |na |para )?[A-ZÂÁÉÊÍÓÔÚ]([A-ZÂÃÁÉÊÍÓÔÕÚÇ]+|[a-zçãàáâéêíóôõú]+)(, | - | )?)+(\\s*(-|/)\\s*[A-Z][A-Za-z\\QçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ&\\E]+)*)\\s*(,|<|\\Q.\\E|;|:|\"|\\Q)\\E| [a-zéàáíóúêâô])";
 		String regexInst2 = "( AD Diper| Adagro| Arquivo Público Digital| Porto Digital| Porto de Recife| ProRural| Complexo Industrial Portuário| Universidade de Pernambuco| Pernambuco Participações e Investimento S/A( - Perpart)?| Serviço de Proteção ao Consumidor( - PROCON)?)";
 		String regexGrupo = "(( |\"|\\()(Comiss(ão|ões)|Comitê(s)?|Grupo(s)?|Grupamento(s)?|Conselho(s)?) ((e )?(de |do |dos |da |das |à |a |ao |aos |pelo |pelos |pelas |pela |por |em |no |nos |nas |na |para |com |com os |com as )?[A-ZÂÁÉÊÍÓÔÚ]([A-ZÂÃÁÉÊÍÓÔÕÚÇ]+|[a-zçãàáâéêíóôõú]+)(, | - | )?)+(\\s*(-|/)\\s*[A-Z][A-Za-z\\QçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ&\\E]+)*)\\s*(,|<|\\Q.\\E|;|:|\"|\\Q)\\E| [a-zéàáíóúêâô])";
@@ -141,7 +141,7 @@ public class XMLizacao {
 		String regexCargo2 = "[^(Unidades|Unidade|Comitê|Comissão)]( Delegad(o|a)(s)?| Escriv(ão|ães)| Agente(s)?| Diretor(es|a|as)?| Assessor(a|as|es)?| Gestor(a|as|es)?| Coordenador(es|a|as)?)(,| [a-z ]{1,8}[^A-Z]|\\.)";
 		String regexTributo = "(( |\"|\\()(Taxa(s)?|Imposto(s)?|Tributo(s)?|Contribuiç(ão|ões)|Empréstimo(s)? Compulsório(s)?) (((e )?(de |do |dos |da |das |à |a |ao |aos |pelo |pelos |pelas |pela |por |em |no |nos |nas |na |para |com |com os |com as |destinada à| destinado ao)?[A-ZÂÁÉÊÍÓÔÚ]([A-ZÂÃÁÉÊÍÓÔÕÚÇ]+|[a-zçãàáâéêíóôõú]+)(, | - | )?))+(\\s*(-|/)\\s*[A-Z]([A-ZÂÃÁÉÊÍÓÔÕÚÇ&]+|[a-zçãàáâéêíóôõú&]+))*)\\s*(,|<|\\Q.\\E|;|:|\"|\\Q)\\E| [a-zéàáíóúêâô])";
 		String regexIndice = "(( |\"|\\()(Índice) (((e )?(de |do |dos |da |das |à |a |ao |aos |pelo |pelos |pelas |pela |por |em |no |nos |nas |na |para |com |com os |com as |destinada à| destinado ao)?[A-ZÂÁÉÊÍÓÔÚ]([A-ZÂÃÁÉÊÍÓÔÕÚÇ]+|[a-zçãàáâéêíóôõú]+)(, | - | )?))+(\\s*(-|/)\\s*[A-Z]([A-ZÂÃÁÉÊÍÓÔÕÚÇ&]+|[a-zçãàáâéêíóôõú&]+))*)\\s*(,|<|\\Q.\\E|;|:|\"|\\Q)\\E| [a-zéàáíóúêâô])";
-		String regexLugar = "(( |\"|\\()(Estaç(ão|ões)|Coletor(es|a|as)?|Reservatório(s)?|Sítio(s)?|Monumento(s)?|Riacho(s)?|Parque(s)|Praça(s)?|Cartório(s)?) ((de |do |dos |da |das |à |a |ao |aos |pelo |pelos |pelas |pela |por |em |no |nos |nas |na |para |com |com os |com as )?[A-ZÂÁÉÊÍÓÔÚ]([A-ZÂÃÁÉÊÍÓÔÕÚÇ]+|[a-zçãàáâéêíóôõú]+)(, | - | )?|[0-9 e]+)+(\\s*(-|/)\\s*[A-Z][A-Za-z\\QçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ&\\E]+)*)\\s*(,|<|\\Q.\\E|;|:|\"|\\Q)\\E| [a-zéàáíóúêâô])";
+		String regexLocal = "(( |\"|\\()(Estaç(ão|ões)|Coletor(es|a|as)?|Reservatório(s)?|Sítio(s)?|Monumento(s)?|Riacho(s)?|Parque(s)|Praça(s)?|Cartório(s)?) ((de |do |dos |da |das |à |a |ao |aos |pelo |pelos |pelas |pela |por |em |no |nos |nas |na |para |com |com os |com as )?[A-ZÂÁÉÊÍÓÔÚ]([A-ZÂÃÁÉÊÍÓÔÕÚÇ]+|[a-zçãàáâéêíóôõú]+)(, | - | )?|[0-9 e]+)+(\\s*(-|/)\\s*[A-Z][A-Za-z\\QçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ&\\E]+)*)\\s*(,|<|\\Q.\\E|;|:|\"|\\Q)\\E| [a-zéàáíóúêâô])";
 		String regexSite = " www(\\d)?((\\.[a-z]+))+(/( )?([A-Za-z]+)?)?";
 		String regexEnd = " <INF_EMP>([0-9A-Za-zçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ\\Q() ,º°ª-.;/'\"\\E]+), com CNPJ(/MF)?";
 		String regexAnexo = "<ANEXOS>([0-9A-Za-zçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ\"\'\\Q()!?&$§%:@#=;/,º°ª.<>-_\\\\E \n\t\u00A7\u002D]+)</ANEXOS>";//só esse tem sinal igual
@@ -171,10 +171,10 @@ public class XMLizacao {
 		Pattern padraoDoc = Pattern.compile(regexDoc);
 		Pattern padraoDinheiro = Pattern.compile(regexDinheiro);
 		Pattern padraoPorcentagem = Pattern.compile(regexPorcentagem);
-		Pattern padraoEmpresa = Pattern.compile(regexEmpresa);
-		Pattern padraoEmpresa2 = Pattern.compile(regexEmpresa2);
-		Pattern padraoEmpresa3 = Pattern.compile(regexEmpresa3);
-		Pattern padraoEmpresa4 = Pattern.compile(regexEmpresa4);
+		Pattern padraoEmpresaLTDA = Pattern.compile(regexEmpresaLTDA);
+		Pattern padraoEmpresaSA = Pattern.compile(regexEmpresaSA);
+		Pattern padraoEmpresaNaoSALTDA = Pattern.compile(regexEmpresaNaoSALTDA);
+		Pattern padraoEmpresaNaoSALTDASemSigla = Pattern.compile(regexEmpresaNaoSALTDASemSilga);
 		Pattern padraoInst = Pattern.compile(regexInst);
 		Pattern padraoInst2 = Pattern.compile(regexInst2);
 		Pattern padraoSecretaria = Pattern.compile(regexSecretaria);
@@ -193,7 +193,7 @@ public class XMLizacao {
 		Pattern padraoIE = Pattern.compile(regexIE);
 		Pattern padraoCACEPE = Pattern.compile(regexCACEPE);
 		Pattern padraoMunicipio = Pattern.compile(regexMunicipio);
-		Pattern padraoLugar = Pattern.compile(regexLugar);
+		Pattern padraoLocal = Pattern.compile(regexLocal);
 		Pattern padraoCargo = Pattern.compile(regexCargo);
 		Pattern padraoCargo2 = Pattern.compile(regexCargo2);
 		Pattern padraoTributo = Pattern.compile(regexTributo);
@@ -744,7 +744,7 @@ public class XMLizacao {
 						decretoSaida = decretoSaida.replaceFirst("\\Q" + entreTags +"\\E", textoModificado);
 					}
 
-					matcher = padraoEmpresa.matcher(decretoSaida);
+					matcher = padraoEmpresaLTDA.matcher(decretoSaida);
 					while (matcher.find()){
 						//System.out.println(nomeArquivo);
 						if (matcher.group(3) == null){
@@ -789,7 +789,7 @@ public class XMLizacao {
 						}		
 					}
 
-					matcher = padraoEmpresa2.matcher(decretoSaida);
+					matcher = padraoEmpresaSA.matcher(decretoSaida);
 					while (matcher.find()){
 						//System.out.println(nomeArquivo);
 
@@ -835,7 +835,7 @@ public class XMLizacao {
 						}	
 					}
 
-					matcher = padraoEmpresa3.matcher(decretoSaida);
+					matcher = padraoEmpresaNaoSALTDA.matcher(decretoSaida);
 					while (matcher.find()){
 						//System.out.println(nomeArquivo);
 						if (matcher.group(3) == null){
@@ -880,7 +880,7 @@ public class XMLizacao {
 						}				
 					}
 
-					matcher = padraoEmpresa4.matcher(decretoSaida);
+					matcher = padraoEmpresaNaoSALTDASemSigla.matcher(decretoSaida);
 					while (matcher.find()){
 						//System.out.println(nomeArquivo);
 						if (matcher.group(3) == null){
@@ -934,7 +934,7 @@ public class XMLizacao {
 								matcher.group(1).contains("nidade do município")||
 								matcher.group(1).contains("nidade municipal"))){
 							entreTags = matcher.group(1);
-							textoModificado = " <UN>" + matcher.group(1).trim() + "</UN>";
+							textoModificado = " <UNI>" + matcher.group(1).trim() + "</UNI>";
 							decretoSaida = decretoSaida.replaceFirst("\\Q" + entreTags +"\\E", textoModificado);			
 						}
 					}
@@ -1178,10 +1178,10 @@ public class XMLizacao {
 						decretoSaida = decretoSaida.replaceFirst("\\Q" + entreTags +"\\E", textoModificado);
 					}
 
-					matcher = padraoLugar.matcher(decretoSaida);
+					matcher = padraoLocal.matcher(decretoSaida);
 					while (matcher.find()){
 						entreTags = matcher.group(1);
-						textoModificado = " <LUG>" + matcher.group(1).trim() + "</LUG>";
+						textoModificado = " <LOC>" + matcher.group(1).trim() + "</LOC>";
 						decretoSaida = decretoSaida.replaceFirst("\\Q" + entreTags +"\\E", textoModificado);
 					}
 
