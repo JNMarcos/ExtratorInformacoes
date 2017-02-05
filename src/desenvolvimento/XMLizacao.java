@@ -105,7 +105,7 @@ public class XMLizacao {
 		String regexInfo = "(\\Q(ERRATA PUBLICADA NO DIÁRIO OFICIAL DE \\E\\d{1,2} DE [A-ZÇ]{4,10} DE \\d{4}\\Q)\\E|\\Q(REPUBLICADO POR HAVER SAÍDO COM INCORREÇÃO NO ORIGINAL)\\E|\\Q(Revogado\\E [0-9A-Za-zçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ\"\'\\Q!?&$%:@#;,/§º°ª.<>-_\\\\E \n\t\u00A7\u002D]{5,70}\\)|\\Q(Vide errata no final do texto.)\\E)";
 
 		//REMOVER O TANTO DE CARACTERES QUE TEM EM ASSINATURA
-		String regexConsiderando = "<CONSIDERACOES>([0-9A-Za-zçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ\"\'\\Q()!?&$§%:@#;=/,º°ª.<>-_\\\\E \n\t\u00A7\u002D]+)</CONSIDERACOES>";
+		String regexConsiderando = "<CONSIDERACOES>([0-9A-Za-zçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ\"\'\\Q()!?&$§%:@#;=/,º°ª.<>-_\\\\E \n\t\u00A7]+)</CONSIDERACOES>";
 		String regexAssinatura = "<ASS>([A-Za-zçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ\'\\Q()=,.<>-\\\\E \n\t]+)</ASS>";
 		//antes junto com a vírgula, tinha espaço para escolher
 		// devido a isso, existia logo após a opção "de" sem espaço
@@ -451,7 +451,7 @@ public class XMLizacao {
 
 			for (int j = 0; j < arquivos[i].length; j++){
 				nomeArquivo = (arquivos[i][j]).getName(); //obtém o nome do arquivo
-				System.out.println(nomeArquivo);
+				//System.out.println(nomeArquivo);
 				decreto = "";
 				//Arquivo de leitura a partir do caminhoTemporario (string)
 				try {
@@ -653,7 +653,8 @@ public class XMLizacao {
 							else
 								textoModificado += "<CONS>" + segmentosConsAss[k].trim() + "</CONS>";
 						}
-						decretoSaida = decretoSaida.replaceFirst(entreTags, textoModificado);
+						
+						decretoSaida = decretoSaida.replace(entreTags, textoModificado);
 					}
 
 					matcher = padraoAssinatura.matcher(decretoSaida);
@@ -1248,8 +1249,6 @@ public class XMLizacao {
 						entreTags = matcher.group(1);
 						if (entreTags.contains(" - ") && entreTags.split(" - ").length >=2 
 								&& !entreTags.contains("Conexão Cidadã") && !entreTags.contains("COFINS")){
-							//System.out.println(entreTags);
-							System.out.println(entreTags);
 							if (entreTags.charAt(0) == '\"'){
 								entreTags = entreTags.replace("\"", "");
 								textoModificado = "<PROG>";
@@ -1264,7 +1263,6 @@ public class XMLizacao {
 								entreTags = entreTags.split(" - ")[0];
 							}
 
-							System.out.println(entreTags);
 							textoModificado += entreTags.trim() + "</PROG>";
 							if (textoModificado.contains(",<")){
 								textoModificado = textoModificado.replace(",</PROG>", "</PROG>,");
