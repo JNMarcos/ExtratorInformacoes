@@ -251,6 +251,8 @@ public class RemovedorFormatacaoCaracteresEspHTML {
 				decreto = decreto.replaceAll("Policia", "Polícia");
 				decreto = decreto.replaceAll("CON S I D E R AN DO", "CONSIDERANDO");
 				decreto = decreto.replaceAll(" ONSIDERANDO", " CONSIDERANDO");
+				//garante que há ao menos dois espaços na hora da segmentação, é necessário para o funcionamento do regex
+				decreto = decreto.replaceAll(" CONSIDERANDO", "  CONSIDERANDO"); 
 				decreto = decreto.replaceAll("GVERNO|GPVERNO", "GOVERNO");
 				decreto = decreto.replaceAll("GVERNADOR", "GOVERNADOR");
 				decreto = decreto.replaceAll("MEORIAL", "MEMORIAL");
