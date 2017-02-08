@@ -68,7 +68,7 @@ public class LimpadorHTML {
 
 		//Strings que contém (parte do) endereço de um arquivo 
 		String caminhoPasta;
-		String caminhoInicio = "tagsEliminadas\\";//Parte final do endereço que conterá em cada pasta em caminhosDecreto os arquivos limpos 
+		String caminhoInicio = "tagsREDUZIDAS\\";//Parte final do endereço que conterá em cada pasta em caminhosDecreto os arquivos limpos 
 		String complementoFinal = ".html";
 		String caminhoComplemento;
 		String caminho; // caminho = caminhoInicio + caminhoComplemento + caminhoFinal
@@ -279,6 +279,8 @@ public class LimpadorHTML {
 					fw = new FileWriter(a);
 					bw = new BufferedWriter(fw);
 
+					//String porEnquanto = decreto.split("Independência do Brasil\\.")[1];
+					//porEnquanto = porEnquanto.split("ANEXO")[0];
 					//Remoção das tags residuais
 					decreto = decreto.replaceAll(padraoRemoverDivLinks, "");
 					decreto = decreto.replaceFirst(padraoRemoverDivInforme, "");
@@ -288,6 +290,10 @@ public class LimpadorHTML {
 					decreto = decreto.replaceAll(removerTagAbertura, "");
 					decreto = decreto.replaceAll(removerTagFim, "");
 					decreto = decreto.replaceAll("\t", "");
+					//String porEnquanto2 = decreto.split("Independência do Brasil\\.")[1];
+					//porEnquanto2 = porEnquanto2.split("ANEXO")[0];
+					
+					//decreto = decreto.replace(porEnquanto2, porEnquanto);
 					decreto = decreto.trim();
 					
 					//Escreve o decreto
