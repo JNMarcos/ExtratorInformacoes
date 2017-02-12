@@ -106,11 +106,7 @@ public class XMLizacao {
 		//REMOVER O TANTO DE CARACTERES QUE TEM EM ASSINATURA
 		String regexConsiderando = "<CONSIDERACOES>([0-9A-Za-zçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ\"\'\\Q()!?&$§%:@#;=/,º°ª.<>-_\\\\E \n\t\u00A7]+)</CONSIDERACOES>";
 		String regexAssinatura = "<ASS>([A-Za-zçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ\'\\Q()=,.<>-\\\\E \n\t]+)</ASS>";
-		//antes junto com a vírgula, tinha espaço para escolher
-		// devido a isso, existia logo após a opção "de" sem espaço
-		//primeiro comentário deixa de ser escolha
-		//mudou abaixo leis
-		String regexLeis = "(( |\"|\\(|>)(Decreto|\\QDecreto-Lei\\E|Decreto Lei|Decreto Lei Federal|\\QDecreto-Lei\\E Federal|Lei Federal|Lei Complementar|Lei Complementar Federal|Lei|Resolução|Emenda Constitucional|Ad Referendum|Ofício|Parecer|Parecer Conjunto|Portaria Conjunta|Portaria|Ato|Ato DeclaratórioTermo|Ajuste|Ata|Acórdão|Protocolo|Lei Orçamentária Anual)( do| da)?[A-Z \\Q/-.\\E]{0,16}((( nº| n°)? (\\d{1,2}\\.\\d{3}|\\d{3}|\\d{2}|\\d{2,4}/\\d{2,4}[A-Z\\Q/ -\\E]{0,10}))?(,)?((( de| em)? (\\d{1,2})(°|º)?( de |[\\Q./-\\E])([a-zçA-ZÇ]{4,9}|\\d{1,2}[\\Q./-\\E]))?( de )?(\\d{4}))?))(,|<|\\Q.\\E|;|:|\"|\\Q)\\E|\\Q(\\E| [a-zéàáíóúêâô])";
+		String regexLeis = "(( |\"|\\(|>)(Decreto|\\QDecreto-Lei\\E|Decreto Lei|Decreto Lei Federal|\\QDecreto-Lei\\E Federal|Lei Federal|Lei Complementar|Lei Complementar Federal|Lei|Resolução|Emenda Constitucional|Ad Referendum|Ofício|Parecer|Parecer Conjunto|Portaria Conjunta|Portaria|Ato|Ato Declaratório|Termo|Ajuste|Ata|Acórdão|Protocolo|Lei Orçamentária Anual)( do| da)?[A-Z \\Q/-.\\E]{0,16}(( nº| n°)? (\\d{1,2}\\.\\d{3}|\\d{3}|\\d{2}|\\d{2,4}/\\d{2,4}[A-Z\\Q/ -\\E]{0,10}))?(,)?((( de| em)? (\\d{1,2})(°|º)?( de |[\\Q./-\\E])([a-zçA-ZÇ]{4,9}|\\d{1,2}[\\Q./-\\E]))?( de )?(\\d{4}))?)(,|<|\\Q.\\E|;|:|\"|\\Q)\\E|\\Q(\\E| [a-zéàáíóúêâô])";
 		String regexDoc = "(( |\"|\\(|>)(Manua(l|is)|Caderno(s)?|Código(s)?|Constituiç(ão|ões)|Estatuto(s)?|Termo(s)?|Documento(s)?|Cadastro(s)?|Quadro(s)?|Declaraç(ão|ões)|Certificado(s)?|Regimento(s)?|Regulamento(s)?|Ato(s)?|Ata(s)?|Termo(s)?|Orde(m|ns) Bancária(s)?|Registro(s)?|Contrato(s)?|Balanço(s)?|Balancete(s)?|Nota(s)?|Relatório(s)?|Resoluç(ão|ões)|Anexo(s)?|Memoria(l|is)|Classificaç(ão|ões)|Convênio(s)?) (e )?((de |do |dos |da |das |à |a |ao |aos |pelo |pelos |pelas |pela |por |em |para |com |com os |com as )?([A-ZÂÁÉÊÍÓÔÚ]|[0-9])([A-ZÂÃÁÉÊÍÓÔÕÚÇ]+|[a-zçãàáâéêíóôõú]+|[0-9]+)*(, | - | (e )?)?)+(\\s*(-|/)\\s*[A-Z][A-Za-z\\QçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ&-\\E]+)*( [0-9\\Q-/\\E]+)?)\\s*(,|<|\\Q.\\E|;|:|\"|\\Q)\\E| [a-zéàáíóúêâô]|  )";
 		String regexDoc2 = " Orçamento Fiscal| Orçamento de Investimento( das Empresas)?| Diário Oficial do Estado| Diário Oficial da União"; 
 		String regexDinheiro = " R\\$\\s+[0-9.]+,\\d{2}";
@@ -245,7 +241,7 @@ public class XMLizacao {
 		tiposDocumentos.put("Lei Complementar Federal", "LCF");
 		tiposDocumentos.put("Protocolo", "PROT");
 		tiposDocumentos.put("Lei Orçamentária Anual", "LOA");
-		
+
 
 		Hashtable<String, String> numeracaoMeses = new Hashtable<>();
 		numeracaoMeses.put("janeiro", "01");
@@ -696,41 +692,39 @@ public class XMLizacao {
 					}
 
 					matcher = padraoLeis.matcher(decretoSaida);
-					//TALVEZ MUDAR AQUI
-					while (matcher.find() && (matcher.group(6) != null || matcher.group(10) != null || matcher.group(11) != null)){
+					while (matcher.find() && (matcher.group(7) != null  || matcher.group(9) != null)){ //&& (matcher.group(6) != null || matcher.group(10) != null || matcher.group(11) != null)){
 						entreTags = matcher.group(1);
 						String tipoDoc = tiposDocumentos.get(matcher.group(3).trim());
 						textoModificado = " <" +  tipoDoc;
-						//System.out.println(entreTags);
+						System.out.println("Leis1 " + entreTags);
 
-						if (matcher.group(10) == null && matcher.group(6) != null){
-							if (matcher.group(8).contains("/")){
-								textoModificado += " numeracao=" + matcher.group(8).split("/")[0] + " ano=" + matcher.group(8).split("/")[1];
+						if (matcher.group(9) == null && matcher.group(7) != null){
+							if (matcher.group(7).contains("/")){
+								textoModificado += " numeracao=" + matcher.group(7).split("/")[0] + " ano=" + matcher.group(7).split("/")[1];
 							} else{
-								textoModificado += " numeracao=" + matcher.group(8);
+								textoModificado += " numeracao=" + matcher.group(7);
 							}
 
-						} else if(matcher.group(6) == null && matcher.group(13) != null){
-							textoModificado += " data=" + (matcher.group(13).length() < 2? "0" + matcher.group(13) : matcher.group(13))
+						} else if(matcher.group(7) == null && matcher.group(9) != null){
+							textoModificado += " data=" + (matcher.group(12).length() < 2? "0" + matcher.group(12) : matcher.group(12))
 									+ "-";
-							if  (matcher.group(15).contains(".") || matcher.group(15).contains("/") || matcher.group(15).contains("-")){
-								textoModificado += (matcher.group(16).length() < 2? "0" + matcher.group(16): matcher.group(16)) + "-" + matcher.group(18);
+							if  (matcher.group(14).contains(".") || matcher.group(14).contains("/") || matcher.group(14).contains("-")){
+								textoModificado += (matcher.group(15).length() < 2? "0" + matcher.group(15): matcher.group(15)) + "-" + matcher.group(17);
 							} else{
-								textoModificado += numeracaoMeses.get(matcher.group(16).toLowerCase()) + "-" + matcher.group(18);
+								textoModificado += numeracaoMeses.get(matcher.group(15).toLowerCase()) + "-" + matcher.group(17);
 							}
-						} else if (matcher.group(12) != null){
-							textoModificado += " numeracao=" + matcher.group(8);
-							textoModificado += " data=" + (matcher.group(13).length() < 2? "0" + matcher.group(13) : matcher.group(13))
+						} else if (matcher.group(7) != null && matcher.group(15) != null){ // 12 é dia, 15 é mês, 17 ano
+							textoModificado += " numeracao=" + matcher.group(7);
+							textoModificado += " data=" + (matcher.group(14).length() < 2? "0" + matcher.group(14) : matcher.group(14))
 									+ "-";
-							if  (matcher.group(15).contains(".") || matcher.group(15).contains("/") || matcher.group(15).contains("-")){
-								textoModificado += (matcher.group(16).length() < 2? "0" + matcher.group(16): matcher.group(16)) + "-" + matcher.group(18);
+							if  (matcher.group(14).contains(".") || matcher.group(14).contains("/") || matcher.group(14).contains("-")){
+								textoModificado += (matcher.group(15).length() < 2? "0" + matcher.group(15): matcher.group(15)) + "-" + matcher.group(17);
 							} else{
-								textoModificado += numeracaoMeses.get(matcher.group(16).toLowerCase()) + "-" + matcher.group(18);
+								textoModificado += numeracaoMeses.get(matcher.group(15).toLowerCase()) + "-" + matcher.group(17);
 							}
-							//+ numeracaoMeses.get(matcher.group(16).toLowerCase()) + "-" + matcher.group(17);
-						} else if (matcher.group(10) != null){
-							textoModificado += " numeracao=" + matcher.group(8);
-							textoModificado += " ano=" + matcher.group(18);
+						} else if (matcher.group(7) != null && matcher.group(17) != null){
+							textoModificado += " numeracao=" + matcher.group(7);
+							textoModificado += " ano=" + matcher.group(17);
 						}
 
 						textoModificado+= ">" + matcher.group(1).trim() + "</" + tipoDoc + ">";
