@@ -110,9 +110,9 @@ public class XMLizacao {
 		// devido a isso, existia logo após a opção "de" sem espaço
 		//primeiro comentário deixa de ser escolha
 		//mudou abaixo leis
-		String regexLeis = "(( |\"|\\(|>)(Decreto|\\QDecreto-Lei\\E|Decreto Lei|Decreto Lei Federal|\\QDecreto-Lei\\E Federal|Lei Federal|Lei Complementar|Lei Complementar Federal|Lei|Resolução|Emenda Constitucional|Ad Referendum|Ofício|Parecer|Parecer Conjunto|Portaria Conjunta|Portaria|Ato|Ato DeclaratórioTermo|Ajuste|Ata|Acórdão|Protocolo)( do| da)?[A-Z \\Q/-.\\E]{0,16}((( nº| n°)? (\\d{1,2}\\.\\d{3}|\\d{3}|\\d{2}|\\d{2,4}/\\d{2,4}[A-Z\\Q/ -\\E]{0,10}))?(,)?((( de| em)? (\\d{1,2})(°|º)?( de |[\\Q./-\\E])([a-zçA-ZÇ]{4,9}|\\d{1,2}[\\Q./-\\E]))?( de )?(\\d{4}))?))(,|<|\\Q.\\E|;|:|\"|\\Q)\\E|\\Q(\\E| [a-zéàáíóúêâô])";
-		String regexDoc = "(( |\"|\\(|>)(Manua(l|is)|Caderno(s)?|Código(s)?|Constituiç(ão|ões)|Estatuto(s)?|Orçamento(s)?|Termo(s)?|Documento(s)?|Cadastro(s)?|Quadro(s)?|Declaraç(ão|ões)|Certificado(s)?|Regimento(s)?|Regulamento(s)?|Ato(s)?|Ata(s)?|Termo(s)?|Orde(m|ns) Bancária(s)?|Registro(s)?|Contrato(s)?|Balanço(s)?|Balancete(s)?|Nota(s)?|Relatório(s)?|Resoluç(ão|ões)|Anexo(s)?|Memoria(l|is)|Classificaç(ão|ões)|Convênio(s)?) (e )?((de |do |dos |da |das |à |a |ao |aos |pelo |pelos |pelas |pela |por |em |para |com |com os |com as )?([A-ZÂÁÉÊÍÓÔÚ]|[0-9])([A-ZÂÃÁÉÊÍÓÔÕÚÇ]+|[a-zçãàáâéêíóôõú]+|[0-9]+)*(, | - | (e )?)?)+(\\s*(-|/)\\s*[A-Z][A-Za-z\\QçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ&-\\E]+)*( [0-9\\Q-/\\E]+)?)\\s*(,|<|\\Q.\\E|;|:|\"|\\Q)\\E| [a-zéàáíóúêâô]|  )";
-		String regexDoc2 = " Orçamento Fiscal| Orçamento de Investimentos| Diário Oficial do Estado| Diário Oficial da União"; 
+		String regexLeis = "(( |\"|\\(|>)(Decreto|\\QDecreto-Lei\\E|Decreto Lei|Decreto Lei Federal|\\QDecreto-Lei\\E Federal|Lei Federal|Lei Complementar|Lei Complementar Federal|Lei|Resolução|Emenda Constitucional|Ad Referendum|Ofício|Parecer|Parecer Conjunto|Portaria Conjunta|Portaria|Ato|Ato DeclaratórioTermo|Ajuste|Ata|Acórdão|Protocolo|Lei Orçamentária Anual)( do| da)?[A-Z \\Q/-.\\E]{0,16}((( nº| n°)? (\\d{1,2}\\.\\d{3}|\\d{3}|\\d{2}|\\d{2,4}/\\d{2,4}[A-Z\\Q/ -\\E]{0,10}))?(,)?((( de| em)? (\\d{1,2})(°|º)?( de |[\\Q./-\\E])([a-zçA-ZÇ]{4,9}|\\d{1,2}[\\Q./-\\E]))?( de )?(\\d{4}))?))(,|<|\\Q.\\E|;|:|\"|\\Q)\\E|\\Q(\\E| [a-zéàáíóúêâô])";
+		String regexDoc = "(( |\"|\\(|>)(Manua(l|is)|Caderno(s)?|Código(s)?|Constituiç(ão|ões)|Estatuto(s)?|Termo(s)?|Documento(s)?|Cadastro(s)?|Quadro(s)?|Declaraç(ão|ões)|Certificado(s)?|Regimento(s)?|Regulamento(s)?|Ato(s)?|Ata(s)?|Termo(s)?|Orde(m|ns) Bancária(s)?|Registro(s)?|Contrato(s)?|Balanço(s)?|Balancete(s)?|Nota(s)?|Relatório(s)?|Resoluç(ão|ões)|Anexo(s)?|Memoria(l|is)|Classificaç(ão|ões)|Convênio(s)?) (e )?((de |do |dos |da |das |à |a |ao |aos |pelo |pelos |pelas |pela |por |em |para |com |com os |com as )?([A-ZÂÁÉÊÍÓÔÚ]|[0-9])([A-ZÂÃÁÉÊÍÓÔÕÚÇ]+|[a-zçãàáâéêíóôõú]+|[0-9]+)*(, | - | (e )?)?)+(\\s*(-|/)\\s*[A-Z][A-Za-z\\QçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ&-\\E]+)*( [0-9\\Q-/\\E]+)?)\\s*(,|<|\\Q.\\E|;|:|\"|\\Q)\\E| [a-zéàáíóúêâô]|  )";
+		String regexDoc2 = " Orçamento Fiscal| Orçamento de Investimento( das Empresas)?| Diário Oficial do Estado| Diário Oficial da União"; 
 		String regexDinheiro = " R\\$\\s+[0-9.]+,\\d{2}";
 		String regexPorcentagem = " [0-9]+(,\\d{1,})?( )?%";
 		String regexEmpresaLTDA = "( (a|à|pela|da|da mesma|denominação atual é|atualmente denominada|antiga|[IXV]{1,5} -)( empresa| EMPRESA| Empresa)?( (([0-9A-ZÂÁÉÊÍÓÔÚ&]|de |da |do |das |dos )[0-9A-Za-z\\QçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ&\\E]*[\\Q-., \\E]{1,3})+(\\QLTDA.\\E|LTDA)( ME)?(\\s*(-| |/)\\s*[A-Z]([A-ZÂÃÁÉÊÍÓÔÕÚÇ&]+|[a-zçãàáâéêíóôõú&]+))*))(,|\\Q.\\E|;|:|\"| [a-zéàáíóúêâô]|, [a-z]|\\))";
@@ -133,8 +133,8 @@ public class XMLizacao {
 		String regexGratificacao = "(( |\"|\\(|>)(Gratificaç(ão|ões)|Compensaç(ão|ões)|Bonificaç(ão|ões)|Abono(s)?|Benefício(s)?) (e )?((de |do |dos |da |das |à |a |ao |aos |pelo |pelos |pelas |pela |por |em |no |nos |nas |na |para |com |com os |com as )?[A-ZÂÁÀÉÊÍÓÔÚ]([A-ZÂÃÁÉÊÍÓÔÕÚÇ]+|[a-zçãàáâéêíóôõú]+)(, | (e )?)?)+(\\s*(-|/)\\s*[A-Z][A-Za-z\\QçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ&\\E]+)*)\\s*(,|<|\\Q.\\E|;|:|\"|\\Q)\\E|\\Q(\\E| [a-zéàáíóúêâô])";
 		String regexPremio = "(( |\"|\\(|>)(Prêmio(s)?|Medalha(s)?|Menç(ão|ões)|Homenage(m|ns)|Honraria(s)?|Condecoraç(ão|ões)|Láurea(s)?) ((de |do |dos |da |das |à |a |ao |aos |pelo |pelos |pelas |pela |por |em |no |nos |nas |na |para |com |com os |com as )?[A-ZÂÁÀÉÊÍÓÔÚ]([A-ZÂÃÁÉÊÍÓÔÕÚÇ]+|[a-zçãàáâéêíóôõú]+)(, |-| (e )?)?)+(\\s*(-|/)\\s*[A-Z][A-Za-z\\QçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ&\\E]+)*)\\s*(,|<|\\Q.\\E|;|:|\"|\\Q)\\E|\\Q(\\E| [a-zéàáíóúêâô])";
 		String regexEdificacao = "(( |\"|\\(|>)(Prédio(s)?|Edifício(s)?|Escola(s)?|Palácio(s)?|Presídio(s)?|Arena(s)?|Refinaria(s)?|Estaleiro(s)?|Polo(s)?|Estaç(ão|ões)|Coletor(es|a|as)?|Reservatório(s)?|Cartório(s)?|Universidade(s)?|Hospita(l|is)( Regina(l|is)| Federa(l|is)| Estadua(l|is)| Municipa(l|is))?) ((de |do |dos |da |das |à |a |ao |aos |pelo |pelos |pelas |pela |por |em |no |nos |nas |na |para |com |com os |com as )?[A-ZÂÁÀÉÊÍÓÔÚ]([A-ZÂÃÁÉÊÍÓÔÕÚÇ]+|[a-zçãàáâéêíóôõú]+)(-| (e )?)?)+(\\s*(-|/)\\s*[A-Z][A-Za-z\\QçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ&\\E]+)*)\\s*(,|<|\\Q.\\E|;|:|\"|\\Q)\\E|\\Q(\\E| [a-zãàáâéêíóôõú])";
-		String regexSistema = "(( |\"|\\(|>)(Sistema|sistema|SISTEMA) ((de |do |dos |da |das |à |a |ao |aos |pelo |pelos |pelas |pela |por |em |no |nos |nas |na |para |com |com os |com as )?(\\Qe-\\E)?[A-ZÂÁÀÉÊÍÓÔÚ]([A-ZÂÃÁÉÊÍÓÔÕÚÇ]+|[a-zçãàáâéêíóôõú]+)(, | - | (e )?)?)+(\\s*(-|/)\\s*[A-Z][A-Za-z\\QçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ&\\E]+)*)\\s*(,|<|\\Q.\\E|;|:|\"|\\Q)\\E|\\Q(\\E| [a-zéàáíóúêâô])";
-		String regexEvento = "(( |\"|\\(|>)([IVX]{1,5} |\\d{1,3}(º|°|ª) )?(Conferência|Congresso|Evento|Show|Concerto|Simpósio|Debate|Fórum|Estudo|Copa) ((de |do |dos |da |das |à |a |ao |aos |pelo |pelos |pelas |pela |por |em |no |nos |nas |na |para |com |com os |com as )?[A-ZÂÁÉÊÍÓÔÚ]([A-ZÂÃÁÉÊÍÓÔÕÚÇ]+|[a-zçãàáâéêíóôõú]+)(\\. |, | - | (e )?)?)+((de )?\\d{4})?(\\s*(-|/)\\s*[A-Z][A-Za-z\\QçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ&\\E]+)*)\\s*(,|<|\\Q.\\E|;|:|\"|\\Q)\\E|\\Q(\\E| [a-zéàáíóúêâô])";
+		String regexSistema = "(( |\"|\\(|>)(Sistema|sistema) ((de |do |dos |da |das |à |a |ao |aos |pelo |pelos |pelas |pela |por |em |no |nos |nas |na |para |com |com os |com as )?(\\Qe-\\E)?[A-ZÂÁÀÉÊÍÓÔÚ]([A-ZÂÃÁÉÊÍÓÔÕÚÇ]+|[a-zçãàáâéêíóôõú]+)(, | - | (e )?)?)+(\\s*(-|/|\\()\\s*[A-Z][A-Za-z\\QçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ&\\E]+)*)\\s*(,|<|\\Q.\\E|;|:|\"|\\Q)\\E|\\Q(\\E| [a-zéàáíóúêâô])";
+		String regexEvento = "(( |\"|\\(|>)([IVX]{1,5} |\\d{1,3}(º|°|ª) )?(Conferência|Congresso|Evento|Show|Concerto|Simpósio|Debate|Fórum|Estudo|Copa) ((de |do |dos |da |das |à |a |ao |aos |pelo |pelos |pelas |pela |por |em |no |nos |nas |na |para |com |com os |com as )?[A-ZÂÁÉÊÍÓÔÚ]([A-ZÂÃÁÉÊÍÓÔÕÚÇ]+|[a-zçãàáâéêíóôõú]+)(\\. |, | - | (e )?)?)+((de )?\\d{4})?(\\s*(-|/|\\()\\s*[A-Z][A-Za-z\\QçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ&\\E]+)*)\\s*(,|<|\\Q.\\E|;|:|\"|\\Q)\\E|\\Q(\\E| [a-zéàáíóúêâô])";
 		String regexPartido = "(( |\"|\\(|>)((?i)Partido(s)?) ((de |do |dos |da |das |à |a |ao |aos |pelo |pelos |pelas |pela |para |com |com os |com as )?[A-ZÂÁÀÉÊÍÓÔÚ]([A-ZÂÃÁÉÊÍÓÔÕÚÇ]+|[a-zçãàáâéêíóôõú]+)(, | - | (e )?)?)+(\\s*(-|/)\\s*[A-Z][A-Za-z\\QçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ&\\E]+)*)\\s*(,|<|\\Q.\\E|;|:|\"|\\Q)\\E|\\Q(\\E| [a-zéàáíóúêâô])";
 		String regexData = "( (\\d{1,2})(°|º)? de ([a-zçA-ZÇ]{4,9}) (do ano )?(de )?(\\d{4})| \\d{1,2}[\\Q./\\E]\\d{1,2}[\\Q./\\E](\\d{2}|\\d{4}))( |\\. |,|;|:|( )?<|\"|\\))";
 		String regexIntervaloData = " <DAT>[0-9A-Za-z \\Qº°/.\\E]+</DAT> a <DAT>[0-9A-Za-z \\Qº°/.\\E]+</DAT>| \\d{1,2}(°|º)?( de)? ([ A-Za-z]{4,10})? (a|e) <DAT>[0-9A-Za-z \\Qº°./\\E]+</DAT>| [A-ZÇa-zç]{4,9} a [A-ZÇa-zç]{4,9} de \\d{4}| \\d{4} a \\d{4}";
@@ -143,8 +143,8 @@ public class XMLizacao {
 		String regexIE = " (Inscrição Estadual|IE)( n°| nº)?( \\d{1,3}\\.\\d{3}\\.\\d{3}(\\-\\d{1,2}|\\.\\d{3})?)";
 		String regexCACEPE = " \\d{7}\\-\\d{2}";
 		String regexMunicipio = "( (M|m)unicípio(s)?)( de| do| da)?((( e)?( de| do| dos| da| das)? [A-ZÂÁÀÉÊÍÓÔÚ][A-Za-zçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ]+(,|\\.)?)+)";
-		String regexCargo = "([A-Za-zçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ]+)?((\\Qex-\\E)?( Primeiro| Segundo| Terceiro| (1|2|3)(º|°|ª))?( Auditor(es)?| Comandante(s)?( Geral)?| Chefe(s)?| Sargent(o|a)(s)?| Tenente(s)?| Subtenente(s)?| (\\QTenente\\E(s)?( |-))?Corone(l|éis)| Capitã(o)?(s)?| Major(es)?| Fiscal| Educador| Cirurgião| Secretári(o|a)(s)?| Presidência| Diretor(es|a|as)?| Diretor(es|a|as)?\\Q-\\EGera(l|is)| Agente(s)?| Ministr(o|a)(s)?| Gerente(s)?| Assistente(s)?| Assessor(a|es|as)?| Superintendente(s)?| Coordenador(a|as|es)?| Gestor(es|a|as)?| Técnico(s)?| Médic(o|a)(s)?| Terapeuta(s)?| Farmacêutic(o|a)(s)?| Condutor(es)?) (\\s*(destinad(o|a)(s)? |sobre |relativ(o|a)(s)? |com |para )?\\s*(de |do |dos |da |das |à |às |a |ao |aos |pelo |pelos |pelas |pela |por |em |no |nos |nas |na )?(<ORG>)?\\s*[A-ZÂÁÉÊÍÓÔÚ]([A-ZÂÃÁÉÊÍÓÔÕÚÇ]+|[a-zçãàáâéêíóôõú]+)(</ORG>)?(, |\\s*-\\s*|\\s+(e )?)?)+)\\s*(,|<|\\Q.\\E|;|:|\"|\\Q)\\E|\\Q(\\E| [a-zéàáíóúêâô])";
-		String regexCargo2 = "([A-Za-zçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ]+)?( Fisioterapeuta| Arte\\s+Educador(a|as|es)?| Delegad(o|a)(s)?| Escriv(ão|ães)| Agente(s)?| Diretor(es|a|as)?| Assessor(a|as|es)?| Gestor(a|as|es)?| Coordenador(es|a|as)?| Governador(a|as|es)?( do Estado)?| Psicopedagogo| Arquiteto| Aeroportuário| Médico| Terapeuta| Jornalista| Turismólogo| Enfermeiro| Psicólogo| Diretor(es|a|as)?\\Q-\\EPresidente(s)?| Bibliotecário|( |)Arquivista| Professor)(,| [a-z ]{1,8}[^A-Z]|\\.|/|\\s*<)";
+		String regexCargo = "([A-Za-zçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ]+)?(( | \"| \\(| >)(ex|EX|Ex)?(\\Q-\\E)?(Primeiro |Segundo |Terceiro |(1|2|3)(º|°|ª) )?(Auditor(es)?|Comandante(s)?( Geral)?|Chefe(s)?|Sargent(o|a)(s)?|Tenente(s)?(-)?|Subtenente(s)?|Corone(l|éis)|Capitã(o)?(s)?|Major(es)?|Fiscal|Educador|Cirurgião|Secretári(o|a)(s)?|Diretor(es|a|as)?(-)?|Agente(s)?|Ministr(o|a)(s)?|Gerente(s)?|Assistente(s)?|Assessor(a|es|as)?|Superintendente(s)?|Coordenador(a|as|es)?|Gestor(es|a|as)?|Técnico(s)?|Médic(o|a)(s)?|Terapeuta(s)?|Farmacêutic(o|a)(s)?|Condutor(es)?) (\\s*(destinad(o|a)(s)? |sobre |relativ(o|a)(s)? |com |para )?\\s*(de |do |dos |da |das |à |às |a |ao |aos |pelo |pelos |pelas |pela |por |em |no |nos |nas |na )?(<ORG>)?\\s*[A-ZÂÁÉÊÍÓÔÚ]([A-ZÂÃÁÉÊÍÓÔÕÚÇ]+|[a-zçãàáâéêíóôõú]+)(</ORG>)?(, |\\s*-\\s*|\\s+(e )?)?)+)\\s*(,|<|\\Q.\\E|;|:|\"|\\Q)\\E|\\Q(\\E| [a-zéàáíóúêâô])";
+		String regexCargo2 = "([A-Za-zçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ]+)?(( | \"| >| /)(ex|EX|Ex)?(\\Q-\\E)?(Fisioterapeuta|Arte(\\s+|-)Educador(a|as|es)?|Delegad(o|a)(s)?|Escriv(ão|ães)|Agente(s)?|Governador(a|as|es)?( do Estado)?|Psicopedagogo|Arquiteto|Aeroportuário|Médico|Terapeuta|Jornalista|Turismólogo|Enfermeiro|Psicólogo|Bibliotecário|Arquivista|Professor))(,| [a-z ]{1,8}[^A-Z]|\\.|/|\\s*<)";
 		String regexEncargo = "(( |\"|\\(|>)(Taxa(s)?|Imposto(s)?|Tributo(s)?|Contribuiç(ão|ões)|Empréstimo(s)? Compulsório(s)?|Financiamento(s)?|Encargo(s)?) ((destinad(o|a)(s)? |sobre |relativ(o|a)(s)? |com |para )?(de |do |dos |da |das |à |às |a |ao |aos |pelo |pelos |pelas |pela |por |em |no |nos |nas |na |para )?[A-ZÂÁÉÊÍÓÔÚ]([A-ZÂÃÁÉÊÍÓÔÕÚÇ]+|[a-zçãàáâéêíóôõú]+)(, | - | (e )?)?)+(\\s*(-|/)\\s*[A-Z]([A-ZÂÃÁÉÊÍÓÔÕÚÇ&]+|[a-zçãàáâéêíóôõú&]+))*)\\s*(,|<|\\Q.\\E|;|:|\"|\\Q)\\E|\\Q(\\E| [a-zéàáíóúêâô])";
 		String regexIndice = "(( |\"|\\(|>)(Índice) (((destinad(o|a)(s)? |sobre |relativ(o|a)(s)? |com |para )?(de |do |dos |da |das |à |a |ao |aos |pelo |pelos |pelas |pela |por |em |no |nos |nas |na )?[A-ZÂÁÉÊÍÓÔÚ]([A-ZÂÃÁÉÊÍÓÔÕÚÇ]+|[a-zçãàáâéêíóôõú]+)(, | - | (e )?)?))+(\\s*(-|/)\\s*[A-Z]([A-ZÂÃÁÉÊÍÓÔÕÚÇ&]+|[a-zçãàáâéêíóôõú&]+))*)\\s*(,|<|\\Q.\\E|;|:|\"|\\Q)\\E|\\Q(\\E| [a-zéàáíóúêâô])";
 		String regexLocal = "(( |\"|\\(|>)(Sítio(s)?|Monumento(s)?|Riacho(s)?|Parque(s)|Praça(s)?|Serra(s)?|Mata(s)?|Floresta(s)?|Planalto(s)?|Depress(ão|ões)) ((de |do |dos |da |das |à |a |ao |aos |pelo |pelos |pelas |pela |por |em |no |nos |nas |na )?[A-ZÂÁÉÊÍÓÔÚ]([A-ZÂÃÁÉÊÍÓÔÕÚÇ]+|[a-zçãàáâéêíóôõú]+)(, | - | (e )?)?|[0-9 e]+)+(\\s*(-|/)\\s*[A-Z][A-Za-z\\QçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ&\\E]+)*)\\s*(,|<|\\Q.\\E|;|:|\"|\\Q)\\E|\\Q(\\E| [a-zéàáíóúêâô])";
@@ -244,8 +244,8 @@ public class XMLizacao {
 		tiposDocumentos.put("Termo", "Te");
 		tiposDocumentos.put("Lei Complementar Federal", "LCF");
 		tiposDocumentos.put("Protocolo", "PROT");
-
-
+		tiposDocumentos.put("Lei Orçamentária Anual", "LOA");
+		
 
 		Hashtable<String, String> numeracaoMeses = new Hashtable<>();
 		numeracaoMeses.put("janeiro", "01");
@@ -1404,155 +1404,151 @@ public class XMLizacao {
 					while (matcher.find()){
 						//System.out.println(nomeArquivo);
 						entreTags = matcher.group(1);
+						if (entreTags.charAt(0) == '\"'){
+							entreTags = entreTags.replace("\"", "");
+							textoModificado = "<PROG>";
+						} else if (entreTags.charAt(0) == '('){ 
+							entreTags = entreTags.replaceFirst("\\Q(\\E", "");
+							textoModificado = "<PROG>";					
+						} else if (entreTags.charAt(0) == '>') {
+							entreTags = entreTags.replaceFirst(">", "");
+							textoModificado = "<PROG>";
+						} else {
+							textoModificado = " <PROG>";
+						}
+
+
 						if (entreTags.contains(" - ") && entreTags.split(" - ").length >=2 
 								&& !entreTags.contains("Conexão Cidadã")){
-							if (entreTags.charAt(0) == '\"'){
-								entreTags = entreTags.replace("\"", "");
-								textoModificado = "<PROG>";
-							} else if (entreTags.charAt(0) == '('){ 
-								entreTags = entreTags.replaceFirst("\\Q(\\E", "");
-								textoModificado = "<PROG>";					
-							} else if (entreTags.charAt(0) == '>') {
-								entreTags = entreTags.replaceFirst(">", "");
-								textoModificado = "<PROG>";
-							} else {
-								textoModificado = " <PROG>";
-							}
 
 							if (entreTags.trim().charAt(0) != entreTags.split(" - ")[1].charAt(0)){
 								entreTags = entreTags.split(" - ")[0];
-							}
-
-							textoModificado += entreTags.trim() + "</PROG>";
-							if (textoModificado.contains(",<")){
-								textoModificado = textoModificado.replace(",</PROG>", "</PROG>,");
-							} else if (textoModificado.contains(";<")){
-								textoModificado = textoModificado.replace(";</PROG>", "</PROG>;");
-							} else if (textoModificado.contains(":<")){
-								textoModificado = textoModificado.replace(":</PROG>", "</PROG>:");
-							} else if (textoModificado.contains(".<")){
-								textoModificado = textoModificado.replace(".</PROG>", "</PROG>.");
-							}
-							if (textoModificado.split("</CAR>").length != textoModificado.split("<CAR>").length){
-								textoModificado = textoModificado.replace("</CAR></PROG>", "</PROG></CAR>");
-							}
-							decretoSaida = decretoSaida.replaceFirst("\\Q" + entreTags +"\\E", textoModificado);			
+							}			
 						}
+
+						textoModificado += entreTags.trim() + "</PROG>";
+						if (textoModificado.contains(",<")){
+							textoModificado = textoModificado.replace(",</PROG>", "</PROG>,");
+						} else if (textoModificado.contains(";<")){
+							textoModificado = textoModificado.replace(";</PROG>", "</PROG>;");
+						} else if (textoModificado.contains(":<")){
+							textoModificado = textoModificado.replace(":</PROG>", "</PROG>:");
+						} else if (textoModificado.contains(".<")){
+							textoModificado = textoModificado.replace(".</PROG>", "</PROG>.");
+						}
+						if (textoModificado.split("</CAR>").length != textoModificado.split("<CAR>").length){
+							textoModificado = textoModificado.replace("</CAR></PROG>", "</PROG></CAR>");
+						}
+						decretoSaida = decretoSaida.replaceFirst("\\Q" + entreTags +"\\E", textoModificado);
 					}
 
 					matcher = padraoPremio.matcher(decretoSaida);
 					while (matcher.find()){
 						//System.out.println(nomeArquivo);
 						entreTags = matcher.group(1);
+						if (entreTags.charAt(0) == '\"'){
+							entreTags = entreTags.replace("\"", "");
+							textoModificado = "<PREM>";
+						} else if (entreTags.charAt(0) == '('){ 
+							entreTags = entreTags.replaceFirst("\\Q(\\E", "");
+							textoModificado = "<PREM>";					
+						} else if (entreTags.charAt(0) == '>') {
+							entreTags = entreTags.replaceFirst(">", "");
+							textoModificado = "<PREM>";
+						} else {
+							textoModificado = " <PREM>";
+						}
 						if (entreTags.contains(" - ") && entreTags.split(" - ").length >=2){
-							if (entreTags.charAt(0) == '\"'){
-								entreTags = entreTags.replace("\"", "");
-								textoModificado = "<PREM>";
-							} else if (entreTags.charAt(0) == '('){ 
-								entreTags = entreTags.replaceFirst("\\Q(\\E", "");
-								textoModificado = "<PREM>";					
-							} else if (entreTags.charAt(0) == '>') {
-								entreTags = entreTags.replaceFirst(">", "");
-								textoModificado = "<PREM>";
-							} else {
-								textoModificado = " <PREM>";
-							}
-							System.out.println("1");
 
 							if (entreTags.trim().charAt(0) != entreTags.split(" - ")[1].charAt(0)){
 								entreTags = entreTags.split(" - ")[0];
 							}
 
-							System.out.println("2");
-
-							textoModificado += entreTags.trim() + "</PREM>";
-							if (textoModificado.contains(",<")){
-								textoModificado = textoModificado.replace(",</PREM>", "</PREM>,");
-							} else if (textoModificado.contains(";<")){
-								textoModificado = textoModificado.replace(";</PREM>", "</PREM>;");
-							} else if (textoModificado.contains(":<")){
-								textoModificado = textoModificado.replace(":</PREM>", "</PREM>:");
-							} else if (textoModificado.contains(".<")){
-								textoModificado = textoModificado.replace(".</PREM>", "</PREM>.");
-							}
-							decretoSaida = decretoSaida.replaceFirst("\\Q" + entreTags +"\\E", textoModificado);			
 						}
-					}	
-
+						textoModificado += entreTags.trim() + "</PREM>";
+						if (textoModificado.contains(",<")){
+							textoModificado = textoModificado.replace(",</PREM>", "</PREM>,");
+						} else if (textoModificado.contains(";<")){
+							textoModificado = textoModificado.replace(";</PREM>", "</PREM>;");
+						} else if (textoModificado.contains(":<")){
+							textoModificado = textoModificado.replace(":</PREM>", "</PREM>:");
+						} else if (textoModificado.contains(".<")){
+							textoModificado = textoModificado.replace(".</PREM>", "</PREM>.");
+						}
+						decretoSaida = decretoSaida.replaceFirst("\\Q" + entreTags +"\\E", textoModificado);			
+					}
 
 					matcher = padraoPartido.matcher(decretoSaida);
 					while (matcher.find()){
 						//System.out.println(nomeArquivo);
 						entreTags = matcher.group(1);
-						if (entreTags.contains(" - ") && entreTags.split(" - ").length >=2){
-							if (entreTags.charAt(0) == '\"'){
-								entreTags = entreTags.replace("\"", "");
-								textoModificado = "<PART>";
-							} else if (entreTags.charAt(0) == '('){ 
-								entreTags = entreTags.replaceFirst("\\Q(\\E", "");
-								textoModificado = "<PART>";					
-							} else if (entreTags.charAt(0) == '>') {
-								entreTags = entreTags.replaceFirst(">", "");
-								textoModificado = "<PART>";
-							} else {
-								textoModificado = " <PART>";
-							}
+						if (entreTags.charAt(0) == '\"'){
+							entreTags = entreTags.replace("\"", "");
+							textoModificado = "<PART>";
+						} else if (entreTags.charAt(0) == '('){ 
+							entreTags = entreTags.replaceFirst("\\Q(\\E", "");
+							textoModificado = "<PART>";					
+						} else if (entreTags.charAt(0) == '>') {
+							entreTags = entreTags.replaceFirst(">", "");
+							textoModificado = "<PART>";
+						} else {
+							textoModificado = " <PART>";
+						}
 
+						if (entreTags.contains(" - ") && entreTags.split(" - ").length >=2){
 							if (entreTags.trim().charAt(0) != entreTags.split(" - ")[1].charAt(0)){
 								entreTags = entreTags.split(" - ")[0];
 							}
-
-							textoModificado += entreTags.trim() + "</PART>";
-							if (textoModificado.contains(",<")){
-								textoModificado = textoModificado.replace(",</PART>", "</PART>,");
-							} else if (textoModificado.contains(";<")){
-								textoModificado = textoModificado.replace(";</PART>", "</PART>;");
-							} else if (textoModificado.contains(":<")){
-								textoModificado = textoModificado.replace(":</PART>", "</PART>:");
-							} else if (textoModificado.contains(".<")){
-								textoModificado = textoModificado.replace(".</PART>", "</PART>.");
-							}
-							decretoSaida = decretoSaida.replaceFirst("\\Q" + entreTags +"\\E", textoModificado);			
 						}
-					}			
+						textoModificado += entreTags.trim() + "</PART>";
+						if (textoModificado.contains(",<")){
+							textoModificado = textoModificado.replace(",</PART>", "</PART>,");
+						} else if (textoModificado.contains(";<")){
+							textoModificado = textoModificado.replace(";</PART>", "</PART>;");
+						} else if (textoModificado.contains(":<")){
+							textoModificado = textoModificado.replace(":</PART>", "</PART>:");
+						} else if (textoModificado.contains(".<")){
+							textoModificado = textoModificado.replace(".</PART>", "</PART>.");
+						}
+						decretoSaida = decretoSaida.replaceFirst("\\Q" + entreTags +"\\E", textoModificado);			
+					}
 
 					matcher = padraoEdificacao.matcher(decretoSaida);
 					while (matcher.find()){
 						//System.out.println(nomeArquivo);
 						entreTags = matcher.group(1);
-						if (entreTags.contains(" - ") && entreTags.split(" - ").length >=2){
-							if (entreTags.charAt(0) == '\"'){
-								entreTags = entreTags.replace("\"", "");
-								textoModificado = "<ED>";
-							} else if (entreTags.charAt(0) == '('){ 
-								entreTags = entreTags.replaceFirst("\\Q(\\E", "");
-								textoModificado = "<ED>";					
-							} else if (entreTags.charAt(0) == '>') {
-								entreTags = entreTags.replaceFirst(">", "");
-								textoModificado = "<ED>";
-							} else {
-								textoModificado = " <ED>";
-							}
+						if (entreTags.charAt(0) == '\"'){
+							entreTags = entreTags.replace("\"", "");
+							textoModificado = "<ED>";
+						} else if (entreTags.charAt(0) == '('){ 
+							entreTags = entreTags.replaceFirst("\\Q(\\E", "");
+							textoModificado = "<ED>";					
+						} else if (entreTags.charAt(0) == '>') {
+							entreTags = entreTags.replaceFirst(">", "");
+							textoModificado = "<ED>";
+						} else {
+							textoModificado = " <ED>";
+						}
 
+						if (entreTags.contains(" - ") && entreTags.split(" - ").length >=2){
 							if (entreTags.trim().charAt(0) != entreTags.split(" - ")[1].charAt(0)){
 								entreTags = entreTags.split(" - ")[0];
 							}
-
-							System.out.println(entreTags + "  edificação");
-							textoModificado += entreTags.trim() + "</ED>";
-							if (textoModificado.contains(",<")){
-								textoModificado = textoModificado.replace(",</ED>", "</ED>,");
-							} else if (textoModificado.contains(";<")){
-								textoModificado = textoModificado.replace(";</ED>", "</ED>;");
-							} else if (textoModificado.contains(":<")){
-								textoModificado = textoModificado.replace(":</ED>", "</ED>:");
-							} else if (textoModificado.contains(".<")){
-								textoModificado = textoModificado.replace(".</ED>", "</ED>.");
-							}
-							decretoSaida = decretoSaida.replaceFirst("\\Q" + entreTags +"\\E", textoModificado);			
 						}
+
+						textoModificado += entreTags.trim() + "</ED>";
+						if (textoModificado.contains(",<")){
+							textoModificado = textoModificado.replace(",</ED>", "</ED>,");
+						} else if (textoModificado.contains(";<")){
+							textoModificado = textoModificado.replace(";</ED>", "</ED>;");
+						} else if (textoModificado.contains(":<")){
+							textoModificado = textoModificado.replace(":</ED>", "</ED>:");
+						} else if (textoModificado.contains(".<")){
+							textoModificado = textoModificado.replace(".</ED>", "</ED>.");
+						}
+						decretoSaida = decretoSaida.replaceFirst("\\Q" + entreTags +"\\E", textoModificado);			
 					}
-					
+
 					matcher = padraoDoc2.matcher(decretoSaida);
 					while (matcher.find()){
 						//System.out.println(nomeArquivo);
@@ -1691,7 +1687,7 @@ public class XMLizacao {
 									quantidadeAnexosTabela.put(tipo, quantidadeAnexosTabela.get(tipo) + 1);
 
 									if (entreTags.contains("R$") || matcherAuxiliar.find() ||entreTags.contains("CRÉDITO SUPLEMENTAR") || entreTags.contains("CRÉDITO")){
-										System.out.println("NOSSSSSSSSSSSSSSSSSA");
+										//System.out.println("NOSSSSSSSSSSSSSSSSSA");
 										quantidadeTabelaOrcamentarias.containsKey(tipo);
 										quantidadeTabelaOrcamentarias.put(tipo, quantidadeTabelaOrcamentarias.get(tipo) + 1);
 									}
@@ -1708,7 +1704,7 @@ public class XMLizacao {
 								matcherAuxiliar = padraoDinheiro.matcher(entreTags);
 
 								if (entreTags.contains("R$") || matcherAuxiliar.find() || entreTags.contains("crédito") || entreTags.contains("CRÉDITO")){
-									System.out.println("NOSSSSSSSSSSSSSSSSSA");
+									//System.out.println("NOSSSSSSSSSSSSSSSSSA");
 									quantidadeTabelaOrcamentarias.containsKey(tipo);
 									quantidadeTabelaOrcamentarias.put(tipo, quantidadeTabelaOrcamentarias.get(tipo) + 1);
 								}
