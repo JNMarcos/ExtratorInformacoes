@@ -23,10 +23,11 @@ import java.util.regex.Pattern;
  *
  */
 public class XMLizacao {
+	private static Hashtable<String, Integer> quantidadeDecretosAnexos = new Hashtable<>();
+	private static Hashtable<String, Integer> quantidadeAnexosTabela = new Hashtable<>();
+	private static Hashtable<String, Integer> quantidadeTabelaOrcamentarias= new Hashtable<>();
+	private static Hashtable<String, Integer> nomePessoas = new Hashtable<>();
 
-	/**
-	 * @param args
-	 */
 	public static void main(String[] args) {
 		//Pastas de origem e destino
 		String pastaDestino = "XMLizada";
@@ -37,10 +38,10 @@ public class XMLizacao {
 		String caminhoDecretos = "C:\\Users\\JN\\Documents\\DecretosAlepe\\";
 		int[] anosDecretos = {2014, 2015, 2016};
 
-		File b = new File("anexos");
-		File c = new File ("tabelas");
+		File b = new File("anexosAno");
+		File c = new File ("tabelasAno");
 		File d = new File("nomePessoas");
-		File f = new File("tabelaOrcamentaria");
+		File f = new File("tabelaOrcamentariaAno");
 
 		//"Cria-se" os Files que apontam para as pastas dos decretos
 		File[] pastas = new File[3];
@@ -128,7 +129,7 @@ public class XMLizacao {
 		String regexFundo = "(( |\"|\\(|>)(Fundo(s)?) ((de |do |dos |da |das |à |a |ao |aos |pelo |pelos |pelas |pela |por |em |no |nos |nas |na |para |com |com os |com as )?[A-ZÂÁÀÉÊÍÓÔÚ]([A-ZÂÃÁÉÊÍÓÔÕÚÇ]+|[a-zçãàáâéêíóôõú]+)(, |-| (e )?)?(</CAR>|</ORG>)?)+(\\s*(-|/)\\s*[A-Z][A-Za-z\\QçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ&\\E]+)*)\\s*(,|<|\\Q.\\E|;|:|\"|\\Q)\\E|\\Q(\\E| [a-zéàáíóúêâô])";
 		String regexGratificacao = "(( |\"|\\(|>)(Gratificaç(ão|ões)|Compensaç(ão|ões)|Bonificaç(ão|ões)|Abono(s)?|Benefício(s)?) (e )?((de |do |dos |da |das |à |a |ao |aos |pelo |pelos |pelas |pela |por |em |no |nos |nas |na |para |com |com os |com as )?[A-ZÂÁÀÉÊÍÓÔÚ]([A-ZÂÃÁÉÊÍÓÔÕÚÇ]+|[a-zçãàáâéêíóôõú]+)(, | (e )?)?)+(\\s*(-|/)\\s*[A-Z][A-Za-z\\QçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ&\\E]+)*)\\s*(,|<|\\Q.\\E|;|:|\"|\\Q)\\E|\\Q(\\E| [a-zéàáíóúêâô])";
 		String regexPremio = "(( |\"|\\(|>)(Prêmio(s)?|Medalha(s)?|Menç(ão|ões)|Homenage(m|ns)|Honraria(s)?|Condecoraç(ão|ões)|Láurea(s)?) ((de |do |dos |da |das |à |a |ao |aos |pelo |pelos |pelas |pela |por |em |no |nos |nas |na |para |com |com os |com as )?[A-ZÂÁÀÉÊÍÓÔÚ]([A-ZÂÃÁÉÊÍÓÔÕÚÇ]+|[a-zçãàáâéêíóôõú]+)(, |-| (e )?)?)+(\\s*(-|/)\\s*[A-Z][A-Za-z\\QçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ&\\E]+)*)\\s*(,|<|\\Q.\\E|;|:|\"|\\Q)\\E|\\Q(\\E| [a-zéàáíóúêâô])";
-		String regexEdificacao = "(( |\"|\\(|>)(Prédio(s)?|Edifício(s)?|Escola(s)?|Palácio(s)?|Presídio(s)?|Arena(s)?|Refinaria(s)?|Estaleiro(s)?|Polo(s)?|Estaç(ão|ões)|Coletor(es|a|as)?|Reservatório(s)?|Cartório(s)?|Universidade(s)?|Hospita(l|is)( Regina(l|is)| Federa(l|is)| Estadua(l|is)| Municipa(l|is))?) ((de |do |dos |da |das |à |a |ao |aos |pelo |pelos |pelas |pela |por |em |no |nos |nas |na |para |com |com os |com as )?[A-ZÂÁÀÉÊÍÓÔÚ]([A-ZÂÃÁÉÊÍÓÔÕÚÇ]+|[a-zçãàáâéêíóôõú]+)(-| (e )?)?)+(\\s*(-|/)\\s*[A-Z][A-Za-z\\QçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ&\\E]+)*)\\s*(,|<|\\Q.\\E|;|:|\"|\\Q)\\E|\\Q(\\E| [a-zãàáâéêíóôõú])";
+		String regexEdificacao = "(( |\"|\\(|>)(Prédio(s)?|Edifício(s)?|Escola(s)?|Palácio(s)?|Presídio(s)?|Arena(s)?|Refinaria(s)?|Estaleiro(s)?|Polo(s)?|Estaç(ão|ões)|Coletor(es|a|as)?|Reservatório(s)?|Cartório(s)?|Hospita(l|is)( Regina(l|is)| Federa(l|is)| Estadua(l|is)| Municipa(l|is))?) ((de |do |dos |da |das |à |a |ao |aos |pelo |pelos |pelas |pela |por |em |no |nos |nas |na |para |com |com os |com as )?[A-ZÂÁÀÉÊÍÓÔÚ]([A-ZÂÃÁÉÊÍÓÔÕÚÇ]+|[a-zçãàáâéêíóôõú]+)(-| (e )?)?)+(\\s*(-|/)\\s*[A-Z][A-Za-z\\QçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ&\\E]+)*)\\s*(,|<|\\Q.\\E|;|:|\"|\\Q)\\E|\\Q(\\E| [a-zãàáâéêíóôõú])";
 		String regexSistema = "(( |\"|\\(|>)(Sistema|sistema) ((de |do |dos |da |das |à |a |ao |aos |pelo |pelos |pelas |pela |por |em |no |nos |nas |na |para |com |com os |com as )?(\\Qe-\\E)?[A-ZÂÁÀÉÊÍÓÔÚ]([A-ZÂÃÁÉÊÍÓÔÕÚÇ]+|[a-zçãàáâéêíóôõú]+)(, | - | (e )?)?)+(\\s*(-|/|\\()\\s*[A-Z][A-Za-z\\QçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ&\\E]+)*)\\s*(,|<|\\Q.\\E|;|:|\"|\\Q)\\E|\\Q(\\E| [a-zéàáíóúêâô])";
 		String regexEvento = "(( |\"|\\(|>)([IVX]{1,5} |\\d{1,3}(º|°|ª) )?(Conferência|Congresso|Evento|Show|Concerto|Simpósio|Debate|Fórum|Estudo|Copa) ((de |do |dos |da |das |à |a |ao |aos |pelo |pelos |pelas |pela |por |em |no |nos |nas |na |para |com |com os |com as )?[A-ZÂÁÉÊÍÓÔÚ]([A-ZÂÃÁÉÊÍÓÔÕÚÇ]+|[a-zçãàáâéêíóôõú]+)(\\. |, | - | (e )?)?)+((de )?\\d{4})?(\\s*(-|/|\\()\\s*[A-Z][A-Za-z\\QçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ&\\E]+)*)\\s*(,|<|\\Q.\\E|;|:|\"|\\Q)\\E|\\Q(\\E| [a-zéàáíóúêâô])";
 		String regexPartido = "(( |\"|\\(|>)((?i)Partido(s)?) ((de |do |dos |da |das |à |a |ao |aos |pelo |pelos |pelas |pela |para |com |com os |com as )?[A-ZÂÁÀÉÊÍÓÔÚ]([A-ZÂÃÁÉÊÍÓÔÕÚÇ]+|[a-zçãàáâéêíóôõú]+)(, | - | (e )?)?)+(\\s*(-|/)\\s*[A-Z][A-Za-z\\QçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ&\\E]+)*)\\s*(,|<|\\Q.\\E|;|:|\"|\\Q)\\E|\\Q(\\E| [a-zéàáíóúêâô])";
@@ -257,16 +258,20 @@ public class XMLizacao {
 		numeracaoMeses.put("novembro", "11");
 		numeracaoMeses.put("dezembro", "12");
 
-		Hashtable<String, Integer> quantidadeDecretosAnexos = new Hashtable<>();
-		Hashtable<String, Integer> quantidadeAnexosTabela = new Hashtable<>();
-		Hashtable<String, Integer> quantidadeTabelaOrcamentarias= new Hashtable<>();
-		Hashtable<String, Integer> nomePessoas = new Hashtable<>();
 
 		File arquivoRegexNaoCaptura = new File("regexNaoCaptura");
 		try {
 			arquivoRegexNaoCaptura.createNewFile();
 			fwarq = new FileWriter(arquivoRegexNaoCaptura);
 			bwarq = new BufferedWriter(fwarq);
+			fwb = new FileWriter(b);
+			bwb = new BufferedWriter(fwb);
+			fwc = new FileWriter(c);
+			bwc = new BufferedWriter(fwc);
+			fwd = new FileWriter(d);
+			bwd = new BufferedWriter(fwd);
+			fwf = new FileWriter(f);
+			bwf = new BufferedWriter(fwf);
 		} catch (IOException e1) {
 			System.out.println("Arquivo não criado.");
 		}
@@ -275,127 +280,6 @@ public class XMLizacao {
 		String decretoSaida = "";
 		String decreto;
 		String linha;
-
-		quantidadeDecretosAnexos.put("Abre", 0);
-		quantidadeDecretosAnexos.put("Acrescenta", 0);
-		quantidadeDecretosAnexos.put("Aloca", 0);
-		quantidadeDecretosAnexos.put("Altera", 0);
-		quantidadeDecretosAnexos.put("Amplia", 0);
-		quantidadeDecretosAnexos.put("Aprova", 0);
-		quantidadeDecretosAnexos.put("Autoriza", 0);
-		quantidadeDecretosAnexos.put("Atualiza", 0);
-		quantidadeDecretosAnexos.put("Ativa", 0);
-		quantidadeDecretosAnexos.put("Concede", 0);
-		quantidadeDecretosAnexos.put("Convoca", 0);
-		quantidadeDecretosAnexos.put("Cria", 0);
-		quantidadeDecretosAnexos.put("Declara", 0);
-		quantidadeDecretosAnexos.put("Decreta", 0);
-		quantidadeDecretosAnexos.put("Define", 0);
-		quantidadeDecretosAnexos.put("Delega", 0);
-		quantidadeDecretosAnexos.put("Desativa", 0);
-		quantidadeDecretosAnexos.put("Disciplina", 0);
-		quantidadeDecretosAnexos.put("Dispõe", 0);
-		quantidadeDecretosAnexos.put("Eleva", 0);
-		quantidadeDecretosAnexos.put("Estabelece", 0);
-		quantidadeDecretosAnexos.put("Estende", 0);
-		quantidadeDecretosAnexos.put("Homologa", 0);
-		quantidadeDecretosAnexos.put("Incorpora", 0);
-		quantidadeDecretosAnexos.put("Institui", 0);
-		quantidadeDecretosAnexos.put("Interpreta", 0);
-		quantidadeDecretosAnexos.put("Introduz", 0);
-		quantidadeDecretosAnexos.put("Modifica", 0);
-		quantidadeDecretosAnexos.put("Promove", 0);
-		quantidadeDecretosAnexos.put("Prorroga", 0);
-		quantidadeDecretosAnexos.put("Qualifica", 0);
-		quantidadeDecretosAnexos.put("Reabre", 0);
-		quantidadeDecretosAnexos.put("Redenomina", 0);
-		quantidadeDecretosAnexos.put("Regulamenta", 0);
-		quantidadeDecretosAnexos.put("Relaciona", 0);
-		quantidadeDecretosAnexos.put("Renova", 0);
-		quantidadeDecretosAnexos.put("Revoga", 0);
-		quantidadeDecretosAnexos.put("Transfere", 0);
-		quantidadeDecretosAnexos.put("Transforma", 0);
-
-		quantidadeAnexosTabela.put("Abre", 0);
-		quantidadeAnexosTabela.put("Acrescenta", 0);
-		quantidadeAnexosTabela.put("Aloca", 0);
-		quantidadeAnexosTabela.put("Altera", 0);
-		quantidadeAnexosTabela.put("Amplia", 0);
-		quantidadeAnexosTabela.put("Aprova", 0);
-		quantidadeAnexosTabela.put("Autoriza", 0);
-		quantidadeAnexosTabela.put("Atualiza", 0);
-		quantidadeAnexosTabela.put("Ativa", 0);
-		quantidadeAnexosTabela.put("Concede", 0);
-		quantidadeAnexosTabela.put("Convoca", 0);
-		quantidadeAnexosTabela.put("Cria", 0);
-		quantidadeAnexosTabela.put("Declara", 0);
-		quantidadeAnexosTabela.put("Decreta", 0);
-		quantidadeAnexosTabela.put("Define", 0);
-		quantidadeAnexosTabela.put("Delega", 0);
-		quantidadeAnexosTabela.put("Desativa", 0);
-		quantidadeAnexosTabela.put("Disciplina", 0);
-		quantidadeAnexosTabela.put("Dispõe", 0);
-		quantidadeAnexosTabela.put("Eleva", 0);
-		quantidadeAnexosTabela.put("Estabelece", 0);
-		quantidadeAnexosTabela.put("Estende", 0);
-		quantidadeAnexosTabela.put("Homologa", 0);
-		quantidadeAnexosTabela.put("Incorpora", 0);
-		quantidadeAnexosTabela.put("Institui", 0);
-		quantidadeAnexosTabela.put("Interpreta", 0);
-		quantidadeAnexosTabela.put("Introduz", 0);
-		quantidadeAnexosTabela.put("Modifica", 0);
-		quantidadeAnexosTabela.put("Promove", 0);
-		quantidadeAnexosTabela.put("Prorroga", 0);
-		quantidadeAnexosTabela.put("Qualifica", 0);
-		quantidadeAnexosTabela.put("Reabre", 0);
-		quantidadeAnexosTabela.put("Redenomina", 0);
-		quantidadeAnexosTabela.put("Regulamenta", 0);
-		quantidadeAnexosTabela.put("Relaciona", 0);
-		quantidadeAnexosTabela.put("Renova", 0);
-		quantidadeAnexosTabela.put("Revoga", 0);
-		quantidadeAnexosTabela.put("Transfere", 0);
-		quantidadeAnexosTabela.put("Transforma", 0);
-
-		quantidadeTabelaOrcamentarias.put("Abre", 0);
-		quantidadeTabelaOrcamentarias.put("Acrescenta", 0);
-		quantidadeTabelaOrcamentarias.put("Aloca", 0);
-		quantidadeTabelaOrcamentarias.put("Altera", 0);
-		quantidadeTabelaOrcamentarias.put("Amplia", 0);
-		quantidadeTabelaOrcamentarias.put("Aprova", 0);
-		quantidadeTabelaOrcamentarias.put("Autoriza", 0);
-		quantidadeTabelaOrcamentarias.put("Atualiza", 0);
-		quantidadeTabelaOrcamentarias.put("Ativa", 0);
-		quantidadeTabelaOrcamentarias.put("Concede", 0);
-		quantidadeTabelaOrcamentarias.put("Convoca", 0);
-		quantidadeTabelaOrcamentarias.put("Cria", 0);
-		quantidadeTabelaOrcamentarias.put("Declara", 0);
-		quantidadeTabelaOrcamentarias.put("Decreta", 0);
-		quantidadeTabelaOrcamentarias.put("Define", 0);
-		quantidadeTabelaOrcamentarias.put("Delega", 0);
-		quantidadeTabelaOrcamentarias.put("Desativa", 0);
-		quantidadeTabelaOrcamentarias.put("Disciplina", 0);
-		quantidadeTabelaOrcamentarias.put("Dispõe", 0);
-		quantidadeTabelaOrcamentarias.put("Eleva", 0);
-		quantidadeTabelaOrcamentarias.put("Estabelece", 0);
-		quantidadeTabelaOrcamentarias.put("Estende", 0);
-		quantidadeTabelaOrcamentarias.put("Homologa", 0);
-		quantidadeTabelaOrcamentarias.put("Incorpora", 0);
-		quantidadeTabelaOrcamentarias.put("Institui", 0);
-		quantidadeTabelaOrcamentarias.put("Interpreta", 0);
-		quantidadeTabelaOrcamentarias.put("Introduz", 0);
-		quantidadeTabelaOrcamentarias.put("Modifica", 0);
-		quantidadeTabelaOrcamentarias.put("Promove", 0);
-		quantidadeTabelaOrcamentarias.put("Prorroga", 0);
-		quantidadeTabelaOrcamentarias.put("Qualifica", 0);
-		quantidadeTabelaOrcamentarias.put("Reabre", 0);
-		quantidadeTabelaOrcamentarias.put("Redenomina", 0);
-		quantidadeTabelaOrcamentarias.put("Regulamenta", 0);
-		quantidadeTabelaOrcamentarias.put("Relaciona", 0);
-		quantidadeTabelaOrcamentarias.put("Renova", 0);
-		quantidadeTabelaOrcamentarias.put("Revoga", 0);
-		quantidadeTabelaOrcamentarias.put("Transfere", 0);
-		quantidadeTabelaOrcamentarias.put("Transforma", 0);
-
 
 		String tipo = "";
 		String nomePessoa;
@@ -408,7 +292,18 @@ public class XMLizacao {
 		for (int i = 0; i < anosDecretos.length; i++){
 			File a = new File("decretos" + anosDecretos[i]);
 
-
+			try {
+				bwb.write("\nDados para o ano de " + anosDecretos[i]);
+				bwb.newLine();
+				bwc.write("\nDados para o ano de " + anosDecretos[i]);
+				bwc.newLine();
+				bwd.write("\nDados para o ano de " + anosDecretos[i]);
+				bwd.newLine();
+				bwf.write("\nDados para o ano de " + anosDecretos[i]);
+				bwf.newLine();
+			} catch (IOException e1) {
+				System.out.println("Não conseguiu escrever no documento");
+			}
 
 			arquivoPasta = new File(caminhoDecretos + anosDecretos[i] + "\\" + pastaDestino);
 			//System.out.println(arquivoPasta);
@@ -457,6 +352,126 @@ public class XMLizacao {
 			contadorTiposDecreto.put("Transfere", 0);
 			contadorTiposDecreto.put("Transforma", 0);
 
+			quantidadeDecretosAnexos.put("Abre", 0);
+			quantidadeDecretosAnexos.put("Acrescenta", 0);
+			quantidadeDecretosAnexos.put("Aloca", 0);
+			quantidadeDecretosAnexos.put("Altera", 0);
+			quantidadeDecretosAnexos.put("Amplia", 0);
+			quantidadeDecretosAnexos.put("Aprova", 0);
+			quantidadeDecretosAnexos.put("Autoriza", 0);
+			quantidadeDecretosAnexos.put("Atualiza", 0);
+			quantidadeDecretosAnexos.put("Ativa", 0);
+			quantidadeDecretosAnexos.put("Concede", 0);
+			quantidadeDecretosAnexos.put("Convoca", 0);
+			quantidadeDecretosAnexos.put("Cria", 0);
+			quantidadeDecretosAnexos.put("Declara", 0);
+			quantidadeDecretosAnexos.put("Decreta", 0);
+			quantidadeDecretosAnexos.put("Define", 0);
+			quantidadeDecretosAnexos.put("Delega", 0);
+			quantidadeDecretosAnexos.put("Desativa", 0);
+			quantidadeDecretosAnexos.put("Disciplina", 0);
+			quantidadeDecretosAnexos.put("Dispõe", 0);
+			quantidadeDecretosAnexos.put("Eleva", 0);
+			quantidadeDecretosAnexos.put("Estabelece", 0);
+			quantidadeDecretosAnexos.put("Estende", 0);
+			quantidadeDecretosAnexos.put("Homologa", 0);
+			quantidadeDecretosAnexos.put("Incorpora", 0);
+			quantidadeDecretosAnexos.put("Institui", 0);
+			quantidadeDecretosAnexos.put("Interpreta", 0);
+			quantidadeDecretosAnexos.put("Introduz", 0);
+			quantidadeDecretosAnexos.put("Modifica", 0);
+			quantidadeDecretosAnexos.put("Promove", 0);
+			quantidadeDecretosAnexos.put("Prorroga", 0);
+			quantidadeDecretosAnexos.put("Qualifica", 0);
+			quantidadeDecretosAnexos.put("Reabre", 0);
+			quantidadeDecretosAnexos.put("Redenomina", 0);
+			quantidadeDecretosAnexos.put("Regulamenta", 0);
+			quantidadeDecretosAnexos.put("Relaciona", 0);
+			quantidadeDecretosAnexos.put("Renova", 0);
+			quantidadeDecretosAnexos.put("Revoga", 0);
+			quantidadeDecretosAnexos.put("Transfere", 0);
+			quantidadeDecretosAnexos.put("Transforma", 0);
+
+			quantidadeAnexosTabela.put("Abre", 0);
+			quantidadeAnexosTabela.put("Acrescenta", 0);
+			quantidadeAnexosTabela.put("Aloca", 0);
+			quantidadeAnexosTabela.put("Altera", 0);
+			quantidadeAnexosTabela.put("Amplia", 0);
+			quantidadeAnexosTabela.put("Aprova", 0);
+			quantidadeAnexosTabela.put("Autoriza", 0);
+			quantidadeAnexosTabela.put("Atualiza", 0);
+			quantidadeAnexosTabela.put("Ativa", 0);
+			quantidadeAnexosTabela.put("Concede", 0);
+			quantidadeAnexosTabela.put("Convoca", 0);
+			quantidadeAnexosTabela.put("Cria", 0);
+			quantidadeAnexosTabela.put("Declara", 0);
+			quantidadeAnexosTabela.put("Decreta", 0);
+			quantidadeAnexosTabela.put("Define", 0);
+			quantidadeAnexosTabela.put("Delega", 0);
+			quantidadeAnexosTabela.put("Desativa", 0);
+			quantidadeAnexosTabela.put("Disciplina", 0);
+			quantidadeAnexosTabela.put("Dispõe", 0);
+			quantidadeAnexosTabela.put("Eleva", 0);
+			quantidadeAnexosTabela.put("Estabelece", 0);
+			quantidadeAnexosTabela.put("Estende", 0);
+			quantidadeAnexosTabela.put("Homologa", 0);
+			quantidadeAnexosTabela.put("Incorpora", 0);
+			quantidadeAnexosTabela.put("Institui", 0);
+			quantidadeAnexosTabela.put("Interpreta", 0);
+			quantidadeAnexosTabela.put("Introduz", 0);
+			quantidadeAnexosTabela.put("Modifica", 0);
+			quantidadeAnexosTabela.put("Promove", 0);
+			quantidadeAnexosTabela.put("Prorroga", 0);
+			quantidadeAnexosTabela.put("Qualifica", 0);
+			quantidadeAnexosTabela.put("Reabre", 0);
+			quantidadeAnexosTabela.put("Redenomina", 0);
+			quantidadeAnexosTabela.put("Regulamenta", 0);
+			quantidadeAnexosTabela.put("Relaciona", 0);
+			quantidadeAnexosTabela.put("Renova", 0);
+			quantidadeAnexosTabela.put("Revoga", 0);
+			quantidadeAnexosTabela.put("Transfere", 0);
+			quantidadeAnexosTabela.put("Transforma", 0);
+
+			quantidadeTabelaOrcamentarias.put("Abre", 0);
+			quantidadeTabelaOrcamentarias.put("Acrescenta", 0);
+			quantidadeTabelaOrcamentarias.put("Aloca", 0);
+			quantidadeTabelaOrcamentarias.put("Altera", 0);
+			quantidadeTabelaOrcamentarias.put("Amplia", 0);
+			quantidadeTabelaOrcamentarias.put("Aprova", 0);
+			quantidadeTabelaOrcamentarias.put("Autoriza", 0);
+			quantidadeTabelaOrcamentarias.put("Atualiza", 0);
+			quantidadeTabelaOrcamentarias.put("Ativa", 0);
+			quantidadeTabelaOrcamentarias.put("Concede", 0);
+			quantidadeTabelaOrcamentarias.put("Convoca", 0);
+			quantidadeTabelaOrcamentarias.put("Cria", 0);
+			quantidadeTabelaOrcamentarias.put("Declara", 0);
+			quantidadeTabelaOrcamentarias.put("Decreta", 0);
+			quantidadeTabelaOrcamentarias.put("Define", 0);
+			quantidadeTabelaOrcamentarias.put("Delega", 0);
+			quantidadeTabelaOrcamentarias.put("Desativa", 0);
+			quantidadeTabelaOrcamentarias.put("Disciplina", 0);
+			quantidadeTabelaOrcamentarias.put("Dispõe", 0);
+			quantidadeTabelaOrcamentarias.put("Eleva", 0);
+			quantidadeTabelaOrcamentarias.put("Estabelece", 0);
+			quantidadeTabelaOrcamentarias.put("Estende", 0);
+			quantidadeTabelaOrcamentarias.put("Homologa", 0);
+			quantidadeTabelaOrcamentarias.put("Incorpora", 0);
+			quantidadeTabelaOrcamentarias.put("Institui", 0);
+			quantidadeTabelaOrcamentarias.put("Interpreta", 0);
+			quantidadeTabelaOrcamentarias.put("Introduz", 0);
+			quantidadeTabelaOrcamentarias.put("Modifica", 0);
+			quantidadeTabelaOrcamentarias.put("Promove", 0);
+			quantidadeTabelaOrcamentarias.put("Prorroga", 0);
+			quantidadeTabelaOrcamentarias.put("Qualifica", 0);
+			quantidadeTabelaOrcamentarias.put("Reabre", 0);
+			quantidadeTabelaOrcamentarias.put("Redenomina", 0);
+			quantidadeTabelaOrcamentarias.put("Regulamenta", 0);
+			quantidadeTabelaOrcamentarias.put("Relaciona", 0);
+			quantidadeTabelaOrcamentarias.put("Renova", 0);
+			quantidadeTabelaOrcamentarias.put("Revoga", 0);
+			quantidadeTabelaOrcamentarias.put("Transfere", 0);
+			quantidadeTabelaOrcamentarias.put("Transforma", 0);
+
 			for (int j = 0; j < arquivos[i].length; j++){
 				nomeArquivo = (arquivos[i][j]).getName(); //obtém o nome do arquivo
 				//System.out.println(nomeArquivo);
@@ -478,8 +493,6 @@ public class XMLizacao {
 
 					decretoIntermediario = decreto;
 					decretoSaida = "";
-
-
 
 					matcher = padraoInfo.matcher(decretoIntermediario);
 
@@ -595,10 +608,10 @@ public class XMLizacao {
 					matcherAuxiliar = null;
 
 					if (matcher.find()){
-						decretoSaida += "<FINALMENTES>\n";
+						decretoSaida += "<FIN>\n";
 						if (matcher.group(1) != null) decretoSaida +=  matcher.group(1).trim();
 						decretoSaida += matcher.group(2).trim() + matcher.group(4).trim() + " " +
-								matcher.group(5).trim() +  "\n</FINALMENTES>";
+								matcher.group(5).trim() +  "\n</FIN>";
 					} else if (decretoIntermediario.contains("Palácio do Campo")){
 						bwarq.write(i + "     " + nomeArquivo + "     " + "FINALMENTES");
 						bwarq.newLine();
@@ -671,17 +684,18 @@ public class XMLizacao {
 						segmentosConsAss = entreTags.split("( ){2,}");
 						textoModificado = "";
 						nomePessoa = segmentosConsAss[0].replaceFirst("Governador do Estado|GOVERNADOR DO ESTADO", "").trim();
-						textoModificado += "<ASS_GOV>" + nomePessoa + "</ASS_GOV>" + segmentosConsAss[0].replaceFirst(nomePessoa, "").trim();
+						textoModificado += "<ASS_GOV>" + nomePessoa + "</ASS_GOV> " + segmentosConsAss[0].replaceFirst(nomePessoa, "").trim();
 
 						if (nomePessoas.containsKey(nomePessoa)){
 							nomePessoas.replace(nomePessoa, nomePessoas.get(nomePessoa) + 1);
 						} else {
 							nomePessoas.put(nomePessoa, 1);
 						}
+
 						for (int k = 1; k < segmentosConsAss.length; k++){
 							//System.out.println(segmentosConsAss[k]);
 							nomePessoa = segmentosConsAss[k].trim();
-							textoModificado += "<ASS_OUTRO>" + nomePessoa + "</ASS_OUTRO>";
+							textoModificado += "<ASS_OUTRO>" + nomePessoa + "</ASS_OUTRO>\n";
 							if (nomePessoas.containsKey(nomePessoa)){
 								nomePessoas.replace(nomePessoa, nomePessoas.get(nomePessoa) + 1);
 							} else {
@@ -691,12 +705,14 @@ public class XMLizacao {
 						decretoSaida = decretoSaida.replaceFirst("\\Q" + entreTags +"\\E", textoModificado);
 					}
 
+					decretoSaida = decretoSaida.replace("table>", "TBL>");
+
 					matcher = padraoLeis.matcher(decretoSaida);
 					while (matcher.find() && (matcher.group(7) != null  || matcher.group(9) != null)){ //&& (matcher.group(6) != null || matcher.group(10) != null || matcher.group(11) != null)){
 						entreTags = matcher.group(1);
 						String tipoDoc = tiposDocumentos.get(matcher.group(3).trim());
 						textoModificado = " <" +  tipoDoc;
-						System.out.println("Leis1 " + entreTags);
+						//	System.out.println("Leis1 " + entreTags);
 
 						if (matcher.group(9) == null && matcher.group(7) != null){
 							if (matcher.group(7).contains("/")){
@@ -714,7 +730,7 @@ public class XMLizacao {
 								textoModificado += numeracaoMeses.get(matcher.group(15).toLowerCase()) + "-" + matcher.group(17);
 							}
 						} else if (matcher.group(7) != null && matcher.group(15) != null){ // 12 é dia, 15 é mês, 17 ano
-							textoModificado += " numeracao=" + matcher.group(7);
+							textoModificado += " numeracao=" + matcher.group(8);
 							textoModificado += " data=" + (matcher.group(14).length() < 2? "0" + matcher.group(14) : matcher.group(14))
 									+ "-";
 							if  (matcher.group(14).contains(".") || matcher.group(14).contains("/") || matcher.group(14).contains("-")){
@@ -1665,89 +1681,109 @@ public class XMLizacao {
 
 					matcher = padraoAnexo.matcher(decretoSaida);
 					textoModificado = "";
+					//caso volte a usar o matcherAuxiliar para pegar dinheiro
+					//matcherAuxiliar = padraoDinheiro.matcher(entreTags);
 
 					if (matcher.find()){
-						//System.out.println(nomeArquivo);
 						quantidadeDecretosAnexos.containsKey(tipo);
 						quantidadeDecretosAnexos.put(tipo, quantidadeDecretosAnexos.get(tipo) + 1);
 						entreTags = matcher.group(1);
+
 						if (entreTags.startsWith("ANEXO ÚNICO")){
-							//System.out.println(entreTags);
-							if (entreTags.contains("MEMORIAL DESCRITIVO")){
+							if (verificarSeTabela(entreTags, tipo) == true){
+								if (entreTags.contains("CRÉDITO SUPLEMENTAR")){
+									entreTags = entreTags.replace("<TBL>", "<TBL tipo=credito_supl>");
+								} else if (entreTags.contains("ANULAÇÃO DE DOTAÇÃO")){
+									entreTags = entreTags.replace("<TBL>", "<TBL tipo=anulacao_dot>");
+								} else if (entreTags.contains("EXCESSO DE ARRECADAÇÃO")){
+									entreTags = entreTags.replace("<TBL>", "<TBL tipo=excesso_arrec>");
+								} else {
+									entreTags = entreTags.replace("<TBL>", "<TBL tipo=outro>");
+								}
+
+								String[] segmentosLinha = entreTags.split("</tr>");
+								for(int l = 3; l < segmentosLinha.length; l++){
+									if (entreTags.contains("ANULAÇÃO DE DOTAÇÃO") || 
+											entreTags.contains("CRÉDITO SUPLEMENTAR") || 
+											entreTags.contains("EXCESSO DE ARRECADAÇÃO")){
+										System.out.println(nomeArquivo + " entrou aqui");
+										System.out.println(segmentosLinha[l]);
+										segmentosLinha[l] = tabelaReformulada(segmentosLinha[l]);
+										System.out.println(segmentosLinha[l]);
+									}
+								}
+							}
+
+							if (entreTags.contains("MEMORIAL")){
 								textoModificado = "<MEMO>" + entreTags + "</MEMO>";
-								matcherAuxiliar = padraoDinheiro.matcher(entreTags);
-								if (entreTags.contains("table")){
-									quantidadeAnexosTabela.containsKey(tipo);
-									quantidadeAnexosTabela.put(tipo, quantidadeAnexosTabela.get(tipo) + 1);
-
-									if (entreTags.contains("R$") || matcherAuxiliar.find() ||entreTags.contains("CRÉDITO SUPLEMENTAR") || entreTags.contains("CRÉDITO")){
-										//System.out.println("NOSSSSSSSSSSSSSSSSSA");
-										quantidadeTabelaOrcamentarias.containsKey(tipo);
-										quantidadeTabelaOrcamentarias.put(tipo, quantidadeTabelaOrcamentarias.get(tipo) + 1);
-									}
-								}
 							} else if (entreTags.contains("PLANO")){
-								textoModificado += "<PLAN>" + "ANEXO " + entreTags.trim() + "</PLAN>";
+								textoModificado += "<PLAN>" + entreTags.trim() + "</PLAN>";
 							}else if (entreTags.contains("FORMULÁRIO")){
-								textoModificado += "<FORM>" + "ANEXO " + entreTags.trim() + "</FORM>";
-							}
-							else if (entreTags.contains("table")){
-								textoModificado = "<TAB>" + entreTags + "</TAB>";					
-								quantidadeAnexosTabela.containsKey(tipo);
-								quantidadeAnexosTabela.put(tipo, quantidadeAnexosTabela.get(tipo) + 1);
-								matcherAuxiliar = padraoDinheiro.matcher(entreTags);
-
-								if (entreTags.contains("R$") || matcherAuxiliar.find() || entreTags.contains("crédito") || entreTags.contains("CRÉDITO")){
-									//System.out.println("NOSSSSSSSSSSSSSSSSSA");
-									quantidadeTabelaOrcamentarias.containsKey(tipo);
-									quantidadeTabelaOrcamentarias.put(tipo, quantidadeTabelaOrcamentarias.get(tipo) + 1);
-								}
-							} else {
+								textoModificado += "<FORM>" + entreTags.trim() + "</FORM>";
+							} else if (entreTags.contains("CÓDIGO")){
+								textoModificado += "<COD>" + entreTags.trim() + "</COD>";
+							} else if (entreTags.contains("REGIMENTO")){
+								textoModificado += "<REG>" + entreTags.trim() + "</REG>";
+							} else if (!entreTags.contains("TBL")){
 								textoModificado = "<OUTRO>" + entreTags + "</OUTRO>";
-								if (entreTags.contains("table")){
-									quantidadeAnexosTabela.containsKey(tipo);
-									quantidadeAnexosTabela.put(tipo, quantidadeAnexosTabela.get(tipo) + 1);
-									matcherAuxiliar = padraoDinheiro.matcher(entreTags);
+							} else {
+								textoModificado = "<TAB>" + entreTags + "</TAB>";					
+							} 
 
-									if (entreTags.contains("R$") || matcherAuxiliar.find() || entreTags.contains("crédito") || entreTags.contains("CRÉDITO")){
-										System.out.println("NOSSSSSSSSSSSSSSSSSA");
-										quantidadeTabelaOrcamentarias.containsKey(tipo);
-										quantidadeTabelaOrcamentarias.put(tipo, quantidadeTabelaOrcamentarias.get(tipo) + 1);
-									}
-								}
-							}
 							decretoSaida = decretoSaida.replace(entreTags, textoModificado);
 							decretoSaida = decretoSaida.replace("<ANEXOS>", "<ANEXOS num_anexos=1>");
 						} else {
 							segmentosConsAss = entreTags.split("ANEXO [IVX]{1,4}");
 
-							for (int k = 1; k < segmentosConsAss.length; k++){
-								if (segmentosConsAss[k].contains("MEMORIAL DESCRITIVO")){
-									textoModificado += "<MEMO>" + "ANEXO " + k + segmentosConsAss[k].trim() + "</MEMO>";
-								}else if (segmentosConsAss[k].contains("PLANO")){
-									textoModificado += "<PLAN>" + "ANEXO " + k + segmentosConsAss[k].trim() + "</PLAN>";
-								}else if (segmentosConsAss[k].contains("FORMULÁRIO") || segmentosConsAss[k].contains("Eu")||segmentosConsAss[k].contains("----") || segmentosConsAss[k].contains("____")){
-									textoModificado += "<FORM>" + "ANEXO " + k + segmentosConsAss[k].trim() + "</FORM>";
-								}else if (segmentosConsAss[k].contains("table")){
-									textoModificado += "<TAB>" + "ANEXO " + k + segmentosConsAss[k].trim() + "</TAB>";
-								} else{
-									//System.out.println(nomeArquivo);
-								}
-							}
-							if (entreTags.contains("table")){
-								quantidadeAnexosTabela.containsKey(tipo);
-								quantidadeAnexosTabela.put(tipo, quantidadeAnexosTabela.get(tipo) + 1);
-								matcherAuxiliar = padraoDinheiro.matcher(entreTags);
+							for (int k = 1; k < segmentosConsAss.length; k++){	
 
-								if (entreTags.contains("R$") || matcherAuxiliar.find() || entreTags.contains("crédito") || entreTags.contains("CRÉDITO") || entreTags.contains("ORCAMENTÁRIO")){
-									System.out.println("NOSSSSSSSSSSSSSSSSSA");
-									quantidadeTabelaOrcamentarias.containsKey(tipo);
-									quantidadeTabelaOrcamentarias.put(tipo, quantidadeTabelaOrcamentarias.get(tipo) + 1);
+								if (segmentosConsAss[k] != "" && verificarSeTabela(segmentosConsAss[k], tipo) == true){
+									int linhaInicial = 3;
+									if (segmentosConsAss[k].contains("CRÉDITO SUPLEMENTAR")){
+										segmentosConsAss[k] = segmentosConsAss[k].replace("<TBL>", "<TBL tipo=credito_supl>");
+									} else if (segmentosConsAss[k].contains("ANULAÇÃO DE DOTAÇÃO")){
+										segmentosConsAss[k] = segmentosConsAss[k].replace("<TBL>", "<TBL tipo=anulacao_dot>");
+									} else if (segmentosConsAss[k].contains("EXCESSO DE ARRECADAÇÃO")){
+										segmentosConsAss[k] = segmentosConsAss[k].replace("<TBL>", "<TBL tipo=excesso_arrec>");
+										linhaInicial = 2;
+									} else {
+										segmentosConsAss[k] = segmentosConsAss[k].replace("<TBL>", "<TBL tipo=outro>");
+									}
+
+									String atualizarSegmento = "";
+									String[] segmentosLinha = segmentosConsAss[k].split("</tr>");
+									if (segmentosConsAss[k].contains("ANULAÇÃO DE DOTAÇÃO") || 
+											segmentosConsAss[k].contains("CRÉDITO SUPLEMENTAR") || 
+											segmentosConsAss[k].contains("EXCESSO DE ARRECADAÇÃO")){
+										for(int l = linhaInicial; l < segmentosLinha.length; l++){
+											System.out.println(nomeArquivo + " entrou aqui");
+											System.out.println(segmentosLinha[l]);
+											atualizarSegmento += tabelaReformulada(segmentosLinha[l]);
+											System.out.println(segmentosLinha[l]);
+										}
+										
+										segmentosConsAss[k] = atualizarSegmento;
+									}
+								}
+
+								if (segmentosConsAss[k].contains("MEMORIAL")){
+									textoModificado += "<MEMO>" + "ANEXO " + k + " " + segmentosConsAss[k].trim() + "</MEMO>";
+								} else if (segmentosConsAss[k].contains("PLANO")){
+									textoModificado += "<PLAN>" + "ANEXO " + k + " " + segmentosConsAss[k].trim() + "</PLAN>";
+								} else if (segmentosConsAss[k].contains("FORMULÁRIO") || segmentosConsAss[k].contains("Eu")||segmentosConsAss[k].contains("----") || segmentosConsAss[k].contains("____")){
+									textoModificado += "<FORM>" + "ANEXO " + k + " " + segmentosConsAss[k].trim() + "</FORM>";
+								} else if (segmentosConsAss[k].contains("CÓDIGO")){
+									textoModificado += "<COD>" + "ANEXO " + k + " " + segmentosConsAss[k].trim() + "</COD>";
+								} else if (segmentosConsAss[k].contains("REGIMENTO")){
+									textoModificado += "<REG>" + "ANEXO " + k + " " + segmentosConsAss[k].trim() + "</REG>";
+								} else if (!segmentosConsAss[k].contains("TBL")){
+									textoModificado += "<OUT>" + "ANEXO " + k + " " + segmentosConsAss[k].trim() + "</OUT>";
+								} else{
+									textoModificado += "<TAB>" + "ANEXO " + k + " " + segmentosConsAss[k].trim() + "</TAB>";
 								}
 							}
 							decretoSaida = decretoSaida.replace(entreTags, textoModificado);
-							//ALTERAR ISSO O MAIS RÁPIDO POSSÍVEL
-							//decretoSaida = decretoSaida.replace("<ANEXOS>", "<ANEXOS num_anexos=" + );
+							decretoSaida = decretoSaida.replace("<ANEXOS>", "<ANEXOS num_anexos=" + (segmentosConsAss.length - 1) + ">");
 						}
 					}
 
@@ -1777,7 +1813,6 @@ public class XMLizacao {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-
 				try {
 					fw = new FileWriter(new File(arquivoPasta + "\\\\" + nomeArquivo));
 					bw = new BufferedWriter(fw);
@@ -1788,57 +1823,98 @@ public class XMLizacao {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
+			}//fim do for para cada decreto
+			try {
+				List<String> contador = new ArrayList<>(quantidadeDecretosAnexos.keySet());
+				for (int v = 0; v < contador.size(); v++){	
+					bwb.write(contador.get(v) + "    " + quantidadeDecretosAnexos.get(contador.get(v)));
+					bwb.newLine();
+					bwc.write(contador.get(v) + "    " + quantidadeAnexosTabela.get(contador.get(v)));
+					bwc.newLine();
+					bwd.write(contador.get(v) + "    " + nomePessoas.get(contador.get(v)));
+					bwd.newLine();
+					bwf.write(contador.get(v) + "    " + quantidadeTabelaOrcamentarias.get(contador.get(v)));
+					bwf.newLine();
+				}
+			}  catch (IOException e) {
+				System.out.println("Erro na escrita da tabela ou do anexo");
 			}
-
-		}
+		} //fim do for para decreto ano
 		try {
-			fwb = new FileWriter(b);
-			bwb = new BufferedWriter(fwb);
-			List<String> contador = new ArrayList<>(quantidadeDecretosAnexos.keySet());
-			for (int v = 0; v < contador.size(); v++){	
-				bwb.write(contador.get(v) + "    " + quantidadeDecretosAnexos.get(contador.get(v)));
-				bwb.newLine();
-			}
-
 			bwb.flush();
 			bwb.close();
-
-			fwc = new FileWriter(c);
-			bwc = new BufferedWriter(fwc);
-			contador = new ArrayList<>(quantidadeAnexosTabela.keySet());
-			for (int v = 0; v < contador.size(); v++){
-				bwc.write(contador.get(v) + "    " + quantidadeAnexosTabela.get(contador.get(v)));
-				bwc.newLine();
-			}
-
 			bwc.flush();
 			bwc.close();
-
-			fwf = new FileWriter(f);
-			bwf = new BufferedWriter(fwf);
-			contador = new ArrayList<>(quantidadeTabelaOrcamentarias.keySet());
-			System.out.println("PASSOU AQUI");
-			for (int v = 0; v < contador.size(); v++){
-				bwf.write(contador.get(v) + "    " + quantidadeTabelaOrcamentarias.get(contador.get(v)));
-				bwf.newLine();
-			}
-
-			bwf.flush();
-			bwf.close();
-
-			fwd = new FileWriter(d);
-			bwd = new BufferedWriter(fwd);
-			contador = new ArrayList<>(nomePessoas.keySet());
-			for (int v = 0; v < contador.size(); v++){
-				bwd.write(contador.get(v) + "    " + nomePessoas.get(contador.get(v)));
-				bwd.newLine();
-			}
 			bwd.flush();
 			bwd.close();
+			bwf.flush();
+			bwf.close();
 		}  catch (IOException e) {
-			System.out.println("Erro na escrita tabela ou anexo");
+			System.out.println("Os streams foram fechados corretamente.");
+		}
+	}
+
+	public static boolean verificarSeTabela(String entreTags, String tipo){
+		boolean isTabela = false;
+		if (entreTags.contains("TBL")){
+			isTabela = true;
+			quantidadeAnexosTabela.put(tipo, quantidadeAnexosTabela.get(tipo) + 1);
+			System.out.println("Possui uma tabela!");
+
+			if (entreTags.contains("R$")){ //é uma tabela orçamentária
+				quantidadeTabelaOrcamentarias.put(tipo, quantidadeTabelaOrcamentarias.get(tipo) + 1);
+			}
+		}
+		return isTabela;
+	}
+
+	public static String tabelaReformulada (String linha){
+		Matcher matcher;
+		linha = linha.replaceAll("<(/)?td>", "");
+		linha = linha.replaceAll("<tr>", "");
+		linha = linha.replaceAll("<(/)?tbody>", "");
+		linha = linha.replaceAll("\t", "  ");
+
+		matcher = Pattern.compile(" \\d{5} - [</>A-ZÇÁÉÍÓÚÂÊÔÃÕ, -]+ ").matcher(linha);
+		if (matcher.find()){
+			System.out.println("Tabela sendo reformulada...");
+			linha = linha.replaceFirst(matcher.group(0), "<ID_ORG_G>" + matcher.group(0).trim() + "</ID_ORG_G>");
 		}
 
+		matcher = Pattern.compile(" \\d{5} [</>A-ZÇÁÉÍÓÚÂÊÔÃÕa-zçáéíóúâêôãõ, -]+").matcher(linha);
+		if (matcher.find()){
+			linha = linha.replaceFirst(matcher.group(0), "<ID_ORG>" + matcher.group(0).trim() + "</ID_ORG>");
+		}
 
+		matcher = Pattern.compile("( ([<A-ZÇÁÉÍÓÚÂÊÔ][/>a-zçáéíóúâêôãõ .-]+)+):").matcher(linha);
+		if (matcher.find()){
+			linha = linha.replaceFirst(matcher.group(1), "<TIPO>" + matcher.group(1).trim() + "</TIPO>");
+		}
+
+		matcher = Pattern.compile("( \\d{2}\\.\\d{3}\\.\\d{4}\\.\\d{4,5}\\s+(- )?[</>A-ZÇÁÉÍÓÚÂÊÔÃÕa-zçáéíóúâêôãõ ]+) ").matcher(linha);
+		if (matcher.find()){
+			linha = linha.replaceFirst(matcher.group(1), "<AT_PROJ>" + matcher.group(1).trim() + "</AT_PROJ>");
+		}
+
+		matcher = Pattern.compile("( \\d\\.\\d\\.\\d{2}\\.\\d{2}\\s+(- )?[/A-ZÇÁÉÍÓÚÂÊÔÃÕa-zçáéíóúâêôãõ, -]+) ").matcher(linha);
+		if (matcher.find()){
+			linha = linha.replaceFirst(matcher.group(1), "<ORIG>" + matcher.group(1).trim() + "</ORIG>");
+		}
+
+		matcher = Pattern.compile("( \\d{4}\\.\\d{2}\\.\\d{2}\\s+(- )?[</>A-ZÇÁÉÍÓÚÂÊÔÃÕ, -]+) ").matcher(linha);
+		if (matcher.find()){
+			linha = linha.replaceFirst(matcher.group(1), "<ORIG>" + matcher.group(1).trim() + "</ORIG>");
+		}
+
+		matcher = Pattern.compile("[^\\d.)(>]\\d{4} ").matcher(linha);
+		if (matcher.find()){
+			linha = linha.replaceFirst(matcher.group(0), "<FON>" + matcher.group(0).trim() + "</FON>");
+		}
+
+		matcher = Pattern.compile("(\\d{1,3})?\\.\\d{1,3}\\.\\d{3},\\d{2}").matcher(linha);
+		if (matcher.find()){
+			linha = linha.replaceFirst(matcher.group(0), "<VAL>" + matcher.group(0).trim() + "</VAL>");
+		}
+		return linha;
 	}
 }
