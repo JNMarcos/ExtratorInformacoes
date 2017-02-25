@@ -3079,201 +3079,101 @@ public class Segmentacao {
 						textoModificado += entreTags.trim() + "</ED>";
 
 						if (textoModificado.contains(",<")){
-
 							textoModificado = textoModificado.replace(",</ED>", "</ED>,");
-
 						} else if (textoModificado.contains(";<")){
-
 							textoModificado = textoModificado.replace(";</ED>", "</ED>;");
-
 						} else if (textoModificado.contains(":<")){
-
 							textoModificado = textoModificado.replace(":</ED>", "</ED>:");
-
 						} else if (textoModificado.contains(".<")){
-
 							textoModificado = textoModificado.replace(".</ED>", "</ED>.");
-
 						}
-
 						decretoSaida = decretoSaida.replaceFirst("\\Q" + entreTags +"\\E", textoModificado);			
-
 					}
-
-
 
 					matcher = padraoDoc2.matcher(decretoSaida);
-
 					while (matcher.find()){
-
 						//System.out.println(nomeArquivo);
-
 						entreTags = matcher.group(0);
-
 						textoModificado = " <DOC>" + matcher.group(0).trim() + "</DOC>";
-
 						decretoSaida = decretoSaida.replaceFirst("\\Q" + entreTags +"\\E", textoModificado);
-
 					}
-
-
 
 					matcher = padraoDoc.matcher(decretoSaida);
-
 					while (matcher.find()){
-
 						//System.out.println(nomeArquivo);
-
 						entreTags = matcher.group(1);
-
-
-
 						if (entreTags.charAt(0) == '\"'){
-
 							entreTags = entreTags.replace("\"", "");
-
 							textoModificado = "<DOC>";
-
 						} else if (entreTags.charAt(0) == '('){ 
-
 							entreTags = entreTags.replaceFirst("\\Q(\\E", "");
-
 							textoModificado = "<DOC>";					
-
 						} else if (entreTags.charAt(0) == '>') {
-
 							entreTags = entreTags.replaceFirst(">", "");
-
 							textoModificado = "<DOC>";
-
 						} else {
-
 							textoModificado = " <DOC>";
-
 						}
-
-
-
 						if (entreTags.contains(" - ") && entreTags.split(" - ").length >=2){								
-
 							if (entreTags.trim().charAt(0) != entreTags.split(" - ")[1].charAt(0)){
-
 								entreTags = entreTags.split(" - ")[0];
-
 							}
-
 						}
-
 						textoModificado += entreTags.trim() + "</DOC>";
-
 						decretoSaida = decretoSaida.replaceFirst("\\Q" + entreTags + "\\E", textoModificado);
-
 					}
-
-
-
-
 
 					matcher = padraoData.matcher(decretoSaida);
-
 					while (matcher.find()){
-
 						//System.out.println(nomeArquivo);
-
 						entreTags = matcher.group(1);
-
 						textoModificado = " <DAT>" + matcher.group(1).trim() + "</DAT>";
-
 						decretoSaida = decretoSaida.replaceFirst("\\Q" + entreTags +"\\E", textoModificado);
-
 					}
-
-
 
 					matcher = padraoIntervaloData.matcher(decretoSaida);
-
 					while (matcher.find()){
-
-						//System.out.println(nomeArquivo);
-
 						entreTags = matcher.group(0);
-
-						textoModificado = " <INT_DAT>" + matcher.group(0).trim() + "</INT_DAT>";
-
+						textoModificado = " <INT_DAT>" + matcher.group(0).trim() + "</INT_DAT>";						
 						decretoSaida = decretoSaida.replaceFirst("\\Q" + entreTags +"\\E", textoModificado);
-
 					}
-
-
 
 					matcher = padraoInfoEmp.matcher(decretoSaida);
-
 					while (matcher.find()){
-
 						entreTags = matcher.group(3);
-
 						textoModificado = " <INF_EMP>" + matcher.group(3).trim() + "</INF_EMP>";
-
 						decretoSaida = decretoSaida.replaceFirst("\\Q" + entreTags +"\\E", textoModificado);
-
 					}
-
-
 
 					matcher = padraoEnd.matcher(decretoSaida);
-
 					while (matcher.find()){
-
 						//System.out.println(matcher.group(1));
-
 						entreTags = matcher.group(1);
-
 						textoModificado = "<END>" + matcher.group(1).trim() + "</END>";
-
 						decretoSaida = decretoSaida.replaceFirst("\\Q" + entreTags +"\\E", textoModificado);
-
 					}
-
-
 
 					matcher = padraoIE.matcher(decretoSaida);
-
 					while (matcher.find()){
-
 						entreTags = matcher.group(3);
-
 						textoModificado = " <IE>" + matcher.group(3).trim() + "</IE>";
-
 						decretoSaida = decretoSaida.replaceFirst("\\Q" + entreTags +"\\E", textoModificado);
-
 					}
 
-
-
 					matcher = padraoCNPJ.matcher(decretoSaida);
-
 					while (matcher.find()){
-
 						entreTags = matcher.group(3);
-
 						textoModificado = " <CNPJ>" + matcher.group(3).trim() + "</CNPJ>";
-
 						decretoSaida = decretoSaida.replaceFirst("\\Q" + entreTags +"\\E", textoModificado);
-
 					}
 
 
 
 					matcher = padraoCACEPE.matcher(decretoSaida);
-
 					while (matcher.find()){
-
 						entreTags = matcher.group(0);
-
 						textoModificado = " <CACEPE>" + matcher.group(0).trim() + "</CACEPE>";
-
 						decretoSaida = decretoSaida.replaceFirst("\\Q" + entreTags +"\\E", textoModificado);
-
 					}
 
 
@@ -3281,494 +3181,277 @@ public class Segmentacao {
 					matcher = padraoMunicipio.matcher(decretoSaida);
 
 					while (matcher.find()){
-
 						entreTags = matcher.group(5);
-
-						textoModificado = " <MUN>" + matcher.group(5).trim() + "</MUN>";
-
-						if (textoModificado.contains(",")){
-
-							textoModificado = textoModificado.replaceAll(", ", "</MUN>,").replaceAll(">,", ">, <MUN>").replaceFirst(" e ", "</MUN> e <MUN>");
-
-							textoModificado = textoModificado.replace(",</MUN>", "</MUN>,");
-
-						} else if (textoModificado.contains(";<")){
-
-							textoModificado = textoModificado.replace(";</MUN>", "</MUN>;");
-
-						} else if (textoModificado.contains(":<")){
-
-							textoModificado = textoModificado.replace(":</MUN>", "</MUN>:");
-
-						} else if (textoModificado.contains(".<")){
-
-							textoModificado = textoModificado.replace(".</MUN>", "</MUN>.");
-
+						if (!entreTags.contains("Pernambuco")){
+							textoModificado = " <MUN>" + matcher.group(5).trim() + "</MUN>";
+							if (textoModificado.contains(",")){
+								textoModificado = textoModificado.replaceAll(", ", "</MUN>,").replaceAll(">,", ">, <MUN>").replaceFirst(" e ", "</MUN> e <MUN>");
+								textoModificado = textoModificado.replace(",</MUN>", "</MUN>,");
+							} else if (textoModificado.contains(";<")){
+								textoModificado = textoModificado.replace(";</MUN>", "</MUN>;");
+							} else if (textoModificado.contains(":<")){
+								textoModificado = textoModificado.replace(":</MUN>", "</MUN>:");
+							} else if (textoModificado.contains(".<")){
+								textoModificado = textoModificado.replace(".</MUN>", "</MUN>.");
+							}
+							decretoSaida = decretoSaida.replaceFirst("\\Q" + entreTags +"\\E", textoModificado);
 						}
-
-						decretoSaida = decretoSaida.replaceFirst("\\Q" + entreTags +"\\E", textoModificado);
-
 					}
-
-
 
 					matcher = padraoLocal.matcher(decretoSaida);
-
 					while (matcher.find()){
-
 						entreTags = matcher.group(1);
-
 						textoModificado = " <LOC>" + matcher.group(1).trim() + "</LOC>";
-
 						decretoSaida = decretoSaida.replaceFirst("\\Q" + entreTags +"\\E", textoModificado);
-
 					}
-
-
 
 					matcher = padraoSite.matcher(decretoSaida);
-
 					while (matcher.find()){
-
 						//System.out.println(matcher.group(1));
-
 						entreTags = matcher.group(0);
-
 						textoModificado = " <SITE>" + matcher.group(0).trim() + "</SITE>";
-
 						decretoSaida = decretoSaida.replaceFirst("\\Q" + entreTags +"\\E", textoModificado);
-
 					}
-
-
 
 					matcher = padraoAnexo.matcher(decretoSaida);
-
 					textoModificado = "";
 
-					//caso volte a usar o matcherAuxiliar para pegar dinheiro
-
-					//matcherAuxiliar = padraoDinheiro.matcher(entreTags);
-
-
-
 					if (matcher.find()){
-
 						quantidadeDecretosAnexos.containsKey(tipo);
-
 						quantidadeDecretosAnexos.put(tipo, quantidadeDecretosAnexos.get(tipo) + 1);
-
 						entreTags = matcher.group(1);
 
-
-
 						if (entreTags.startsWith("ANEXO ⁄NICO")){
-
 							if (verificarSeTabela(entreTags, tipo) == true){
-
 								if (entreTags.contains("CR…DITO SUPLEMENTAR")){
-
 									entreTags = entreTags.replace("<TBL>", "<TBL tipo=credito_supl>");
-
 								} else if (entreTags.contains("ANULA«√O DE DOTA«√O")){
-
 									entreTags = entreTags.replace("<TBL>", "<TBL tipo=anulacao_dot>");
-
 								} else if (entreTags.contains("EXCESSO DE ARRECADA«√O")){
-
 									entreTags = entreTags.replace("<TBL>", "<TBL tipo=excesso_arrec>");
-
 								} else {
-
 									entreTags = entreTags.replace("<TBL>", "<TBL tipo=outro>");
-
 								}
 
-
-
-								String[] segmentosLinha = entreTags.split("</tr>");
-
-								for(int l = 3; l < segmentosLinha.length; l++){
-
-									if (entreTags.contains("ANULA«√O DE DOTA«√O") || 
-
-											entreTags.contains("CR…DITO SUPLEMENTAR") || 
-
-											entreTags.contains("EXCESSO DE ARRECADA«√O")){
-
-										System.out.println(nomeArquivo + " entrou aqui");
-
-										System.out.println(segmentosLinha[l]);
-
-										segmentosLinha[l] = tabelaReformulada(segmentosLinha[l]);
-
-										System.out.println(segmentosLinha[l]);
-
-									}
-
+								if (entreTags.contains("ANULA«√O DE DOTA«√O") || 
+										entreTags.contains("CR…DITO SUPLEMENTAR") || 
+										entreTags.contains("EXCESSO DE ARRECADA«√O")){
+									System.out.println(nomeArquivo + " entrou aqui 1");
+									System.out.println(entreTags);
+									entreTags = tabelaReformulada(entreTags);
+									System.out.println(entreTags);
 								}
-
 							}
-
-
 
 							if (entreTags.contains("MEMORIAL")){
-
 								textoModificado = "<MEMO>" + entreTags + "</MEMO>";
-
 							} else if (entreTags.contains("PLANO")){
-
 								textoModificado += "<PLAN>" + entreTags.trim() + "</PLAN>";
-
 							}else if (entreTags.contains("FORMUL¡RIO")){
-
 								textoModificado += "<FORM>" + entreTags.trim() + "</FORM>";
-
 							} else if (entreTags.contains("C”DIGO")){
-
 								textoModificado += "<COD>" + entreTags.trim() + "</COD>";
-
 							} else if (entreTags.contains("REGIMENTO")){
-
 								textoModificado += "<REG>" + entreTags.trim() + "</REG>";
-
 							} else if (!entreTags.contains("TBL")){
-
 								textoModificado = "<OUTRO>" + entreTags + "</OUTRO>";
-
 							} else {
-
 								textoModificado = "<TAB>" + entreTags + "</TAB>";					
-
 							} 
-
-
-
 							decretoSaida = decretoSaida.replace(entreTags, textoModificado);
-
 							decretoSaida = decretoSaida.replace("<ANEXOS>", "<ANEXOS num_anexos=1>");
-
 						} else {
-
 							segmentosConsAss = entreTags.split("ANEXO [IVX]{1,4}");
-
-
-
 							for (int k = 1; k < segmentosConsAss.length; k++){	
-
-
-
 								if (segmentosConsAss[k] != "" && verificarSeTabela(segmentosConsAss[k], tipo) == true){
-
-									int linhaInicial = 3;
-
 									if (segmentosConsAss[k].contains("CR…DITO SUPLEMENTAR")){
-
 										segmentosConsAss[k] = segmentosConsAss[k].replace("<TBL>", "<TBL tipo=credito_supl>");
-
 									} else if (segmentosConsAss[k].contains("ANULA«√O DE DOTA«√O")){
-
 										segmentosConsAss[k] = segmentosConsAss[k].replace("<TBL>", "<TBL tipo=anulacao_dot>");
-
 									} else if (segmentosConsAss[k].contains("EXCESSO DE ARRECADA«√O")){
-
 										segmentosConsAss[k] = segmentosConsAss[k].replace("<TBL>", "<TBL tipo=excesso_arrec>");
-
-										linhaInicial = 2;
-
 									} else {
-
 										segmentosConsAss[k] = segmentosConsAss[k].replace("<TBL>", "<TBL tipo=outro>");
-
 									}
-
-
-
-									String atualizarSegmento = "";
-
-									String[] segmentosLinha = segmentosConsAss[k].split("</tr>");
 
 									if (segmentosConsAss[k].contains("ANULA«√O DE DOTA«√O") || 
-
 											segmentosConsAss[k].contains("CR…DITO SUPLEMENTAR") || 
-
 											segmentosConsAss[k].contains("EXCESSO DE ARRECADA«√O")){
-
-										for(int l = linhaInicial; l < segmentosLinha.length; l++){
-
-											System.out.println(nomeArquivo + " entrou aqui");
-
-											System.out.println(segmentosLinha[l]);
-
-											atualizarSegmento += tabelaReformulada(segmentosLinha[l]);
-
-											System.out.println(segmentosLinha[l]);
-
-										}
-
-
-
-										segmentosConsAss[k] = atualizarSegmento;
-
+										System.out.println(nomeArquivo + " entrou aqui 2");
+										System.out.println(segmentosConsAss[k]);
+										segmentosConsAss[k] = tabelaReformulada(segmentosConsAss[k]);
+										System.out.println(segmentosConsAss[k]);
 									}
-
 								}
-
-
 
 								if (segmentosConsAss[k].contains("MEMORIAL")){
-
 									textoModificado += "<MEMO>" + "ANEXO " + k + " " + segmentosConsAss[k].trim() + "</MEMO>";
-
 								} else if (segmentosConsAss[k].contains("PLANO")){
-
 									textoModificado += "<PLAN>" + "ANEXO " + k + " " + segmentosConsAss[k].trim() + "</PLAN>";
-
 								} else if (segmentosConsAss[k].contains("FORMUL¡RIO") || segmentosConsAss[k].contains("Eu")||segmentosConsAss[k].contains("----") || segmentosConsAss[k].contains("____")){
-
 									textoModificado += "<FORM>" + "ANEXO " + k + " " + segmentosConsAss[k].trim() + "</FORM>";
-
 								} else if (segmentosConsAss[k].contains("C”DIGO")){
-
 									textoModificado += "<COD>" + "ANEXO " + k + " " + segmentosConsAss[k].trim() + "</COD>";
-
 								} else if (segmentosConsAss[k].contains("REGIMENTO")){
-
 									textoModificado += "<REG>" + "ANEXO " + k + " " + segmentosConsAss[k].trim() + "</REG>";
-
 								} else if (!segmentosConsAss[k].contains("TBL")){
-
 									textoModificado += "<OUT>" + "ANEXO " + k + " " + segmentosConsAss[k].trim() + "</OUT>";
-
 								} else{
-
 									textoModificado += "<TAB>" + "ANEXO " + k + " " + segmentosConsAss[k].trim() + "</TAB>";
-
 								}
-
 							}
-
 							decretoSaida = decretoSaida.replace(entreTags, textoModificado);
-
 							decretoSaida = decretoSaida.replace("<ANEXOS>", "<ANEXOS num_anexos=" + (segmentosConsAss.length - 1) + ">");
-
 						}
-
 					}
 
-
-
 					decretoSaida = decretoSaida.replaceAll("&middot;", "\u00B7");
-
 					decretoSaida = decretoSaida.replaceAll("&sup2;","\u00B2");
-
 					decretoSaida = decretoSaida.replaceAll(" m2"," m\u00B2");
-
 					decretoSaida = decretoSaida.replaceAll(" m3"," m\u00B3");
-
 					decretoSaida = decretoSaida.replaceAll("&sup3;","\u00B3");
-
 					decretoSaida+= "</DECRETO>";
 
-
-
 					a.createNewFile();
-
 					fw = new FileWriter(a);
-
 					bw = new BufferedWriter(fw);
-
-
-
 					List<String> contador = new ArrayList<>(contadorTiposDecreto.keySet());
 
 					for (int v = 0; v < contador.size(); v++){	
-
 						bw.write(contador.get(v) + "    " + contadorTiposDecreto.get(contador.get(v)));
-
 						bw.newLine();
-
 					}
-
 					bw.flush();
-
 					bw.close();
-
-
-
 				} catch (FileNotFoundException e) {
-
-					// TODO Auto-generated catch block
-
 					e.printStackTrace();
-
 				} catch (IOException e) {
-
-					// TODO Auto-generated catch block
-
 					e.printStackTrace();
-
 				}
 
 				try {
-
 					fw = new FileWriter(new File(arquivoPasta + "\\\\" + nomeArquivo));
-
 					bw = new BufferedWriter(fw);
-
 					bw.write(decretoSaida);
-
 					bw.flush();//antes os dois era bw
-
 					bw.close();
-
 				} catch (IOException e) {
-
-					// TODO Auto-generated catch block
-
 					e.printStackTrace();
-
 				}
-
 			}//fim do for para cada decreto
 
 			try {
-
 				List<String> contador = new ArrayList<>(quantidadeDecretosAnexos.keySet());
-
 				for (int v = 0; v < contador.size(); v++){	
-
 					bwb.write(contador.get(v) + "    " + quantidadeDecretosAnexos.get(contador.get(v)));
-
 					bwb.newLine();
-
-					bwc.write(contador.get(v) + "    " + quantidadeAnexosTabela.get(contador.get(v)));
-
+					bwc.write(contador.get(v) + "    " + quantidadeAnexosTabela.get(contador.get(v)));					
 					bwc.newLine();
-
 					bwd.write(contador.get(v) + "    " + nomePessoas.get(contador.get(v)));
-
 					bwd.newLine();
-
 					bwf.write(contador.get(v) + "    " + quantidadeTabelaOrcamentarias.get(contador.get(v)));
-
 					bwf.newLine();
-
 				}
-
 			}  catch (IOException e) {
-
 				System.out.println("Erro na escrita da tabela ou do anexo");
-
 			}
 
 		} //fim do for para decreto ano
 
 		try {
-
 			bwb.flush();
-
 			bwb.close();
-
 			bwc.flush();
-
 			bwc.close();
-
 			bwd.flush();
-
 			bwd.close();
-
 			bwf.flush();
-
 			bwf.close();
-
 		}  catch (IOException e) {
-
 			System.out.println("Os streams foram fechados corretamente.");
-
 		}
-
 	}
-
-
 
 	public static boolean verificarSeTabela(String entreTags, String tipo){
-
 		boolean isTabela = false;
-
 		if (entreTags.contains("TBL")){
-
 			isTabela = true;
-
 			quantidadeAnexosTabela.put(tipo, quantidadeAnexosTabela.get(tipo) + 1);
-
 			System.out.println("Possui uma tabela!");
-
-
-
 			if (entreTags.contains("R$")){ //È uma tabela orÁament·ria
-
 				quantidadeTabelaOrcamentarias.put(tipo, quantidadeTabelaOrcamentarias.get(tipo) + 1);
-
 			}
-
 		}
-
 		return isTabela;
-
 	}
 
-
-
-	public static String tabelaReformulada (String linha){
+	public static String tabelaReformulada (String tabela){
 		Matcher matcher;
-		linha = linha.replaceAll("<(/)?td>", "");
-		linha = linha.replaceAll("<(/)?tr>", "");
-		linha = linha.replaceAll("<(/)?tbody>", "");
-		linha = linha.replaceAll("\t", "  ");
+		tabela = tabela.replaceAll("<(/)?td>", "");
+		tabela = tabela.replaceAll("<(/)?tr>", "");
+		tabela = tabela.replaceAll("<(/)?tbody>", "");
+		tabela = tabela.replaceAll("\t", "  ");
 
-		matcher = Pattern.compile(" \\d{5} - [</>A-Z«¡…Õ”⁄¬ ‘√’, -]+ ").matcher(linha);
+		matcher = Pattern.compile("\\([A-Z«¡…Õ”⁄¬ ‘√’ ]+\\)").matcher(tabela);
 		while (matcher.find()){
-			System.out.println("Tabela sendo reformulada...");
-			linha = linha.replaceFirst(matcher.group(0), " <ID_ORG_G>" + matcher.group(0).trim() + "</ID_ORG_G> ");
+			System.out.println("Tabela sendo reformulada...");//TIT = TITULO
+			tabela = tabela.replaceFirst("\\Q" + matcher.group(0) + "\\E", "<TIT>" + matcher.group(0).trim() + "</TIT>");
 		}
 
-		matcher = Pattern.compile(" \\d{5} [</>A-Z«¡…Õ”⁄¬ ‘√’a-zÁ·ÈÌÛ˙‚ÍÙ„ı, -]+ ").matcher(linha);
+		matcher = Pattern.compile(" \\d{5}\\s*(- )?[</>A-Z«¡…Õ”⁄¬ ‘√’¿, -]+ ").matcher(tabela);
 		while (matcher.find()){
-			linha = linha.replaceFirst(matcher.group(0), " <ID_ORG>" + matcher.group(0).trim() + "</ID_ORG> ");
+			tabela = tabela.replaceFirst(matcher.group(0), " <ID_ORG_G>" + matcher.group(0).trim() + "</ID_ORG_G> ");
 		}
 
-		matcher = Pattern.compile("( ([<A-Z«¡…Õ”⁄¬ ‘][/>a-zÁ·ÈÌÛ˙‚ÍÙ„ı .-]+)+):").matcher(linha);
+		matcher = Pattern.compile(" \\d{5}\\s*(- )?[</>A-Z«¡…Õ”⁄¬ ‘√’¿‡a-zÁ·ÈÌÛ˙‚ÍÙ„ı, -]+ ").matcher(tabela);
 		while (matcher.find()){
-			linha = linha.replaceFirst(matcher.group(1), " <TIPO>" + matcher.group(1).trim() + "</TIPO>");
+			tabela = tabela.replaceFirst(matcher.group(0), " <ID_ORG>" + matcher.group(0).trim() + "</ID_ORG> ");
 		}
 
-		matcher = Pattern.compile(" \\d{2}\\.\\d{3}\\.\\d{4}\\.\\d{4,5}\\s+(- )?[</>A-Z«¡…Õ”⁄¬ ‘√’a-zÁ·ÈÌÛ˙‚ÍÙ„ı ]+ ").matcher(linha);
+		matcher = Pattern.compile("( ([<A-Z«¡…Õ”⁄¬ ‘¿][/>‡a-zÁ·ÈÌÛ˙‚ÍÙ„ı .-]+)+):").matcher(tabela);
 		while (matcher.find()){
-			linha = linha.replaceFirst(matcher.group(0), "<AT_PROJ>" + matcher.group(0).trim() + "</AT_PROJ> ");
+			tabela = tabela.replaceFirst(matcher.group(1), " <TIPO>" + matcher.group(1).trim() + "</TIPO>");
 		}
 
-		matcher = Pattern.compile(" \\d\\.\\d\\.\\d{2}\\.\\d{2}\\s+(- )?[/A-Z«¡…Õ”⁄¬ ‘√’a-zÁ·ÈÌÛ˙‚ÍÙ„ı, -]+ ").matcher(linha);
+		matcher = Pattern.compile(" \\d{2}\\.\\d{3}\\.\\d{4}\\.\\d{4,5}\\s*(- )?[</>A-Z«¡…Õ”⁄¬ ‘√’¿‡a-zÁ·ÈÌÛ˙‚ÍÙ„ı ,.]+ ").matcher(tabela);
 		while (matcher.find()){
-			linha = linha.replaceFirst(matcher.group(0), " <ORIG>" + matcher.group(0).trim() + "</ORIG> ");
-		}
-		
-		matcher = Pattern.compile(" \\d{4}\\.\\d{2}\\.\\d{2}\\s+(- )?[</>A-Z«¡…Õ”⁄¬ ‘√’, -]+ ").matcher(linha);
-		while (matcher.find()){
-			linha = linha.replaceFirst(matcher.group(0), " <ORIG>" + matcher.group(0).trim() + "</ORIG> ");
+			tabela = tabela.replaceFirst(matcher.group(0), "<AT_PROJ>" + matcher.group(0).trim() + "</AT_PROJ> ");
 		}
 
-		matcher = Pattern.compile("[^0-9.)(>]\\d{4} ").matcher(linha);
+		matcher = Pattern.compile(" \\d\\.\\d\\.\\d{2}\\.\\d{2}\\s+(- )?[</>A-Z«¡…Õ”⁄¬ ‘√’¿‡a-zÁ·ÈÌÛ˙‚ÍÙ„ı, -.]+ ").matcher(tabela);
 		while (matcher.find()){
-			linha = linha.replaceFirst(matcher.group(0), "<FON>" + matcher.group(0).trim() + "</FON> ");
+			tabela = tabela.replaceFirst(matcher.group(0), " <ORIG>" + matcher.group(0).trim() + "</ORIG> ");
 		}
 
-		matcher = Pattern.compile(" (\\d{1,3}\\.)?\\d{1,3}\\.\\d{3},\\d{2}").matcher(linha);
+		matcher = Pattern.compile(" \\d{4}\\.\\d{2}\\.\\d{2}\\s+(- )?[</>A-Z«¡…Õ”⁄¬ ‘√’¿, -.]+ ").matcher(tabela);
 		while (matcher.find()){
-			linha = linha.replaceFirst(matcher.group(0), " <VAL>" + matcher.group(0).trim() + "</VAL>");
+			tabela = tabela.replaceFirst(matcher.group(0), " <ORIG>" + matcher.group(0).trim() + "</ORIG> ");
 		}
 
-		return linha;
+		matcher = Pattern.compile("(FISCAL)?\\s+\\d{4} ").matcher(tabela);
+		while (matcher.find()){
+			if (matcher.group(1) == null){
+				tabela = tabela.replaceFirst(matcher.group(0), " <FON>" + matcher.group(0).trim() + "</FON> ");
+			}
+		}
+
+		matcher = Pattern.compile("(TOTAL)?(\\s+(\\d{1,3}\\.)?\\d{1,3}\\.\\d{3},\\d{2})").matcher(tabela);
+		while (matcher.find()){
+			if (matcher.group(1) != null){
+				tabela = tabela.replaceFirst(matcher.group(2), " <TOT>" + matcher.group(2).trim() + "</TOT>");
+			} else {
+				tabela = tabela.replaceFirst(matcher.group(2), " <VAL>" + matcher.group(2).trim() + "</VAL>");
+			}
+		}
+
+		matcher = Pattern.compile("<(AT_PROJ|ID_ORG|ID_ORG_G)>([A-Z¡…Õ”⁄¬ ‘√’«¿‡Áa-z·ÈÌÛ˙‚ÍÙ„<>,0-9/ -.]+)</(AT_PROJ|ID_ORG|ID_ORG_G)>\\s*<(VAL|FON)>[0-9.,]+</(VAL|FON)>\\s+([A-Z¡…Õ”⁄¬ ‘√’«Áa-z·ÈÌÛ˙‚ÍÙ„,/ -.]+)<").matcher(tabela);
+		while (matcher.find()){
+			tabela = tabela.replaceFirst(matcher.group(2), matcher.group(2) + " " + matcher.group(6).trim() + "</" + matcher.group(1)+ "> ");
+		}
+
+		tabela = tabela.replaceAll("\\s{2,}", " ");
+
+		return tabela;
 	}
 
 }
