@@ -3391,6 +3391,10 @@ public class Segmentacao {
 		tabela = tabela.replaceAll("<(/)?tr>", "");
 		tabela = tabela.replaceAll("<(/)?tbody>", "");
 		tabela = tabela.replaceAll("\t", "  ");
+		String especificacao = "<ESPECIFICACAO>";
+		String fonte = "<FONTE>";
+		String valor = "<VALOR>";
+		String total;
 
 		matcher = Pattern.compile("\\([A-ZÇÁÉÍÓÚÂÊÔÃÕ ]+\\)").matcher(tabela);
 		while (matcher.find()){
@@ -3400,46 +3404,56 @@ public class Segmentacao {
 
 		matcher = Pattern.compile(" \\d{5}\\s*(- )?[</>A-ZÇÁÉÍÓÚÂÊÔÃÕÀ, -]+ ").matcher(tabela);
 		while (matcher.find()){
-			tabela = tabela.replaceFirst(matcher.group(0), " <ID_ORG_G>" + matcher.group(0).trim() + "</ID_ORG_G> ");
+			especificacao += "<ESPEC><ID_ORG_G>" + matcher.group(0).trim() + "</ID_ORG_G> "; 
+			//tabela = tabela.replaceFirst(matcher.group(0), " <ID_ORG_G>" + matcher.group(0).trim() + "</ID_ORG_G> ");
 		}
 
 		matcher = Pattern.compile(" \\d{5}\\s*(- )?[</>A-ZÇÁÉÍÓÚÂÊÔÃÕÀàa-zçáéíóúâêôãõ, -]+ ").matcher(tabela);
 		while (matcher.find()){
-			tabela = tabela.replaceFirst(matcher.group(0), " <ID_ORG>" + matcher.group(0).trim() + "</ID_ORG> ");
+			especificacao += " <ID_ORG>" + matcher.group(0).trim() + "</ID_ORG> ";
+			//tabela = tabela.replaceFirst(matcher.group(0), " <ID_ORG>" + matcher.group(0).trim() + "</ID_ORG> ");
 		}
 
 		matcher = Pattern.compile("( ([<A-ZÇÁÉÍÓÚÂÊÔÀ][/>àa-zçáéíóúâêôãõ .-]+)+):").matcher(tabela);
 		while (matcher.find()){
+			especificacao += " <TIPO>" + matcher.group(1).trim() + "</TIPO>";
 			tabela = tabela.replaceFirst(matcher.group(1), " <TIPO>" + matcher.group(1).trim() + "</TIPO>");
 		}
 
 		matcher = Pattern.compile(" \\d{2}\\.\\d{3}\\.\\d{4}\\.\\d{4,5}\\s*(- )?[</>A-ZÇÁÉÍÓÚÂÊÔÃÕÀàa-zçáéíóúâêôãõ ,.]+ ").matcher(tabela);
 		while (matcher.find()){
-			tabela = tabela.replaceFirst(matcher.group(0), "<AT_PROJ>" + matcher.group(0).trim() + "</AT_PROJ> ");
+			especificacao += " <AT_PROJ>" + matcher.group(0).trim() + "</AT_PROJ> ";
+			tabela = tabela.replaceFirst(matcher.group(0), " <AT_PROJ>" + matcher.group(0).trim() + "</AT_PROJ> ");
 		}
 
 		matcher = Pattern.compile(" \\d\\.\\d\\.\\d{2}\\.\\d{2}\\s+(- )?[</>A-ZÇÁÉÍÓÚÂÊÔÃÕÀàa-zçáéíóúâêôãõ, -.]+ ").matcher(tabela);
 		while (matcher.find()){
+			especificacao += " <ORIG>" + matcher.group(0).trim() + "</ORIG> ";
 			tabela = tabela.replaceFirst(matcher.group(0), " <ORIG>" + matcher.group(0).trim() + "</ORIG> ");
 		}
 
 		matcher = Pattern.compile(" \\d{4}\\.\\d{2}\\.\\d{2}\\s+(- )?[</>A-ZÇÁÉÍÓÚÂÊÔÃÕÀ, -.]+ ").matcher(tabela);
 		while (matcher.find()){
+			especificacao += " <ORIG>" + matcher.group(0).trim() + "</ORIG> ";
 			tabela = tabela.replaceFirst(matcher.group(0), " <ORIG>" + matcher.group(0).trim() + "</ORIG> ");
 		}
 
 		matcher = Pattern.compile("(FISCAL)?\\s+\\d{4} ").matcher(tabela);
 		while (matcher.find()){
 			if (matcher.group(1) == null){
+				fonte += " <FON>" + matcher.group(0).trim() + "</FON> ";
 				tabela = tabela.replaceFirst(matcher.group(0), " <FON>" + matcher.group(0).trim() + "</FON> ");
 			}
 		}
+		
+		fonte += "</FONTE>";
 
 		matcher = Pattern.compile("(TOTAL)?(\\s+(\\d{1,3}\\.)?\\d{1,3}\\.\\d{3},\\d{2})").matcher(tabela);
 		while (matcher.find()){
 			if (matcher.group(1) != null){
 				tabela = tabela.replaceFirst(matcher.group(2), " <TOT>" + matcher.group(2).trim() + "</TOT>");
 			} else {
+				valor += 
 				tabela = tabela.replaceFirst(matcher.group(2), " <VAL>" + matcher.group(2).trim() + "</VAL>");
 			}
 		}
