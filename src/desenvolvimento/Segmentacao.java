@@ -1401,57 +1401,28 @@ public class Segmentacao {
 					matcher = padraoLeis.matcher(decretoSaida);
 
 					while (matcher.find() && (matcher.group(7) != null  || matcher.group(9) != null)){ //&& (matcher.group(6) != null || matcher.group(10) != null || matcher.group(11) != null)){
-
 						entreTags = matcher.group(1);
-
 						String tipoDoc = tiposDocumentos.get(matcher.group(3).trim());
-
 						textoModificado = " <" +  tipoDoc;
-
 						//	System.out.println("Leis1 " + entreTags);
-
-
-
 						if (matcher.group(9) == null && matcher.group(7) != null){
-
 							if (matcher.group(7).contains("/")){
-
 								textoModificado += " numeracao=" + matcher.group(7).split("/")[0] + " ano=" + matcher.group(7).split("/")[1];
-
 							} else{
-
 								textoModificado += " numeracao=" + matcher.group(7);
-
 							}
-
-
-
 						} else if(matcher.group(7) == null && matcher.group(9) != null){
-
-							textoModificado += " data=" + (matcher.group(12).length() < 2? "0" + matcher.group(12) : matcher.group(12))
-
-									+ "-";
-
+							textoModificado += " data=" + (matcher.group(12).length() < 2? "0" + matcher.group(12) : matcher.group(12))	+ "-";
 							if  (matcher.group(14).contains(".") || matcher.group(14).contains("/") || matcher.group(14).contains("-")){
-
 								textoModificado += (matcher.group(15).length() < 2? "0" + matcher.group(15): matcher.group(15)) + "-" + matcher.group(17);
-
 							} else{
-
 								textoModificado += numeracaoMeses.get(matcher.group(15).toLowerCase()) + "-" + matcher.group(17);
-
 							}
-
-						} else if (matcher.group(7) != null && matcher.group(15) != null){ // 12 é dia, 15 é mês, 17 ano
-
-							textoModificado += " numeracao=" + matcher.group(8);
-
-							textoModificado += " data=" + (matcher.group(14).length() < 2? "0" + matcher.group(14) : matcher.group(14))
-
-									+ "-";
+						} else if (matcher.group(6) != null && matcher.group(15) != null){ // 12 é dia, 15 é mês, 17 ano
+							textoModificado += " numeracao=" + matcher.group(6);
+							textoModificado += " data=" + (matcher.group(12).length() < 2? "0" + matcher.group(12) : matcher.group(12)) + "-";
 
 							if  (matcher.group(14).contains(".") || matcher.group(14).contains("/") || matcher.group(14).contains("-")){
-
 								textoModificado += (matcher.group(15).length() < 2? "0" + matcher.group(15): matcher.group(15)) + "-" + matcher.group(17);
 
 							} else{
@@ -1461,11 +1432,8 @@ public class Segmentacao {
 							}
 
 						} else if (matcher.group(7) != null && matcher.group(17) != null){
-
 							textoModificado += " numeracao=" + matcher.group(7);
-
 							textoModificado += " ano=" + matcher.group(17);
-
 						}
 
 
@@ -3391,10 +3359,6 @@ public class Segmentacao {
 		tabela = tabela.replaceAll("<(/)?tr>", "");
 		tabela = tabela.replaceAll("<(/)?tbody>", "");
 		tabela = tabela.replaceAll("\t", "  ");
-		String especificacao = "<ESPECIFICACAO>";
-		String fonte = "<FONTE>";
-		String valor = "<VALOR>";
-		String total;
 
 		matcher = Pattern.compile("\\([A-ZÇÁÉÍÓÚÂÊÔÃÕ ]+\\)").matcher(tabela);
 		while (matcher.find()){
@@ -3404,68 +3368,78 @@ public class Segmentacao {
 
 		matcher = Pattern.compile(" \\d{5}\\s*(- )?[</>A-ZÇÁÉÍÓÚÂÊÔÃÕÀ, -]+ ").matcher(tabela);
 		while (matcher.find()){
-			especificacao += "<ESPEC><ID_ORG_G>" + matcher.group(0).trim() + "</ID_ORG_G> "; 
-			//tabela = tabela.replaceFirst(matcher.group(0), " <ID_ORG_G>" + matcher.group(0).trim() + "</ID_ORG_G> ");
+			tabela = tabela.replaceFirst(matcher.group(0), " <ID_ORG_G>" + matcher.group(0).trim() + "</ID_ORG_G> ");
 		}
 
 		matcher = Pattern.compile(" \\d{5}\\s*(- )?[</>A-ZÇÁÉÍÓÚÂÊÔÃÕÀàa-zçáéíóúâêôãõ, -]+ ").matcher(tabela);
 		while (matcher.find()){
-			especificacao += " <ID_ORG>" + matcher.group(0).trim() + "</ID_ORG> ";
-			//tabela = tabela.replaceFirst(matcher.group(0), " <ID_ORG>" + matcher.group(0).trim() + "</ID_ORG> ");
+			tabela = tabela.replaceFirst(matcher.group(0), " <ID_ORG>" + matcher.group(0).trim() + "</ID_ORG> ");
 		}
 
 		matcher = Pattern.compile("( ([<A-ZÇÁÉÍÓÚÂÊÔÀ][/>àa-zçáéíóúâêôãõ .-]+)+):").matcher(tabela);
 		while (matcher.find()){
-			especificacao += " <TIPO>" + matcher.group(1).trim() + "</TIPO>";
-			tabela = tabela.replaceFirst(matcher.group(1), " <TIPO>" + matcher.group(1).trim() + "</TIPO>");
+			tabela = tabela.replaceFirst(matcher.group(1), " <DESCR_PROJ><TIPO>" + matcher.group(1).trim() + "</TIPO>");
 		}
 
 		matcher = Pattern.compile(" \\d{2}\\.\\d{3}\\.\\d{4}\\.\\d{4,5}\\s*(- )?[</>A-ZÇÁÉÍÓÚÂÊÔÃÕÀàa-zçáéíóúâêôãõ ,.]+ ").matcher(tabela);
 		while (matcher.find()){
-			especificacao += " <AT_PROJ>" + matcher.group(0).trim() + "</AT_PROJ> ";
 			tabela = tabela.replaceFirst(matcher.group(0), " <AT_PROJ>" + matcher.group(0).trim() + "</AT_PROJ> ");
 		}
 
 		matcher = Pattern.compile(" \\d\\.\\d\\.\\d{2}\\.\\d{2}\\s+(- )?[</>A-ZÇÁÉÍÓÚÂÊÔÃÕÀàa-zçáéíóúâêôãõ, -.]+ ").matcher(tabela);
 		while (matcher.find()){
-			especificacao += " <ORIG>" + matcher.group(0).trim() + "</ORIG> ";
-			tabela = tabela.replaceFirst(matcher.group(0), " <ORIG>" + matcher.group(0).trim() + "</ORIG> ");
+			tabela = tabela.replaceFirst(matcher.group(0), " <DESCR_OGM><OGM>" + matcher.group(0).trim() + "</OGM> ");
 		}
 
 		matcher = Pattern.compile(" \\d{4}\\.\\d{2}\\.\\d{2}\\s+(- )?[</>A-ZÇÁÉÍÓÚÂÊÔÃÕÀ, -.]+ ").matcher(tabela);
 		while (matcher.find()){
-			especificacao += " <ORIG>" + matcher.group(0).trim() + "</ORIG> ";
-			tabela = tabela.replaceFirst(matcher.group(0), " <ORIG>" + matcher.group(0).trim() + "</ORIG> ");
+			tabela = tabela.replaceFirst(matcher.group(0), " <DESCR_OGM><OGM>" + matcher.group(0).trim() + "</OGM> ");
 		}
-
+		
 		matcher = Pattern.compile("(FISCAL)?\\s+\\d{4} ").matcher(tabela);
 		while (matcher.find()){
 			if (matcher.group(1) == null){
-				fonte += " <FON>" + matcher.group(0).trim() + "</FON> ";
 				tabela = tabela.replaceFirst(matcher.group(0), " <FON>" + matcher.group(0).trim() + "</FON> ");
 			}
 		}
 		
-		fonte += "</FONTE>";
 
 		matcher = Pattern.compile("(TOTAL)?(\\s+(\\d{1,3}\\.)?\\d{1,3}\\.\\d{3},\\d{2})").matcher(tabela);
 		while (matcher.find()){
 			if (matcher.group(1) != null){
 				tabela = tabela.replaceFirst(matcher.group(2), " <TOT>" + matcher.group(2).trim() + "</TOT>");
 			} else {
-				valor += 
 				tabela = tabela.replaceFirst(matcher.group(2), " <VAL>" + matcher.group(2).trim() + "</VAL>");
 			}
 		}
-
-		matcher = Pattern.compile("<(AT_PROJ|ID_ORG|ID_ORG_G)>([A-ZÁÉÍÓÚÂÊÔÃÕÇÀàça-záéíóúâêôã<>,0-9/ -.]+)</(AT_PROJ|ID_ORG|ID_ORG_G)>\\s*<(VAL|FON)>[0-9.,]+</(VAL|FON)>\\s+([A-ZÁÉÍÓÚÂÊÔÃÕÇça-záéíóúâêôã,/ -.]+)<").matcher(tabela);
+		
+		matcher = Pattern.compile("<(AT_PROJ|ID_ORG|ID_ORG_G)>([A-ZÁÉÍÓÚÂÊÔÃÕÇÀàça-záéíóúâêôã<>,0-9/ -.]+)</(AT_PROJ|ID_ORG|ID_ORG_G)>\\s*<(VAL|FON)>[0-9.,]+</(VAL|FON)>\\s+([A-ZÁÉÍÓÚÂÊÔÃÕÇça-záéíóúâêôãõ,/ -.]+)<").matcher(tabela);
 		while (matcher.find()){
-			tabela = tabela.replaceFirst(matcher.group(2), matcher.group(2) + " " + matcher.group(6).trim() + "</" + matcher.group(1)+ "> ");
+			String aux = matcher.group(6).trim();
+			tabela = tabela.replace(matcher.group(6), " ");
+			tabela = tabela.replaceFirst(matcher.group(2), matcher.group(2) + " " + aux);
+		}
+		
+		String[] aux = tabela.split("</OGM>");
+		for (int i = 0; i < aux.length; i++){
+			
+		}
+		
+		matcher = Pattern.compile("</OGM>(\\s*(<FON>[0-9]{4}</FON>\\s*)?<VAL>[0-9.,]+</VAL>)").matcher(tabela);
+		while (matcher.find()){
+			tabela = tabela.replaceFirst("\\Q" + matcher.group(1) + "\\E", matcher.group(1).trim() + "</DESCR_OGM> ");
+		}
+		
+		
+		matcher = Pattern.compile("</TIPO>:(\\s*[A-ZÁÉÍÓÚÂÊÔÃÕÇÀàça-záéíóúâêôãõ<>,0-9/ -_.]+\\s*<DESCR_OGM>[A-ZÁÉÍÓÚÂÊÔÃÕÇÀàça-záéíóúâêôãõ<>,0-9/ -.]+</DESCR_OGM>\\s*)(TOTAL|<DESCR_PROJ>)").matcher(tabela);
+		while (matcher.find()){
+			System.out.println("PASSOU AQUI --------------------------------------------");
+
+			tabela = tabela.replaceFirst("\\Q" + matcher.group(1) + "\\E", matcher.group(1).trim() + "</DESCR_PROJ> ");
 		}
 
 		tabela = tabela.replaceAll("\\s{2,}", " ");
 
 		return tabela;
 	}
-
 }
