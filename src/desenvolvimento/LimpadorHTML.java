@@ -290,10 +290,6 @@ public class LimpadorHTML {
 					decreto = decreto.replaceAll(removerTagAbertura, "");
 					decreto = decreto.replaceAll(removerTagFim, "");
 					decreto = decreto.replaceAll("\t", "");
-					//String porEnquanto2 = decreto.split("Independência do Brasil\\.")[1];
-					//porEnquanto2 = porEnquanto2.split("ANEXO")[0];
-					
-					//decreto = decreto.replace(porEnquanto2, porEnquanto);
 					decreto = decreto.trim();
 					
 					//Escreve o decreto
