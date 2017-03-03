@@ -149,11 +149,9 @@ public class RemovedorFormatacaoCaracteresEspHTML {
 
 
 				//conserta a numeração do decreto
-
 				padrao = Pattern.compile("(\\d{1,3})\\s*\\.\\s+(\\d{3})[^º]");
 				matcher = padrao.matcher(decreto);
 				if (matcher.find()){
-					//System.out.println(nomeArquivo + "  numeracaoDecreto" + "   "+ matcher.group(1) + matcher.group(2));
 					substituirPor = matcher.group(1) + "." + matcher.group(2);
 					decreto = decreto.replaceFirst("\\d{1,3}\\s*\\.\\s+(\\d{3})[^º]", substituirPor);
 				}
@@ -163,18 +161,15 @@ public class RemovedorFormatacaoCaracteresEspHTML {
 				matcher = padrao.matcher(decreto);
 
 				if (matcher.find()){
-					//System.out.println(nomeArquivo + "  ?");
 					substituirPor = matcher.group(1) + matcher.group(2);
 					decreto = decreto.replaceFirst("\\w\\Q?\\E\\w", substituirPor);	
 				}
 				String[] partes = decreto.split("Palácio do Campo das Princesas");
 
 				padrao = Pattern.compile("( ){2,}(\\w)");
-
 				for (int k = 0; k < partes.length && k != 1; k++){
 					matcher = padrao.matcher(partes[k]);
 					while (matcher.find()){
-						//System.out.println(nomeArquivo + "  espaço letra");
 						substituirPor = " " + matcher.group(2);
 						partes[k] = partes[k].replaceFirst("( ){2,}(\\w)", substituirPor);
 					}
@@ -249,11 +244,11 @@ public class RemovedorFormatacaoCaracteresEspHTML {
 				//correção de palavras
 				decreto = decreto.replaceAll("A( )+tiva", "Ativa");
 				decreto = decreto.replaceAll("Policia", "Polícia");
-				decreto = decreto.replaceAll("CON S I D E R AN DO", "CONSIDERANDO");
+				decreto = decreto.replaceAll("C\\s*O\\s*N\\*\\s*S\\s*I\\s*D\\s*E\\s*R\\s*A\\s*N\\s*D\\s*O", "CONSIDERANDO");
 				decreto = decreto.replaceAll(" ONSIDERANDO", " CONSIDERANDO");
 				//garante que há ao menos dois espaços na hora da segmentação, é necessário para o funcionamento do regex
 				decreto = decreto.replaceAll("GVERNO|GPVERNO", "GOVERNO");
-				decreto = decreto.replaceAll("GVERNADOR", "GOVERNADOR");
+				decreto = decreto.replaceAll("GVERNADOR|GPVERNADOR", "GOVERNADOR");
 				decreto = decreto.replaceAll("MEORIAL", "MEMORIAL");
 				decreto = decreto.replaceAll("Conselho estadual", "Conselho Estadual");
 				decreto = decreto.replaceAll(" n °", " nº");

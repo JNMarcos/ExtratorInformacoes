@@ -30,6 +30,11 @@ public class Segmentacao {
 	private static Hashtable<String, Integer> quantidadeAnexosTabela = new Hashtable<>();
 	private static Hashtable<String, Integer> quantidadeTabelaOrcamentarias= new Hashtable<>();
 	private static Map<String, Integer> contadorTiposDecreto = new Hashtable<>();
+	private static Hashtable<String, Integer> quantidadeDecretosTabela = new Hashtable<>();
+	private static Hashtable<String, Integer> quantidadeDecretosTabelaOrcamentaria = new Hashtable<>();
+	private static Hashtable<String, Integer> somaDecretosTabela = new Hashtable<>();
+	private static Hashtable<String, Integer> somaDecretosTabelaOrcamentaria = new Hashtable<>();
+
 	private static Hashtable<String, Integer> nomePessoas = new Hashtable<>();
 
 	public static void main(String[] args) {
@@ -45,6 +50,10 @@ public class Segmentacao {
 		File c = new File ("tabelasAno");
 		File d = new File("nomePessoas");
 		File f = new File("tabelaOrcamentariaAno");
+		File g = new File("qtdDecretosComTabela");
+		File h = new File("qtdDecretosComTabelaOrcamentaria");
+		File y = new File("somaDecretosComTabela");
+		File z = new File("somaDecretosComTabelaOrcamentaria");
 
 		//"Cria-se" os Files que apontam para as pastas dos decretos
 		File[] pastas = new File[3];
@@ -76,9 +85,16 @@ public class Segmentacao {
 		BufferedWriter bwd = null;
 		FileWriter fwf;
 		BufferedWriter bwf = null;
+		FileWriter fwg;
+		BufferedWriter bwg = null;
+		FileWriter fwh;
+		BufferedWriter bwh = null;
+		FileWriter fwi;
+		BufferedWriter bwi = null;
+		FileWriter fwj;
+		BufferedWriter bwj = null;
 		FileWriter fwarq;
 		BufferedWriter bwarq = null;
-
 		String nomeArquivo = null;
 		File arquivoPasta;
 
@@ -106,7 +122,7 @@ public class Segmentacao {
 		String regexInfo = "(\\Q(ERRATA PUBLICADA NO DI¡RIO OFICIAL DE \\E\\d{1,2} DE [A-Z«]{4,10} DE \\d{4}\\Q)\\E|\\Q(REPUBLICADO POR HAVER SAÕDO COM INCORRE«√O NO ORIGINAL)\\E|\\Q(Revogado\\E [0-9A-Za-zÁ„‡·‚ÈÍÌÛÙı˙¬√¡¿… Õ”‘’⁄«\"\'\\Q!?&$%:@#;,/ß∫∞™.<>-_\\\\E \n\t\u00A7\u002D]{5,70}\\)|\\Q(Vide errata no final do texto.)\\E)";
 
 		//regex de conserto
-		String regexConsiderando = "<CONSIDERACOES>([0-9A-Za-zÁ„‡·‚ÈÍÌÛÙı˙¬√¡¿… Õ”‘’⁄«\"\'\\Q()!?&$ß%:@#;=/,∫∞™.<>-_\\\\E \n\t\u00A7]+)</CONSIDERACOES>";
+		String regexConsiderando = "<CONSS>([0-9A-Za-zÁ„‡·‚ÈÍÌÛÙı˙¬√¡¿… Õ”‘’⁄«\"\'\\Q()!?&$ß%:@#;=/,∫∞™.<>-_\\\\E \n\t\u00A7]+)</CONSS>";
 		String regexAssinatura = "<ASS>([A-Za-zÁ„‡·‚ÈÍÌÛÙı˙¬√¡¿… Õ”‘’⁄«\'\\Q()=,.<>-\\\\E \n\t]+)</ASS>";
 		String regexAnexo = "<ANEXOS>([0-9A-Za-zÁ„‡·‚ÈÍÌÛÙı˙¬√¡¿… Õ”‘’⁄«\"\'\\Q()!?&$ß%:@#=;/,∫∞™.<>-_\\\\E \n\t\u00A7\u002D]+)</ANEXOS>";//sÛ esse tem sinal igual
 
@@ -220,6 +236,8 @@ public class Segmentacao {
 		Matcher matcher;
 		Matcher matcherAuxiliar;
 
+		popularAsHashtablesSoma();
+		
 		Hashtable<String, String> tiposDocumentos = new Hashtable<>();
 		tiposDocumentos.put("Lei", "LE");
 		tiposDocumentos.put("Lei Complementar", "LC");
@@ -273,6 +291,14 @@ public class Segmentacao {
 			bwd = new BufferedWriter(fwd);
 			fwf = new FileWriter(f);
 			bwf = new BufferedWriter(fwf);
+			fwg = new FileWriter(g);
+			bwg = new BufferedWriter(fwg);
+			fwh = new FileWriter(h);
+			bwh = new BufferedWriter(fwh);
+			fwi = new FileWriter(y);
+			bwi = new BufferedWriter(fwi);
+			fwj = new FileWriter(z);
+			bwj = new BufferedWriter(fwj);
 			bwd.write("\nDados\n");
 			bwd.newLine();
 		} catch (IOException e1) {
@@ -300,6 +326,14 @@ public class Segmentacao {
 				bwc.newLine();
 				bwf.write("\nDados para o ano de " + anosDecretos[i]);
 				bwf.newLine();
+				bwg.write("\nDados para o ano de " + anosDecretos[i]);
+				bwg.newLine();
+				bwh.write("\nDados para o ano de " + anosDecretos[i]);
+				bwh.newLine();
+				bwi.write("\nDados para o ano de " + anosDecretos[i]);
+				bwi.newLine();
+				bwj.write("\nDados para o ano de " + anosDecretos[i]);
+				bwj.newLine();
 			} catch (IOException e1) {
 				System.out.println("N„o conseguiu escrever no documento");
 			}
@@ -332,7 +366,7 @@ public class Segmentacao {
 					fr.close();
 					decretoIntermediario = decreto;
 					decretoSaida = "";
-					decretoSaida+= "<DECRETO>\n";
+					decretoSaida+= "<DECR>\n";
 
 					matcher = padraoInfo.matcher(decretoIntermediario);
 					while (matcher.find()){
@@ -355,25 +389,25 @@ public class Segmentacao {
 					matcherAuxiliar = padraoTipoDecreto2.matcher(decretoIntermediario);
 					if (matcherAuxiliar.find()){
 						entreTags = matcherAuxiliar.group(1) + " " + matcherAuxiliar.group(2);
-						decretoSaida += "<DESCR>" +	entreTags + "<";
+						decretoSaida += "<EM>" +	entreTags + "<";
 						tipo = matcherAuxiliar.group(1);
 						contadorTiposDecreto.put(matcherAuxiliar.group(1), contadorTiposDecreto.get(matcherAuxiliar.group(1)) + 1);
 						decretoIntermediario = decretoIntermediario.replace(entreTags, "");
 					} else if (matcher.find()){
 						entreTags = matcher.group(1) + " " + matcher.group(2);
-						decretoSaida += "<DESCR>" + entreTags + "<";
+						decretoSaida += "<EM>" + entreTags + "<";
 						tipo = matcher.group(1);
 						contadorTiposDecreto.put(matcher.group(1), contadorTiposDecreto.get(matcher.group(1)) + 1);
 						decretoIntermediario = decretoIntermediario.replace(entreTags, "");
 					} else{
-						bwarq.write(i + "     " + nomeArquivo + "     " + "DESCRICAO");
+						bwarq.write(i + "     " + nomeArquivo + "     " + "EMENTA");
 						bwarq.newLine();
 					}
 
 					decretoSaida = decretoSaida.replaceFirst("O\\s*<", " ");
 					String[] partes = decretoSaida.split("GOVERNADOR D(O|E) ESTADO|GOVERNO DO ESTADO|Governador do Estado de Pernambuco|PRESIDENTE DA ASSEMBLEIA LEGISLATIVA DO ESTADO DE PERNAMBUCO");
 					decretoSaida = partes[0].trim();
-					decretoSaida += "</DESCR>";
+					decretoSaida += "</EM>";
 
 					matcher = padraoAtribuicoes.matcher(decretoIntermediario);
 					matcherAuxiliar = padraoAtribuicoes2.matcher(decretoIntermediario);
@@ -406,8 +440,8 @@ public class Segmentacao {
 					matcher = padraoConsideracoes.matcher(decretoIntermediario);
 					matcherAuxiliar = null;
 					if (matcher.find()){
-						decretoSaida += "<CONSIDERACOES>" + matcher.group(1).trim() + " " 
-								+ matcher.group(2).trim() + "</CONSIDERACOES>";
+						decretoSaida += "<CONSS>" + matcher.group(1).trim() + " " 
+								+ matcher.group(2).trim() + "</CONSS>";
 					} else if (decretoIntermediario.contains("CONSIDERANDO")){
 						bwarq.write(i + "     " + nomeArquivo + "     " + "CONSIDERACOES");
 						bwarq.newLine();
@@ -416,22 +450,22 @@ public class Segmentacao {
 					matcher = padraoCorpo4.matcher(decretoIntermediario);
 					matcherAuxiliar = padraoCorpo.matcher(decretoIntermediario);
 					if (matcher.find()){
-						decretoSaida += "<DECRETAMENTO>" + matcher.group(1).trim() + " "
-								+ matcher.group(2).trim() + "</DECRETAMENTO>";
+						decretoSaida += "<ORD>" + matcher.group(1).trim() + " "
+								+ matcher.group(2).trim() + "</ORD>";
 					} else if (matcherAuxiliar.find()){
-						decretoSaida += "<DECRETAMENTO>" + matcherAuxiliar.group(1).trim() + " "
-								+ matcherAuxiliar.group(2).trim() + "</DECRETAMENTO>";
+						decretoSaida += "<ORD>" + matcherAuxiliar.group(1).trim() + " "
+								+ matcherAuxiliar.group(2).trim() + "</ORD>";
 					} else{
 						matcher = padraoCorpo2.matcher(decretoIntermediario);
 						matcherAuxiliar = padraoCorpo3.matcher(decretoIntermediario);
 						if (matcher.find()) {
-							decretoSaida += "<DECRETAMENTO>" + matcher.group(1).trim() + " "
-									+ matcher.group(2).trim() + "</DECRETAMENTO>";
+							decretoSaida += "<ORD>" + matcher.group(1).trim() + " "
+									+ matcher.group(2).trim() + "</ORD>";
 						} else if (matcherAuxiliar.find()){
-							decretoSaida += "<DECRETAMENTO>" + matcherAuxiliar.group(1).trim() + " "
-									+ matcherAuxiliar.group(2).trim() + "</DECRETAMENTO>";	
+							decretoSaida += "<ORD>" + matcherAuxiliar.group(1).trim() + " "
+									+ matcherAuxiliar.group(2).trim() + "</ORD>";	
 						}else{
-							bwarq.write(i + "     " + nomeArquivo + "     " + "DECRETAMENTO");
+							bwarq.write(i + "     " + nomeArquivo + "     " + "ORDENAMENTO");
 							bwarq.newLine();
 						}
 					}
@@ -511,28 +545,32 @@ public class Segmentacao {
 					if (matcher.find()){
 						entreTags = matcher.group(1);
 						segmentosConsAss = entreTags.split("( ){2,}");
+
 						textoModificado = "";
 						nomePessoa = segmentosConsAss[0].replaceFirst("Governador do Estado|GOVERNADOR DO ESTADO", "").trim();
 						textoModificado += "<ASS_GOV>" + nomePessoa + "</ASS_GOV> " + segmentosConsAss[0].replaceFirst(nomePessoa, "");
 
-							List<String> chavesPessoas = new ArrayList<>(nomePessoas.keySet());
+						if (nomeArquivo.contains("43.133")){
+							System.out.println(entreTags + "   " + nomePessoa);
+						}
+						/*List<String> chavesPessoas = new ArrayList<>(nomePessoas.keySet());
 							for (int p = 0; p < chavesPessoas.size(); p++){
 								if (nomePessoa.contains(chavesPessoas.get(p))){
 									nomePessoas.put(chavesPessoas.get(p), nomePessoas.get(chavesPessoas.get(p)) + 1);
 								}
-							}
+							}*/
 						for (int k = 1; k < segmentosConsAss.length; k++){
 							//System.out.println(segmentosConsAss[k]);
 							nomePessoa = segmentosConsAss[k].trim();
 							textoModificado += "<ASS_OUTRO>" + nomePessoa + "</ASS_OUTRO>\n";
-							chavesPessoas = new ArrayList<>(nomePessoas.keySet());
+							/*chavesPessoas = new ArrayList<>(nomePessoas.keySet());
 							for (int p = 0; p < chavesPessoas.size(); p++){
 								if (nomePessoa.contains(chavesPessoas.get(p))){
 									nomePessoas.put(chavesPessoas.get(p), nomePessoas.get(chavesPessoas.get(p)) + 1);
 								} else {
 									nomePessoas.put(nomePessoa, 1);
 								}
-							}
+							}*/
 						}
 						decretoSaida = decretoSaida.replaceFirst("\\Q" + entreTags +"\\E", textoModificado);
 					}
@@ -546,6 +584,25 @@ public class Segmentacao {
 						quantidadeDecretosAnexos.put(tipo, quantidadeDecretosAnexos.get(tipo) + 1);
 
 						entreTags = matcher.group(1);
+
+						if (entreTags.contains("TBL")){
+							quantidadeDecretosTabela.containsKey(tipo);
+							quantidadeDecretosTabela.put(tipo, quantidadeDecretosTabela.get(tipo) + 1);
+
+							somaDecretosTabela.containsKey(tipo);
+							somaDecretosTabela.put(tipo, somaDecretosTabela.get(tipo) + 1);
+							if (entreTags.contains("CR…DITO SUPLEMENTAR") || 
+									entreTags.contains("ANULA«√O DE DOTA«√O")
+									|| entreTags.contains("EXCESSO DE ARRECADA«√O")
+									|| entreTags.contains("R$")){
+								somaDecretosTabelaOrcamentaria.containsKey(tipo);
+								somaDecretosTabelaOrcamentaria.put(tipo, somaDecretosTabelaOrcamentaria.get(tipo) + 1);
+							} else {
+								entreTags.replace("TBL", "TBL tipo=outro");
+							}
+						}
+						
+
 						if (entreTags.startsWith("ANEXO ⁄NICO")){
 							if (verificarSeTabela(entreTags, tipo) == true){
 								if (entreTags.contains("ANULA«√O DE DOTA«√O") || 
@@ -999,7 +1056,7 @@ public class Segmentacao {
 						}
 
 						textoModificado += entreTags.trim() + "</PROG>";
-						textoModificado = removerdorSinaisFinaisEntreTags(textoModificado, "MUN");
+						textoModificado = removerdorSinaisFinaisEntreTags(textoModificado, "PROG");
 
 						if (textoModificado.split("</CAR>").length != textoModificado.split("<CAR>").length){
 							textoModificado = textoModificado.replace("</CAR></PROG>", "</PROG></CAR>");
@@ -1158,7 +1215,7 @@ public class Segmentacao {
 					decretoSaida = decretoSaida.replaceAll(" m2"," m\u00B2");
 					decretoSaida = decretoSaida.replaceAll(" m3"," m\u00B3");
 					decretoSaida = decretoSaida.replaceAll("&sup3;","\u00B3");
-					decretoSaida+= "</DECRETO>";
+					decretoSaida+= "</DECR>";
 
 					a.createNewFile();
 					fw = new FileWriter(a);
@@ -1198,6 +1255,14 @@ public class Segmentacao {
 					bwc.newLine();
 					bwf.write(contador.get(v) + "    " + quantidadeTabelaOrcamentarias.get(contador.get(v)));
 					bwf.newLine();
+					bwg.write(contador.get(v) + "    " + quantidadeDecretosTabela.get(contador.get(v)));
+					bwg.newLine();
+					bwh.write(contador.get(v) + "    " + quantidadeDecretosTabelaOrcamentaria.get(contador.get(v)));
+					bwh.newLine();
+					bwi.write(contador.get(v) + "    " + somaDecretosTabela.get(contador.get(v)));
+					bwi.newLine();
+					bwj.write(contador.get(v) + "    " + somaDecretosTabelaOrcamentaria.get(contador.get(v)));
+					bwj.newLine();
 				}
 
 				contador = new ArrayList<>(nomePessoas.keySet());
@@ -1219,6 +1284,14 @@ public class Segmentacao {
 			bwd.close();
 			bwf.flush();
 			bwf.close();
+			bwg.flush();
+			bwg.close();
+			bwh.flush();
+			bwh.close();
+			bwi.flush();
+			bwi.close();
+			bwj.flush();
+			bwj.close();
 		}  catch (IOException e) {
 			System.out.println("Os streams foram fechados corretamente.");
 		}
@@ -1229,7 +1302,7 @@ public class Segmentacao {
 		if (entreTags.contains("TBL")){
 			isTabela = true;
 			quantidadeAnexosTabela.put(tipo, quantidadeAnexosTabela.get(tipo) + 1);
-			System.out.println("Possui uma tabela!");
+			//System.out.println("Possui uma tabela!");
 			if (entreTags.contains("R$")){ //È uma tabela orÁament·ria
 				quantidadeTabelaOrcamentarias.put(tipo, quantidadeTabelaOrcamentarias.get(tipo) + 1);
 			}
@@ -1336,8 +1409,8 @@ public class Segmentacao {
 	public static String removerdorSinaisFinaisEntreTags(String entreTags, String tag){
 		if (entreTags.contains(",")){
 			entreTags = entreTags.replace(",</" + tag + ">", "</" + tag + ">,");
-			if (tag.equals("MUN")){
-				entreTags = entreTags.replaceAll(">,", ">, <" + tag + ">").replaceFirst(" e ", "</" + tag + "> e <" + tag + ">");
+			if (tag.equals("MUN") && (entreTags.contains(", ") || entreTags.contains(" e "))){
+				entreTags = entreTags.replaceAll(", ", ", <" + tag + ">").replaceFirst(" e ", "</" + tag + "> e <" + tag + ">");
 			}
 		} else if (entreTags.contains(";<")){
 			entreTags = entreTags.replace(";</" + tag + ">", "</" + tag + ">;");
@@ -1355,18 +1428,21 @@ public class Segmentacao {
 		//coloca o n˙mero do anexo
 		String unicoOuNumero = entreTags.replaceFirst("\\Q" + semAnexo + "\\E", "");
 
-		if (semAnexo.startsWith("DESCRI«√O")){
-			textoModificado = unicoOuNumero + " <DESCR>" + semAnexo.trim() + "</DESCR>";
-		} else if (semAnexo.startsWith("MEMORIAL")){
+		//if (semAnexo.startsWith("DESCRI«√O")){
+		//	textoModificado = unicoOuNumero + " <DESCR>" + semAnexo.trim() + "</DESCR>";
+		//} else 
+			if (semAnexo.startsWith("MEMORIAL")){
 			textoModificado = unicoOuNumero + " <MEMO>" + semAnexo.trim() + "</MEMO>";
 		} else if (semAnexo.startsWith("PLANO")){
 			textoModificado = unicoOuNumero + " <PLAN>" + semAnexo.trim() + "</PLAN>";
-		}else if (semAnexo.startsWith("FORMUL¡RIO")){
+		} else if (semAnexo.startsWith("FORMUL¡RIO")){
 			textoModificado = unicoOuNumero + " <FORM>" + semAnexo.trim() + "</FORM>";
-		} else if (semAnexo.startsWith("C”DIGO")){
-			textoModificado = unicoOuNumero + " <COD>" + semAnexo.trim() + "</COD>";
+		//} else if (semAnexo.startsWith("C”DIGO")){
+			///textoModificado = unicoOuNumero + " <COD>" + semAnexo.trim() + "</COD>";
 		} else if (semAnexo.startsWith("REGIMENTO")){
-			textoModificado = unicoOuNumero + " <REG>" + semAnexo.trim() + "</REG>";
+			textoModificado = unicoOuNumero + " <REGTO>" + semAnexo.trim() + "</REGTO>";
+		} else if (semAnexo.startsWith("REGULAMENTO")){
+			textoModificado = unicoOuNumero + " <REGUL>" + semAnexo.trim() + "</REGUL>";
 		} else if (!entreTags.contains("TBL")){
 			textoModificado = unicoOuNumero + " <OUTRO>" + semAnexo.trim() + "</OUTRO>";
 		} else {
@@ -1393,6 +1469,8 @@ public class Segmentacao {
 	}
 
 	public static void popularAsHashtables(){
+		nomePessoas.put("teste", 0);
+
 		//tem de add ativa ainda
 		contadorTiposDecreto.put("Abre", 0);
 		contadorTiposDecreto.put("Acrescenta", 0);
@@ -1553,5 +1631,169 @@ public class Segmentacao {
 		quantidadeTabelaOrcamentarias.put("Revoga", 0);
 		quantidadeTabelaOrcamentarias.put("Transfere", 0);
 		quantidadeTabelaOrcamentarias.put("Transforma", 0);
+
+		quantidadeDecretosTabela.put("Abre", 0);
+		quantidadeDecretosTabela.put("Acrescenta", 0);
+		quantidadeDecretosTabela.put("Aloca", 0);
+		quantidadeDecretosTabela.put("Altera", 0);
+		quantidadeDecretosTabela.put("Amplia", 0);
+		quantidadeDecretosTabela.put("Aprova", 0);
+		quantidadeDecretosTabela.put("Autoriza", 0);
+		quantidadeDecretosTabela.put("Atualiza", 0);
+		quantidadeDecretosTabela.put("Ativa", 0);
+		quantidadeDecretosTabela.put("Concede", 0);
+		quantidadeDecretosTabela.put("Convoca", 0);
+		quantidadeDecretosTabela.put("Cria", 0);
+		quantidadeDecretosTabela.put("Declara", 0);
+		quantidadeDecretosTabela.put("Decreta", 0);
+		quantidadeDecretosTabela.put("Define", 0);
+		quantidadeDecretosTabela.put("Delega", 0);
+		quantidadeDecretosTabela.put("Desativa", 0);
+		quantidadeDecretosTabela.put("Disciplina", 0);
+		quantidadeDecretosTabela.put("Dispıe", 0);
+		quantidadeDecretosTabela.put("Eleva", 0);
+		quantidadeDecretosTabela.put("Estabelece", 0);
+		quantidadeDecretosTabela.put("Estende", 0);
+		quantidadeDecretosTabela.put("Homologa", 0);
+		quantidadeDecretosTabela.put("Incorpora", 0);
+		quantidadeDecretosTabela.put("Institui", 0);
+		quantidadeDecretosTabela.put("Interpreta", 0);
+		quantidadeDecretosTabela.put("Introduz", 0);
+		quantidadeDecretosTabela.put("Modifica", 0);
+		quantidadeDecretosTabela.put("Promove", 0);
+		quantidadeDecretosTabela.put("Prorroga", 0);
+		quantidadeDecretosTabela.put("Qualifica", 0);
+		quantidadeDecretosTabela.put("Reabre", 0);
+		quantidadeDecretosTabela.put("Redenomina", 0);
+		quantidadeDecretosTabela.put("Regulamenta", 0);
+		quantidadeDecretosTabela.put("Relaciona", 0);
+		quantidadeDecretosTabela.put("Renova", 0);
+		quantidadeDecretosTabela.put("Revoga", 0);
+		quantidadeDecretosTabela.put("Transfere", 0);
+		quantidadeDecretosTabela.put("Transforma", 0);
+
+		quantidadeDecretosTabelaOrcamentaria.put("Abre", 0);
+		quantidadeDecretosTabelaOrcamentaria.put("Acrescenta", 0);
+		quantidadeDecretosTabelaOrcamentaria.put("Aloca", 0);
+		quantidadeDecretosTabelaOrcamentaria.put("Altera", 0);
+		quantidadeDecretosTabelaOrcamentaria.put("Amplia", 0);
+		quantidadeDecretosTabelaOrcamentaria.put("Aprova", 0);
+		quantidadeDecretosTabelaOrcamentaria.put("Autoriza", 0);
+		quantidadeDecretosTabelaOrcamentaria.put("Atualiza", 0);
+		quantidadeDecretosTabelaOrcamentaria.put("Ativa", 0);
+		quantidadeDecretosTabelaOrcamentaria.put("Concede", 0);
+		quantidadeDecretosTabelaOrcamentaria.put("Convoca", 0);
+		quantidadeDecretosTabelaOrcamentaria.put("Cria", 0);
+		quantidadeDecretosTabelaOrcamentaria.put("Declara", 0);
+		quantidadeDecretosTabelaOrcamentaria.put("Decreta", 0);
+		quantidadeDecretosTabelaOrcamentaria.put("Define", 0);
+		quantidadeDecretosTabelaOrcamentaria.put("Delega", 0);
+		quantidadeDecretosTabelaOrcamentaria.put("Desativa", 0);
+		quantidadeDecretosTabelaOrcamentaria.put("Disciplina", 0);
+		quantidadeDecretosTabelaOrcamentaria.put("Dispıe", 0);
+		quantidadeDecretosTabelaOrcamentaria.put("Eleva", 0);
+		quantidadeDecretosTabelaOrcamentaria.put("Estabelece", 0);
+		quantidadeDecretosTabelaOrcamentaria.put("Estende", 0);
+		quantidadeDecretosTabelaOrcamentaria.put("Homologa", 0);
+		quantidadeDecretosTabelaOrcamentaria.put("Incorpora", 0);
+		quantidadeDecretosTabelaOrcamentaria.put("Institui", 0);
+		quantidadeDecretosTabelaOrcamentaria.put("Interpreta", 0);
+		quantidadeDecretosTabelaOrcamentaria.put("Introduz", 0);
+		quantidadeDecretosTabelaOrcamentaria.put("Modifica", 0);
+		quantidadeDecretosTabelaOrcamentaria.put("Promove", 0);
+		quantidadeDecretosTabelaOrcamentaria.put("Prorroga", 0);
+		quantidadeDecretosTabelaOrcamentaria.put("Qualifica", 0);
+		quantidadeDecretosTabelaOrcamentaria.put("Reabre", 0);
+		quantidadeDecretosTabelaOrcamentaria.put("Redenomina", 0);
+		quantidadeDecretosTabelaOrcamentaria.put("Regulamenta", 0);
+		quantidadeDecretosTabelaOrcamentaria.put("Relaciona", 0);
+		quantidadeDecretosTabelaOrcamentaria.put("Renova", 0);
+		quantidadeDecretosTabelaOrcamentaria.put("Revoga", 0);
+		quantidadeDecretosTabelaOrcamentaria.put("Transfere", 0);
+		quantidadeDecretosTabelaOrcamentaria.put("Transforma", 0);
+	}
+	
+	public static void popularAsHashtablesSoma(){
+		somaDecretosTabelaOrcamentaria.put("Abre", 0);
+		somaDecretosTabelaOrcamentaria.put("Acrescenta", 0);
+		somaDecretosTabelaOrcamentaria.put("Aloca", 0);
+		somaDecretosTabelaOrcamentaria.put("Altera", 0);
+		somaDecretosTabelaOrcamentaria.put("Amplia", 0);
+		somaDecretosTabelaOrcamentaria.put("Aprova", 0);
+		somaDecretosTabelaOrcamentaria.put("Autoriza", 0);
+		somaDecretosTabelaOrcamentaria.put("Atualiza", 0);
+		somaDecretosTabelaOrcamentaria.put("Ativa", 0);
+		somaDecretosTabelaOrcamentaria.put("Concede", 0);
+		somaDecretosTabelaOrcamentaria.put("Convoca", 0);
+		somaDecretosTabelaOrcamentaria.put("Cria", 0);
+		somaDecretosTabelaOrcamentaria.put("Declara", 0);
+		somaDecretosTabelaOrcamentaria.put("Decreta", 0);
+		somaDecretosTabelaOrcamentaria.put("Define", 0);
+		somaDecretosTabelaOrcamentaria.put("Delega", 0);
+		somaDecretosTabelaOrcamentaria.put("Desativa", 0);
+		somaDecretosTabelaOrcamentaria.put("Disciplina", 0);
+		somaDecretosTabelaOrcamentaria.put("Dispıe", 0);
+		somaDecretosTabelaOrcamentaria.put("Eleva", 0);
+		somaDecretosTabelaOrcamentaria.put("Estabelece", 0);
+		somaDecretosTabelaOrcamentaria.put("Estende", 0);
+		somaDecretosTabelaOrcamentaria.put("Homologa", 0);
+		somaDecretosTabelaOrcamentaria.put("Incorpora", 0);
+		somaDecretosTabelaOrcamentaria.put("Institui", 0);
+		somaDecretosTabelaOrcamentaria.put("Interpreta", 0);
+		somaDecretosTabelaOrcamentaria.put("Introduz", 0);
+		somaDecretosTabelaOrcamentaria.put("Modifica", 0);
+		somaDecretosTabelaOrcamentaria.put("Promove", 0);
+		somaDecretosTabelaOrcamentaria.put("Prorroga", 0);
+		somaDecretosTabelaOrcamentaria.put("Qualifica", 0);
+		somaDecretosTabelaOrcamentaria.put("Reabre", 0);
+		somaDecretosTabelaOrcamentaria.put("Redenomina", 0);
+		somaDecretosTabelaOrcamentaria.put("Regulamenta", 0);
+		somaDecretosTabelaOrcamentaria.put("Relaciona", 0);
+		somaDecretosTabelaOrcamentaria.put("Renova", 0);
+		somaDecretosTabelaOrcamentaria.put("Revoga", 0);
+		somaDecretosTabelaOrcamentaria.put("Transfere", 0);
+		somaDecretosTabelaOrcamentaria.put("Transforma", 0);
+		
+		
+		somaDecretosTabela.put("Abre", 0);
+		somaDecretosTabela.put("Acrescenta", 0);
+		somaDecretosTabela.put("Aloca", 0);
+		somaDecretosTabela.put("Altera", 0);
+		somaDecretosTabela.put("Amplia", 0);
+		somaDecretosTabela.put("Aprova", 0);
+		somaDecretosTabela.put("Autoriza", 0);
+		somaDecretosTabela.put("Atualiza", 0);
+		somaDecretosTabela.put("Ativa", 0);
+		somaDecretosTabela.put("Concede", 0);
+		somaDecretosTabela.put("Convoca", 0);
+		somaDecretosTabela.put("Cria", 0);
+		somaDecretosTabela.put("Declara", 0);
+		somaDecretosTabela.put("Decreta", 0);
+		somaDecretosTabela.put("Define", 0);
+		somaDecretosTabela.put("Delega", 0);
+		somaDecretosTabela.put("Desativa", 0);
+		somaDecretosTabela.put("Disciplina", 0);
+		somaDecretosTabela.put("Dispıe", 0);
+		somaDecretosTabela.put("Eleva", 0);
+		somaDecretosTabela.put("Estabelece", 0);
+		somaDecretosTabela.put("Estende", 0);
+		somaDecretosTabela.put("Homologa", 0);
+		somaDecretosTabela.put("Incorpora", 0);
+		somaDecretosTabela.put("Institui", 0);
+		somaDecretosTabela.put("Interpreta", 0);
+		somaDecretosTabela.put("Introduz", 0);
+		somaDecretosTabela.put("Modifica", 0);
+		somaDecretosTabela.put("Promove", 0);
+		somaDecretosTabela.put("Prorroga", 0);
+		somaDecretosTabela.put("Qualifica", 0);
+		somaDecretosTabela.put("Reabre", 0);
+		somaDecretosTabela.put("Redenomina", 0);
+		somaDecretosTabela.put("Regulamenta", 0);
+		somaDecretosTabela.put("Relaciona", 0);
+		somaDecretosTabela.put("Renova", 0);
+		somaDecretosTabela.put("Revoga", 0);
+		somaDecretosTabela.put("Transfere", 0);
+		somaDecretosTabela.put("Transforma", 0);
+		
 	}
 }
