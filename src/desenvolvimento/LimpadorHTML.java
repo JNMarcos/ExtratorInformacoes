@@ -68,7 +68,7 @@ public class LimpadorHTML {
 
 		//Strings que contém (parte do) endereço de um arquivo 
 		String caminhoPasta;
-		String caminhoInicio = "tagsREDUZIDAS\\";//Parte final do endereço que conterá em cada pasta em caminhosDecreto os arquivos limpos 
+		String caminhoInicio = "tagsReduzidas\\";//Parte final do endereço que conterá em cada pasta em caminhosDecreto os arquivos limpos 
 		String complementoFinal = ".html";
 		String caminhoComplemento;
 		String caminho; // caminho = caminhoInicio + caminhoComplemento + caminhoFinal
@@ -114,8 +114,8 @@ public class LimpadorHTML {
 		String padraoRemoverPClique = "<p>[A-Za-z; \n\t\r\0\\&\\.,]*<br />[A-Za-z; \n\t\r\0\\&\\.,]*<br />\\s*<br />\\s*</p>";
 		String padraoRemoverDivLinks = "<div>\\W*(<a\\W+href=[A-Za-z0-9\\./:\"=?!#&;]*>[a-zA-z \\.\t]*</a>\\s*\\|?\\s*)+</div>";
 		String padraoRemoverFinalPagina = "<div>\\s*<p>\\s*Este.*";
-		String removerTagAbertura = "<(a( href=\"[A-Za-z0-9\\Q:?/\\$%\\E\u00A7_#\u002D\u002E\u00A0]+\")?|b|p|u|s|i|sup|em|span|strong|br|br /|form|body|head|div|h(1|2|3|4|5|6))>";
-		String removerTagFim = "</(a|b|p|u|s|i|sup|em|span|strong|br|form|body|head|div|h(1|2|3|4|5|6))>";
+		String removerTagAbertura = "<(a( href=\"[A-Za-z0-9\\Q:?&.=;/\"\'\\$%\\E \u00A7_#\u002D\u002E\u00A0]+\")?|b|p|u|s|i|sup|em|span|strong|br|br /|form|body|head|div|ins|sub|h(1|2|3|4|5|6))>";
+		String removerTagFim = "</(a|b|p|u|s|i|sup|em|span|strong|br|form|body|head|div|ins|sub|h(1|2|3|4|5|6))>";
 		String padraoNumeroDecreto = "DECRETO\\s*.*\\s*(\\d{2,3})\\s*\\.\\s*(\\d{3})\\s*.?\\s*(</b>)?\\s*(<b>)?.?\\s+(DE|DIA)(&nbsp;)*\\s+(\\d{1,2})[a-zA-Z&;º°]*\\s+DE\\s+([A-Za-z&Çç;]+)( )*\\s*DE\\s+(\\d{4})";
 
 		//Compilação do padrão e definição de um Matcher

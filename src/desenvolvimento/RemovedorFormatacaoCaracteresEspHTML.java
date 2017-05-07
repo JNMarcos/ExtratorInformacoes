@@ -25,7 +25,7 @@ public class RemovedorFormatacaoCaracteresEspHTML {
 	 */
 	public static void main(String[] args) {
 		String pastaDestino = "semFormatação";
-		String pastaOrigem = "tagsEliminadas";
+		String pastaOrigem = "tagsReduzidas";
 		String nomeArquivo;
 		String decreto;
 		String linha;
@@ -129,6 +129,7 @@ public class RemovedorFormatacaoCaracteresEspHTML {
 
 				//substituição de símbolos (sinais)
 				decreto = decreto.replaceAll("&nbsp;", " ");
+				decreto = decreto.replaceAll("&acute;", "\'");
 				decreto = decreto.replaceAll("&quot;", "\"");
 				decreto = decreto.replaceAll("&ldquo;", "\"");
 				decreto = decreto.replaceAll("&rdquo;", "\"");
@@ -141,8 +142,15 @@ public class RemovedorFormatacaoCaracteresEspHTML {
 				decreto = decreto.replaceAll("&mdash;", "-");
 				decreto = decreto.replaceAll("&sect;","§");
 				decreto = decreto.replaceAll("\u2033", "\"");
+				decreto = decreto.replaceAll("\u2206", "delta");
+				decreto = decreto.replaceAll("&#8710;", "delta");
+				decreto = decreto.replaceAll("â#8224;", "delta");
+				decreto = decreto.replaceAll("&shy;", "");
+				decreto = decreto.replaceAll("&frac12;", "1/2");
+				decreto = decreto.replaceAll("&frac13;", "1/3");
 				decreto = decreto.replaceAll("&acute; ", "\'");
-				decreto = decreto.replaceAll("&amp;", "&");
+				decreto = decreto.replaceAll(",000", ",00");
+				decreto = decreto.replaceAll("&amp;", "e");//antes era & mas dá erro
 				decreto = decreto.replaceAll("&hellip;", ".");
 				decreto = decreto.replaceAll("\\Qï¬?\\E", "fi");
 				decreto = decreto.replaceAll(" ", " ");
@@ -258,10 +266,11 @@ public class RemovedorFormatacaoCaracteresEspHTML {
 				decreto = decreto.replaceAll("O G O VER N ADOR DO E S T ADO", "O GOVERNADOR DO ESTADO");
 				decreto = decreto.replaceAll("D\\s*E\\s*C\\s*R\\s*E\\s*T\\s*A", "DECRETA");
 				decreto = decreto.replaceAll("SETMBRO", "SETEMBRO");
+				
 
 
 				try {
-					fw = new FileWriter(new File(arquivoPasta + "\\\\" + nomeArquivo));
+					fw = new FileWriter(new File(arquivoPasta + "\\\\" + nomeArquivo.replace("html", "xml")));
 					bw = new BufferedWriter(fw);
 					bw.write(decreto);
 					bw.flush();

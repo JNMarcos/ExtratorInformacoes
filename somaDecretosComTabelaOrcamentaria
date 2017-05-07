@@ -30,7 +30,7 @@ Altera    3
 Autoriza    0
 Interpreta    0
 Estende    0
-Estabelece    0
+Estabelece    1
 Amplia    0
 Reabre    0
 Disciplina    0
@@ -62,7 +62,7 @@ Delega    0
 Renova    0
 Modifica    0
 Atualiza    2
-Dispõe    0
+Dispõe    1
 Concede    0
 Convoca    0
 Homologa    0
@@ -71,7 +71,7 @@ Altera    5
 Autoriza    0
 Interpreta    0
 Estende    0
-Estabelece    0
+Estabelece    2
 Amplia    0
 Reabre    0
 Disciplina    0
@@ -103,7 +103,7 @@ Delega    0
 Renova    0
 Modifica    0
 Atualiza    2
-Dispõe    0
+Dispõe    1
 Concede    0
 Convoca    0
 Homologa    0
@@ -112,7 +112,7 @@ Altera    7
 Autoriza    0
 Interpreta    0
 Estende    0
-Estabelece    0
+Estabelece    2
 Amplia    0
 Reabre    1
 Disciplina    0
