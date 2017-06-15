@@ -142,17 +142,19 @@ public class RemovedorFormatacaoCaracteresEspHTML {
 				decreto = decreto.replaceAll("&mdash;", "-");
 				decreto = decreto.replaceAll("&sect;","ß");
 				decreto = decreto.replaceAll("\u2033", "\"");
-				decreto = decreto.replaceAll("\u2206", "delta");
-				decreto = decreto.replaceAll("&#8710;", "delta");
-				decreto = decreto.replaceAll("‚#8224;", "delta");
 				decreto = decreto.replaceAll("&shy;", "");
 				decreto = decreto.replaceAll("&frac12;", "1/2");
 				decreto = decreto.replaceAll("&frac13;", "1/3");
-				decreto = decreto.replaceAll("&acute; ", "\'");
+				decreto = decreto.replaceAll("&acute;", "\'");
+				decreto = decreto.replaceAll("&ugrave;", "˙");
 				decreto = decreto.replaceAll(",000", ",00");
 				decreto = decreto.replaceAll("&amp;", "e");//antes era & mas d· erro
 				decreto = decreto.replaceAll("&hellip;", ".");
+				decreto = decreto.replaceAll("‚àÜ", "\u2033");
+				decreto = decreto.replaceAll("&uml;", "");//nada mesmo
 				decreto = decreto.replaceAll("\\QÔ¨?\\E", "fi");
+				decreto = decreto.replaceAll("\\QcÃßaÃÉ\\E", "Á„");
+				decreto = decreto.replaceAll("\\QaÃ?\\E", "·");
 				decreto = decreto.replaceAll("†", " ");
 
 
@@ -234,6 +236,13 @@ public class RemovedorFormatacaoCaracteresEspHTML {
 					decreto = decreto.replaceFirst(" m (2|3)( |;|,|\\.|\\))", substituirPor);	
 				}
 				
+				padrao = Pattern.compile("(,|\\.)([A-Z¡…Õ”⁄¬ ‘a-z·ÈÌÛ˙‚ÍÙ])");
+				matcher = padrao.matcher(decreto);
+				while (matcher.find()){
+					substituirPor = matcher.group(1) + " " + matcher.group(2);
+					decreto = decreto.replaceFirst("(,|\\.)([A-Z¡…Õ”⁄¬ ‘a-z·ÈÌÛ˙‚ÍÙ])", substituirPor);	
+				}
+				
 				/*
 				padrao = Pattern.compile(":([0-9A-Za-z„‡·‚ÈÍÌÛÙı˙¬√¡¿… Õ”‘’⁄])");
 				matcher = padrao.matcher(decreto);
@@ -256,16 +265,20 @@ public class RemovedorFormatacaoCaracteresEspHTML {
 				decreto = decreto.replaceAll(" ONSIDERANDO", " CONSIDERANDO");
 				//garante que h· ao menos dois espaÁos na hora da segmentaÁ„o, È necess·rio para o funcionamento do regex
 				decreto = decreto.replaceAll("GVERNO|GPVERNO", "GOVERNO");
+				decreto = decreto.replaceAll("⁄NCIO", "⁄NICO");
 				decreto = decreto.replaceAll("GVERNADOR|GPVERNADOR", "GOVERNADOR");
 				decreto = decreto.replaceAll("MEORIAL", "MEMORIAL");
+				decreto = decreto.replaceAll("F undaÁ„o", "FundaÁ„o");
 				decreto = decreto.replaceAll("Conselho estadual", "Conselho Estadual");
 				decreto = decreto.replaceAll(" n ∞", " n∫");
 				decreto = decreto.replaceAll(" n ∫", " n∫");
 				decreto = decreto.replaceAll(" de do ", " do ");
+				decreto = decreto.replaceAll(" n o ", " n∫ ");
 				decreto = decreto.replaceAll("Oficio", "OfÌcio");
 				decreto = decreto.replaceAll("O G O VER N ADOR DO E S T ADO", "O GOVERNADOR DO ESTADO");
 				decreto = decreto.replaceAll("D\\s*E\\s*C\\s*R\\s*E\\s*T\\s*A", "DECRETA");
 				decreto = decreto.replaceAll("SETMBRO", "SETEMBRO");
+				decreto = decreto.replaceAll(" /", "/");
 				
 
 
