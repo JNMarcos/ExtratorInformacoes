@@ -610,6 +610,7 @@ public class Segmentacao {
 
 							somaDecretosTabela.containsKey(tipo);
 							somaDecretosTabela.put(tipo, somaDecretosTabela.get(tipo) + 1);
+							
 							if (entreTags.contains("CRÉDITO SUPLEMENTAR") || 
 									entreTags.contains("DOTAÇÃO")
 									|| entreTags.contains("EXCESSO DE ARRECADAÇÃO")
@@ -618,50 +619,37 @@ public class Segmentacao {
 								somaDecretosTabelaOrcamentaria.put(tipo, somaDecretosTabelaOrcamentaria.get(tipo) + 1);
 							} else {
 								entreTags.replace("TBL", "TBL tipo=\'outro\'");
-								if (nomeArquivo.contains("40.773"))
-									System.out.println("1   " + entreTags);
 							}
 						}
 
 
 						if (entreTags.startsWith("ANEXO ÚNICO")){
 							if (verificarSeTabela(entreTags, tipo) == true){
-								if (entreTags.contains("ANULAÇÃO DE DOTAÇÃO") || 
-										entreTags.contains("CRÉDITO SUPLEMENTAR") || 
-										entreTags.contains("EXCESSO DE ARRECADAÇÃO")
-										|| entreTags.contains("ORÇAMENTO FISCAL")){
-									entreTags = tabelaReformulada(entreTags);
+								if (entreTags.contains("ANULAÇÃO DE DOTAÇÃO")){
+									entreTags = tabelaReformulada(entreTags, "dot");
+								} else if (entreTags.contains("CRÉDITO SUPLEMENTAR")){
+									entreTags = tabelaReformulada(entreTags, "supl");
+								} else if (entreTags.contains("EXCESSO DE ARRECADAÇÃO")){
+									entreTags = tabelaReformulada(entreTags, "arr");
 								}
 							}
-							if (nomeArquivo.contains("42.616")){
-								System.out.println("-----------" + entreTags);
-							}
+
 							textoModificado = classificadorAnexos(entreTags);
 							decretoSaida = decretoSaida.replace(entreTags, textoModificado);
 							decretoSaida = decretoSaida.replace("<ANEXOS>", "<ANEXOS num_anexos=\'1\'>");
 						} else {
-							if (nomeArquivo.contains("40.773"))
-							System.out.println(entreTags);
 							segmentosConsAss = entreTags.split("ANEXO [IVX]{1,4}");
 							for (int k = 1; k < segmentosConsAss.length; k++){	
 								if (segmentosConsAss[k] != "" && verificarSeTabela(segmentosConsAss[k], tipo) == true){
-									if (segmentosConsAss[k].contains("ANULAÇÃO DE DOTAÇÃO") || 
-											segmentosConsAss[k].contains("CRÉDITO SUPLEMENTAR") || 
-											segmentosConsAss[k].contains("EXCESSO DE ARRECADAÇÃO")
-											|| segmentosConsAss[k].contains("ORÇAMENTO FISCAL")){
-										//System.out.println(segmentosConsAss[k]);
-										segmentosConsAss[k] = tabelaReformulada(segmentosConsAss[k]);
-										//System.out.println(segmentosConsAss[k]);
-									}
-									if (nomeArquivo.contains("40.773")){
-										System.out.println(segmentosConsAss[k]);
+									if (entreTags.contains("ANULAÇÃO DE DOTAÇÃO")){
+										segmentosConsAss[k] = tabelaReformulada(segmentosConsAss[k], "dot");
+									} else if (entreTags.contains("CRÉDITO SUPLEMENTAR")){
+										segmentosConsAss[k] = tabelaReformulada(segmentosConsAss[k], "supl");
+									} else if (entreTags.contains("EXCESSO DE ARRECADAÇÃO")){
+										segmentosConsAss[k] = tabelaReformulada(segmentosConsAss[k], "arr");
 									}
 								}
-								
 								textoModificado += classificadorAnexos(segmentosConsAss[k]);
-								if (nomeArquivo.contains("40.773")){
-									System.out.println(textoModificado);
-								}
 							}
 							decretoSaida = decretoSaida.replace(entreTags, textoModificado);
 							decretoSaida = decretoSaida.replace("<ANEXOS>", "<ANEXOS num_anexos=\'" + (segmentosConsAss.length - 1) + "\'>");
@@ -1448,65 +1436,53 @@ public class Segmentacao {
 		if (entreTags.contains("TBL")){
 			isTabela = true;
 			quantidadeAnexosTabela.put(tipo, quantidadeAnexosTabela.get(tipo) + 1);
-			//System.out.println("Possui uma tabela!");
-			if (entreTags.contains("R$")){ //é uma tabela orçamentária
+			if (entreTags.contains("R$") || entreTags.contains("TOTAL")){ //é uma tabela orçamentária
 				quantidadeTabelaOrcamentarias.put(tipo, quantidadeTabelaOrcamentarias.get(tipo) + 1);
 			}
 		}
 		return isTabela;
 	}
 
-	public static String tabelaReformulada (String tabela){
+	public static String tabelaReformulada (String tabela, String tipoTabela){
 		Matcher matcher;
 		String aux;
 		tabela = tabela.replaceAll("<(/)?td>", "");
 		tabela = tabela.replaceAll("<(/)?tr>", "");
 		tabela = tabela.replaceAll("<(/)?tbody>", "");
 		tabela = tabela.replaceAll("\t", "  ");
-		String regrasPassou = "";
 
 		matcher = Pattern.compile("\\(([A-ZÇÁÉÍÓÚÂÊÔÃÕ ]+)\\)").matcher(tabela);
 		while (matcher.find()){
 			aux = matcher.group(1);
 			tabela = tabela.replace("(" +matcher.group(1)+ ")", " ");
 			tabela = tabela.replaceFirst("<TBL>","\n<TBL\ttipo=\'orcamentaria\'>\n<TIT>" + aux.trim() + "</TIT>\n ");	
-			//regrasPassou += "TITULO";
 		}
 
 		matcher = Pattern.compile(" \\d{5}\\s*- [</>A-ZÇÁÉÍÓÚÂÊÔÃÕÀ, -]+ ").matcher(tabela);
 		while (matcher.find()){
 			tabela = tabela.replaceFirst(matcher.group(0), "\n<DESCR_ENT>\n<ID_ORG_G>" + matcher.group(0).trim() + "</ID_ORG_G> ");
-			//regrasPassou += "    DESCR_ENT";
 		}
 
 
 		matcher = Pattern.compile(" \\d{2}\\.\\d{3}\\.\\d{4}\\.\\d{3,5}\\s*(- )?[\\Q</>-,(). \'\\EA-ZÇÁÉÍÓÚÂÊÔÃÕÀàa-zçáéíóúâêôãõ]+ ").matcher(tabela);
 		while (matcher.find()){
 			tabela = tabela.replaceFirst(matcher.group(0), " \n<AT_PROJ>" + matcher.group(0).trim() + "</AT_PROJ> ");
-			//regrasPassou += "    AT_PR";
 		}
 
-		//if (nomeArquivo.contains("41.926")){
-		//System.out.println(tabela);
-		//}
 		matcher = Pattern.compile("( Atividade\\s*| \\QOp.\\E\\s*Especial\\s*| Operação\\s*Especial\\s*| Projeto\\s*)(:| )\\s*<AT_PROJ>").matcher(tabela);
-		//( ([<A-ZÇÁÉÍÓÚÂÊÔÀ][/>àa-zçáéíóúâêôãõ .-]+)+):
 		while (matcher.find()){
 			tabela = tabela.replaceFirst(matcher.group(1) + matcher.group(2), " <DESCR_PROJ><TIPO>" + matcher.group(1).trim() + "</TIPO>" + matcher.group(2));
-			//regrasPassou += "   DESCR_PR E TIPO";
 		}
 
 		matcher = Pattern.compile(" \\d{5}\\s*(- )?[</>A-ZÇÁÉÍÓÚÂÊÔÃÕÀàa-zçáéíóúâêôãõ, -]+ ").matcher(tabela);
 		while (matcher.find()){
 			tabela = tabela.replaceFirst(matcher.group(0), "\n<ID_ORG>" + matcher.group(0).trim() + "</ID_ORG> ");
-			//regrasPassou += "     ID_ORG";
 		}
 
 		matcher = Pattern.compile("(FISCAL)?\\s+\\d{4} ").matcher(tabela);
 		while (matcher.find()){
 			if (matcher.group(1) == null){
 				tabela = tabela.replaceFirst(matcher.group(0), " <FON>" + matcher.group(0).trim() + "</FON> ");
-				//regrasPassou += "   FON";
 			}
 		}
 
@@ -1517,34 +1493,24 @@ public class Segmentacao {
 			} else {
 				tabela = tabela.replaceFirst(matcher.group(2), " <VAL>" + matcher.group(2).trim() + "</VAL> ");
 			}
-
-			//regrasPassou += "   TOT/VAL";
 		}
 
 		matcher = Pattern.compile(" \\d\\.\\d\\.\\d{2}\\.\\d{2}\\s+(- )?[</>A-ZÇÁÉÍÓÚÂÊÔÃÕÀàa-zçáéíóúâêôãõ, -.]+ ").matcher(tabela);
 		while (matcher.find()){
 			tabela = tabela.replaceFirst(matcher.group(0), " \n<DESCR_OGM><OGM>" + matcher.group(0).trim() + "</OGM> ");
-			regrasPassou += "   DESCR_OGM 1";
 		}
 
 		matcher = Pattern.compile(" \\d{4}\\.\\d{2}\\.\\d{2}\\s+(- )?[</>A-ZÇÁÉÍÓÚÂÊÔÃÕÀ, -.]+ ").matcher(tabela);
 		while (matcher.find()){
 			tabela = tabela.replaceFirst(matcher.group(0), " \n<DESCR_OGM><OGM>" + matcher.group(0).trim() + "</OGM> ");
-			regrasPassou += "   DESCR_OGM 2";
 		}
 
-		regrasPassou = tabela + "\n\n\n\n";
 		matcher = Pattern.compile("</OGM>(\\s*(<FON>[0-9]{4}</FON>\\s*)?<VAL>[0-9.,]+</VAL>\\s*)").matcher(tabela);
 		while (matcher.find()){
 			tabela = tabela.replaceFirst(matcher.group(1), " " + matcher.group(1).trim() + "</DESCR_OGM> ");  //+ matcher.group(3) REMOVI P FAZER UM TESTE, MAS ANTES TAVA CERTO
-			//regrasPassou += "   DESCR_OGM FECH";
-			regrasPassou += tabela + "\n\n\n\n\n";
 		}
 
 		//CONTINUAÇÃO(\\s*<DESCR_OGM>|\\s*</TBL>|\\s*</DESCR_PROJ>)
-		//if (nomeArquivo.contains("41.691")){
-		//System.out.println(tabela);
-		//}
 		matcher = Pattern.compile("(<OGM>[A-ZÁÉÍÓÚÂÊÔÃÕÇÀàça-záéíóúâêõôã0-9\\Q<>\'\",()/ -.\\E]+)(</OGM>\\s*<VAL>[0-9.,]+</VAL>\\s*</DESCR_OGM>\\s*)([A-Za-zàáéíóúâêôãõçÇÁÀÉÍÓÚÂÊÔÃÕÇ\\Q/- .,\\E]{3,})").matcher(tabela);
 		while(matcher.find()){
 			if (!matcher.group(3).contains("TOTAL")){
@@ -1557,36 +1523,25 @@ public class Segmentacao {
 		tabela = tabela.replaceAll("[\\s0-9A-ZÁÉÍÓÚÂÊÔÃÕÇ$a-záéíóúâêôãõç]{10,}<DESCR_ENT>", "<DESCR_ENT>");
 		//corrige a tabela. textos que estão fora de at_proj passam a estar nele contidos		
 
-		//if (nomeArquivo.contains("42.117")){
-		//System.out.println(tabela);
-		//}
 		matcher = Pattern.compile("(<AT_PROJ>[A-ZÁÉÍÓÚÂÊÔÃÕÇÀàça-záéíóúâêõôã0-9\\Q<>\'\",()/ -.\\E]+)(</AT_PROJ>\\s*<VAL>[0-9.,]+</VAL>\\s*)([A-Za-zàáéíóúâêôãõçÇÁÀÉÍÓÚÂÊÔÃÕÇ\\Q/- .,\\E]{3,})(\\s*<DESCR_OGM>)").matcher(tabela);
 		while (matcher.find()){
 			String auxi = matcher.group(1) + " " + matcher.group(3) + matcher.group(2) + matcher.group(4);
 			tabela = tabela.replaceFirst(matcher.group(), auxi);
-
-			regrasPassou += "   FIM";
 		}
 
 		matcher = Pattern.compile("(<AT_PROJ>[\\Q</>-,(). \'\\EA-ZÇÁÉÍÓÚÂÊÔÃÕÀàa-zçáéíóúâêôãõ0-9]+</AT_PROJ>\\s*<VAL>[0-9.,]+</VAL>(\\s*<DESCR_OGM>[A-ZÁÉÍÓÚÂÊÔÃÕÇÀàça-zàáéíóúâêôãõ0-9\\Q<>\'\",()/ -.\\E]+</DESCR_OGM>)+\\s*)(TOTAL|<DESCR_ENT>)").matcher(tabela);
 		while (matcher.find()){
 			tabela = tabela.replaceFirst("\\Q" + matcher.group(1) + "\\E", matcher.group(1).trim() + "</DESCR_PROJ> ");
-			//regrasPassou += "   DESCR_PROJ";
-			//regrasPassou += tabela + "\n\n\n";
 		}
 
 		matcher = Pattern.compile("(</AT_PROJ>\\s*<VAL>[0-9\\Q,.\\E]+</VAL>\\s*)(</DESCR_OGM>)([\\Q-,(). \'\\EA-ZÇÁÉÍÓÚÂÊÔÃÕÀàa-zçáéíóúâêôãõ]+)(<DESCR_OGM>)").matcher(tabela);
 		while (matcher.find()){
 			tabela = tabela.replaceFirst("\\Q" + matcher.group(0) + "\\E", matcher.group(3) + matcher.group(1) + matcher.group(2) + matcher.group(4));
-			//regrasPassou += "   DESCR_PROJ";
-			//regrasPassou += tabela + "\n\n\n";
 		}
 		
 		matcher = Pattern.compile("(</OGM>\\s*<VAL>[0-9\\Q,.\\E]+</VAL>\\s*)(</DESCR_OGM>)([\\Q-,(). \'\\EA-ZÇÁÉÍÓÚÂÊÔÃÕÀàa-zçáéíóúâêôãõ]+)(TOTAL|<DESCR_ENT>)").matcher(tabela);
 		while (matcher.find()){
 			tabela = tabela.replaceFirst("\\Q" + matcher.group(0) + "\\E", matcher.group(3) + matcher.group(1) + matcher.group(2) + matcher.group(4));
-			//regrasPassou += "   DESCR_PROJ";
-			//regrasPassou += tabela + "\n\n\n";
 		}
 
 
@@ -1608,15 +1563,14 @@ public class Segmentacao {
 		tabela = novaTabela;
 		tabela = tabela.replaceFirst("</DESCR_ENT>", "");
 
-		//ANTES ERA
-		//ONDE DESCR_PROJ ->DESCR_OGM E VICE-VERSA
 		if (tabela.contains("DESCR_ENT")){
 			matcher = Pattern.compile("(</DESCR_PROJ>\\s*|</DESCR_OGM>\\s*)(TOTAL|</TBL>)").matcher(tabela);
 			while (matcher.find()){
 				tabela = tabela.replaceAll(matcher.group(0), matcher.group(1).trim() + "</DESCR_ENT> " + matcher.group(2));
-				regrasPassou += "   FIM";
 			}
 		}
+
+		tabela = tabela.replaceFirst("<TOT", "<TOT tipoTabela=\"" + "\"");
 
 		//matcher = Pattern.compile("\\s*[A-Za-z]+\\s*(</DESCR_OGM>)").matcher(tabela);
 		//while (matcher.find()){
@@ -1629,7 +1583,6 @@ public class Segmentacao {
 		//if (matcher.group(1).equals(matcher.group(2))){
 		//tabela = tabela.replaceFirst(matcher.group(1), "");
 		//}
-		regrasPassou += "   FIM";
 		return tabela;
 	}
 
