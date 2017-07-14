@@ -604,7 +604,41 @@ public class Segmentacao {
 
 						entreTags = matcher.group(1);
 
-						if (entreTags.contains("TBL")){
+						if (entreTags.startsWith("ANEXO ÚNICO")){
+							textoModificado = classificadorAnexos(entreTags, tipo);
+
+							if (textoModificado.contains("ANULAÇÃO DE DOTAÇÃO")){
+								textoModificado = tabelaReformulada(textoModificado, "dot");
+							} else if (textoModificado.contains("CRÉDITO SUPLEMENTAR")){
+								textoModificado = tabelaReformulada(textoModificado, "supl");
+							} else if (textoModificado.contains("EXCESSO DE ARRECADAÇÃO")){
+								textoModificado = tabelaReformulada(textoModificado, "arr");
+							}
+							
+							decretoSaida = decretoSaida.replace(entreTags, textoModificado);
+							decretoSaida = decretoSaida.replace("<ANEXOS>", "<ANEXOS num_anexos=\'1\'>");
+						} else {
+							segmentosConsAss = entreTags.split("ANEXO [IVX]{1,4}");
+							String modSegmentos = "";
+							for (int k = 1; k < segmentosConsAss.length; k++){
+								modSegmentos = classificadorAnexos(segmentosConsAss[k], tipo);
+								if (modSegmentos != ""){
+									if (modSegmentos.contains("ANULAÇÃO DE DOTAÇÃO")){
+										modSegmentos = tabelaReformulada(modSegmentos, "dot");
+									} else if (modSegmentos.contains("CRÉDITO SUPLEMENTAR")){
+										modSegmentos = tabelaReformulada(modSegmentos, "supl");
+									} else if (modSegmentos.contains("EXCESSO DE ARRECADAÇÃO")){
+										modSegmentos = tabelaReformulada(modSegmentos, "arr");
+									}
+								}
+								textoModificado += modSegmentos;
+							}
+							decretoSaida = decretoSaida.replace(entreTags, textoModificado);
+							decretoSaida = decretoSaida.replace("<ANEXOS>", "<ANEXOS num_anexos=\'" + (segmentosConsAss.length - 1) + "\'>");
+						}
+						
+						///TAVA ANTES DO IF 
+						if (entreTags.contains("TAB")){
 							quantidadeDecretosTabela.containsKey(tipo);
 							quantidadeDecretosTabela.put(tipo, quantidadeDecretosTabela.get(tipo) + 1);
 
@@ -620,39 +654,6 @@ public class Segmentacao {
 							} else {
 								entreTags.replace("TBL", "TBL tipo=\'outro\'");
 							}
-						}
-
-
-						if (entreTags.startsWith("ANEXO ÚNICO")){
-							if (verificarSeTabela(entreTags, tipo) == true){
-								if (entreTags.contains("ANULAÇÃO DE DOTAÇÃO")){
-									entreTags = tabelaReformulada(entreTags, "dot");
-								} else if (entreTags.contains("CRÉDITO SUPLEMENTAR")){
-									entreTags = tabelaReformulada(entreTags, "supl");
-								} else if (entreTags.contains("EXCESSO DE ARRECADAÇÃO")){
-									entreTags = tabelaReformulada(entreTags, "arr");
-								}
-							}
-
-							textoModificado = classificadorAnexos(entreTags);
-							decretoSaida = decretoSaida.replace(entreTags, textoModificado);
-							decretoSaida = decretoSaida.replace("<ANEXOS>", "<ANEXOS num_anexos=\'1\'>");
-						} else {
-							segmentosConsAss = entreTags.split("ANEXO [IVX]{1,4}");
-							for (int k = 1; k < segmentosConsAss.length; k++){	
-								if (segmentosConsAss[k] != "" && verificarSeTabela(segmentosConsAss[k], tipo) == true){
-									if (entreTags.contains("ANULAÇÃO DE DOTAÇÃO")){
-										segmentosConsAss[k] = tabelaReformulada(segmentosConsAss[k], "dot");
-									} else if (entreTags.contains("CRÉDITO SUPLEMENTAR")){
-										segmentosConsAss[k] = tabelaReformulada(segmentosConsAss[k], "supl");
-									} else if (entreTags.contains("EXCESSO DE ARRECADAÇÃO")){
-										segmentosConsAss[k] = tabelaReformulada(segmentosConsAss[k], "arr");
-									}
-								}
-								textoModificado += classificadorAnexos(segmentosConsAss[k]);
-							}
-							decretoSaida = decretoSaida.replace(entreTags, textoModificado);
-							decretoSaida = decretoSaida.replace("<ANEXOS>", "<ANEXOS num_anexos=\'" + (segmentosConsAss.length - 1) + "\'>");
 						}
 					}
 
@@ -1232,7 +1233,6 @@ public class Segmentacao {
 						}
 					}
 
-
 					matcher = padraoPartido.matcher(decretoSaida);
 					while (matcher.find()){
 						entreTags = matcher.group(1);
@@ -1250,7 +1250,6 @@ public class Segmentacao {
 								textoModificado, "PART", "", false);
 						decretoSaida = decretoSaida.replaceFirst("\\Q" + primeiroCaractere + entreTags +"\\E", textoModificado);			
 					}
-
 
 					matcher = padraoData.matcher(decretoSaida);
 					while (matcher.find()){
@@ -1673,13 +1672,14 @@ public class Segmentacao {
 		return entreTags;
 	}
 
-	public static String classificadorAnexos(String entreTags){
+	public static String classificadorAnexos(String entreTags, String tipo){
 		String textoModificado;
 		String semAnexo = entreTags.
 				replaceFirst("\\s*</td>(\\s*<td>\\s*</td>\\s*)+(</tr>)?\\s*","");
 
+		//QQ coisa remover os valores em romano
 		semAnexo = entreTags.
-				replaceFirst("ANEXO\\s*ÚNICO\\s*</td>\\s*</tr>","");
+				replaceFirst("ANEXO\\s*(ÚNICO|I{1,3}|IV|VI{0,3})\\s*</td>\\s*</tr>","");
 
 		String unicoOuNumero = "";
 		/*
@@ -1697,8 +1697,7 @@ public class Segmentacao {
 
 		if (semAnexo.substring((int) (semAnexo.length()/2)).contains("DESCRIÇÃO")){
 			textoModificado = unicoOuNumero + " <DESCR>" + semAnexo.trim() + "</DESCR>";
-		} else 
-		if (semAnexo.substring((int) (semAnexo.length()/2)).contains("MEMORIAL")){
+		} else if (semAnexo.substring((int) (semAnexo.length()/2)).contains("MEMORIAL")){
 			textoModificado = unicoOuNumero + " <MEMO>" + semAnexo.trim() + "</MEMO>";
 		} else if (semAnexo.substring((int) (semAnexo.length()/2)).contains("PLANO")){
 			textoModificado = unicoOuNumero + " <PLAN>" + semAnexo.trim() + "</PLAN>";
@@ -1715,8 +1714,19 @@ public class Segmentacao {
 		} else if (!entreTags.contains("TBL")){
 			textoModificado = unicoOuNumero + " <OUTRO>" + semAnexo.trim() + "</OUTRO>";
 		} else {
-			textoModificado = unicoOuNumero + " <TAB>" + semAnexo.trim() + "</TAB>";					
+			textoModificado = unicoOuNumero + " <TAB>" + semAnexo.trim() + "</TAB>";	
+			quantidadeAnexosTabela.put(tipo, quantidadeAnexosTabela.get(tipo) + 1);
+			if (entreTags.contains("R$") || entreTags.contains("TOTAL")){ //é uma tabela orçamentária
+				quantidadeTabelaOrcamentarias.put(tipo, quantidadeTabelaOrcamentarias.get(tipo) + 1);
+			}
 		}
+		
+		//Se não possuir TAB, pode-se remover o TBL
+		if(!textoModificado.contains("TAB")){
+			textoModificado = textoModificado.replace("<TBL>", "");
+			textoModificado = textoModificado.replace("</TBL>", "");
+		}
+		
 		return textoModificado; 
 	}
 
