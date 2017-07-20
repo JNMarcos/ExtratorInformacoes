@@ -17,23 +17,20 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
-
  * @author JN
-
  *
-
  */
 
 public class Segmentacao {
 
-	private static Hashtable<String, Integer> quantidadeDecretosAnexos = new Hashtable<>();
-	private static Hashtable<String, Integer> quantidadeAnexosTabela = new Hashtable<>();
-	private static Hashtable<String, Integer> quantidadeTabelaOrcamentarias= new Hashtable<>();
+	private static Hashtable<String, Integer> quantidadeDecretosQTemAnexos = new Hashtable<>();
+	private static Hashtable<String, Integer> quantidadeDecretosQTemTabela = new Hashtable<>();
+	private static Hashtable<String, Integer> quantidadeDecretosQTemTabelaOrcamentaria= new Hashtable<>();
 	private static Map<String, Integer> contadorTiposDecreto = new Hashtable<>();
-	private static Hashtable<String, Integer> quantidadeDecretosTabela = new Hashtable<>();
-	private static Hashtable<String, Integer> quantidadeDecretosTabelaOrcamentaria = new Hashtable<>();
-	private static Hashtable<String, Integer> somaDecretosTabela = new Hashtable<>();
-	private static Hashtable<String, Integer> somaDecretosTabelaOrcamentaria = new Hashtable<>();
+	private static Hashtable<String, Integer> quantidadeTabelasPorTipoDecreto = new Hashtable<>();
+	private static Hashtable<String, Integer> quantidadeTabelasOrcamentariasPorTipoDecreto = new Hashtable<>();
+	private static Hashtable<String, Integer> somaDecretosQTemTabelaTodosAnos = new Hashtable<>();
+	private static Hashtable<String, Integer> somaDecretosQTemTabelaOrcamentariaTodosAnos = new Hashtable<>();
 
 	private static Hashtable<String, Integer> nomePessoas = new Hashtable<>();
 
@@ -45,16 +42,19 @@ public class Segmentacao {
 		//Caminhos dos decretos
 		//Substitua para a localizaÁ„o em seu computador
 		String caminhoDecretos = "C:\\Users\\JN\\Documents\\DecretosAlepe\\";
+		//String caminhoDecretos = "C:\\Users\\JN\\Documents\\BaseDecretos";
 
 		int[] anosDecretos = {2014, 2015, 2016};
-		File b = new File("anexosAno");
-		File c = new File ("tabelasAno");
+
+		
 		File d = new File("nomePessoas");
-		File f = new File("tabelaOrcamentariaAno");
-		File g = new File("qtdDecretosComTabela");
-		File h = new File("qtdDecretosComTabelaOrcamentaria");
-		File y = new File("somaDecretosComTabela");
-		File z = new File("somaDecretosComTabelaOrcamentaria");
+		File b = new File("qtdDecretosQTemAnexos");
+		File c = new File("qtdDecretosQTemTabela");
+		File f = new File("qtdDecretosQTemTabelaOrcamentaria");
+		File h = new File("qtdTabelasOrcamentariaPorTipoDecreto");
+		File g = new File ("qtdTabelasPorTipoDecreto");
+		File y = new File("somaDecretosQTemTabelaTodosAnos");
+		File z = new File("somaDecretosQTemTabelaOrcamentariaTodosAnos");
 
 		//"Cria-se" os Files que apontam para as pastas dos decretos
 		File[] pastas = new File[3];
@@ -131,15 +131,14 @@ public class Segmentacao {
 		String regexLeis = "(( |\"|\\(|>)(Decreto|\\QDecreto-Lei\\E|Decreto Lei|Decreto Lei Federal|\\QDecreto-Lei\\E Federal|Lei Federal|Lei Complementar|Lei Complementar Federal|Lei|ResoluÁ„o|Emenda Constitucional|Ad Referendum|OfÌcio|Parecer|Parecer Conjunto|Portaria Conjunta|Portaria|Ato|Ato DeclaratÛrio|Termo|Ajuste|Ata|AcÛrd„o|Protocolo|Lei OrÁament·ria Anual)( do| da)?[A-Z \\Q/-.\\E]{0,16}(( n∫| n∞)? (\\d{1,2}\\.\\d{3}|\\d{3}|\\d{2}|\\d{2,4}/\\d{2,4}[A-Z\\Q/ -\\E]{0,10}))?(,)?((( de| em)? (\\d{1,2})(∞|∫)?( de |[\\Q./-\\E])([a-zÁA-Z«]{4,9}|\\d{1,2}[\\Q./-\\E]))?( de )?(\\d{4}))?)(,|<|\\Q.\\E|;|:|\"|\\Q)\\E|\\Q(\\E| [a-zÈ‡·ÌÛ˙Í‚Ù0-9])";
 		//String regexDoc = "( |\"|\\()(AudiÍncia(s)?|Manua(l|is)|Caderno(s)?|CÛdigo(s)?|ConstituiÁ(„o|ıes)|Estatuto(s)?|Termo(s)?|Documento(s)?|Cadastro(s)?|Quadro(s)?|DeclaraÁ(„o|ıes)|Certificado(s)?|Regimento(s)?|Regulamento(s)?|Termo(s)?|Orde(m|ns) Banc·ria(s)?|Registro(s)?|Contrato(s)?|BalanÁo(s)?|Minuta(s)?|Balancete(s)?|Nota(s)?|RelatÛrio(s)?|ResoluÁ(„o|ıes)|Anexo(s)?|Memoria(l|is)|ClassificaÁ(„o|ıes)|ConvÍnio(s)?) (((de |do |dos |da |das |‡ |‡s |ao |aos |pelo |pelos |pelas |pela |por |em |para |com |com os |com as )?(<(INST|GRUP|UNI|SECR|ED)>)*([A-Z¬¡… Õ”‘⁄]|[0-9])([A-Z¬√¡… Õ”‘’⁄«]*|[a-zÁ„‡·‚ÈÍÌÛÙı˙]+|[0-9]+)(, |-| (e )?)?)+(\\s*(-|/|\\()\\s*[A-Z][A-Za-z\\QÁ„‡·‚ÈÍÌÛÙı˙¬√¡¿… Õ”‘’⁄«&-\\E]+(\\))?)*(</(INST|GRUP|UNI|SECR|ED)>)*(( )?(n∫ )?[0-9\\Q/-\\E]{2,})?\\s*(, |<|\\Q.\\E|;|:|\"|\\Q)\\E|\\Q(\\E| [a-zÈ‡·ÌÛ˙Í‚Ù0-9]( )?))+";
 		String regexDoc = "( |\"|\\()(AudiÍncia(s)?|Manua(l|is)|Caderno(s)?|CÛdigo(s)?|ConstituiÁ(„o|ıes)|Estatuto(s)?|Termo(s)?|Documento(s)?|Cadastro(s)?|Quadro(s)?|DeclaraÁ(„o|ıes)|Certificado(s)?|Regimento(s)?|Regulamento(s)?|Termo(s)?|Orde(m|ns) Banc·ria(s)?|Registro(s)?|Contrato(s)?|BalanÁo(s)?|Minuta(s)?|Balancete(s)?|Nota(s)?|RelatÛrio(s)?|ResoluÁ(„o|ıes)|Anexo(s)?|Memoria(l|is)|ClassificaÁ(„o|ıes)|ConvÍnio(s)?) (((de |do |dos |da |das |‡ |‡s |ao |aos |pelo |pelos |pelas |pela |por |em |para |com |com os |com as )?([A-Z¬¡… Õ”‘⁄]|[0-9])([A-Z¬√¡… Õ”‘’⁄«]*|[a-zÁ„‡·‚ÈÍÌÛÙı˙]+|[0-9]+)(, |-| (e )?)?)+(\\s*(-|/|\\()\\s*[A-Z][A-Za-z\\QÁ„‡·‚ÈÍÌÛÙı˙¬√¡¿… Õ”‘’⁄«&-\\E]+(\\))?)*(</(INST|GRUP|UNI|SECR|ED)>)*(( )?(n∫ )?[0-9\\Q/-\\E]{2,})?\\s*(, |<|\\Q.\\E|;|:|\"|\\Q)\\E|\\Q(\\E| [a-zÈ‡·ÌÛ˙Í‚Ù0-9]( )?))+";
-
 		String regexDoc2 = " OrÁamento Fiscal( do Estado| da Uni„o)?| OrÁamento de Investimento( das Empresas)?| Di·rio Oficial do Estado(\\s*-\\s*DOE)?| Di·rio Oficial da Uni„o(\\s*-\\s*DOU)?"; 
 		String regexDoc3 = "( |\"|\\(|>)(Anexo(s)?)\\s*[0-9]{1,2}\\s*\\-([0-9A-Za-zÁ„‡·‚ÈÍÌÛÙı˙¬√¡¿… Õ”‘’⁄« ,]+)(<|\\Q.\\E|;|:|\"|\\Q)\\E|\\Q(\\E)";
 		String regexDinheiro = " R\\$\\s+[0-9.]+,\\d{2}";
 		String regexPorcentagem = " [0-9]+(,\\d{1,})?( )?%";
-		String regexEmpresaLTDA = "( (a|‡|pela|da|da mesma|denominaÁ„o atual È|atualmente denominada|antiga|[IXV]{1,5} -)( empresa| EMPRESA| Empresa)?( (([0-9A-Z¬¡… Õ”‘⁄&]|de |da |do |das |dos )[0-9A-Za-z\\QÁ„‡·‚ÈÍÌÛÙı˙¬√¡¿… Õ”‘’⁄«&\\E]*[\\Q-., \\E]{1,3})+(\\QLTDA.\\E|LTDA)( ME)?(\\s*(-| |/)\\s*[A-Z]([A-Z¬√¡… Õ”‘’⁄«&]+|[a-zÁ„‡·‚ÈÍÌÛÙı˙&]+))*))(,|\\Q.\\E|;|:|\"| [a-zÈ‡·ÌÛ˙Í‚Ù0-9]|, [a-z]|\\)|\\Q(\\E|<)";
-		String regexEmpresaSA = "( (a|‡|pela|da|da mesma|denominaÁ„o atual È|atualmente denominada|antiga|[IXV]{1,5} -)( empresa| EMPRESA| Empresa)?( (([0-9A-Z¬¡… Õ”‘⁄&]|de |da |do |das |dos )[0-9A-Za-z\\QÁ„‡·‚ÈÍÌÛÙı˙¬√¡¿… Õ”‘’⁄«&\\E]*[\\Q-., \\E]{1,3})+(\\QS/A\\E|\\QS.A.\\E|\\QS.A\\E)(\\s*(-| |/)\\s*[A-Z]([A-Z¬√¡… Õ”‘’⁄«&]+|[a-zÁ„‡·‚ÈÍÌÛÙı˙&]+))*))(,|\\Q.\\E|;|:|\"| [a-zÈ‡·ÌÛ˙Í‚Ù0-9]|\\)|\\Q(\\E|<)";
-		String regexEmpresaNaoSALTDA = "( (a|‡|pela|da|da mesma|denominaÁ„o atual È|atualmente denominada|[IXV]{1,5} -)( empresa| EMPRESA| Empresa)( (([0-9A-Z¬¡… Õ”‘⁄&]|de |da |do |das |dos )[0-9A-Za-z\\QÁ„‡·‚ÈÍÌÛÙı˙¬√¡¿… Õ”‘’⁄«&\\E]*[\\Q-., \\E]{1,3})+(\\s*(-| |/)\\s*[A-Z]([A-Z¬√¡… Õ”‘’⁄«&]+|[a-zÁ„‡·‚ÈÍÌÛÙı˙&]+))*))(,|\\Q.\\E|;|:|\"|\\)|<)";
-		String regexEmpresaNaoSALTDASemSilga = "( (a|‡|pela|da|da mesma|denominaÁ„o atual È|atualmente denominada|[IXV]{1,5} -)( empresa| EMPRESA| Empresa)( (([0-9A-Z¬¡… Õ”‘⁄&]|de |da |do |das |dos )[0-9A-Za-z\\QÁ„‡·‚ÈÍÌÛÙı˙¬√¡¿… Õ”‘’⁄«&\\E]*[\\Q-., \\E]{0,3})+))(,|\\Q.\\E|;|:|\"| [a-z])";
+		String regexEmpresaLTDA = "( (a|‡|pela|da|da mesma|denominaÁ„o atual È|atualmente denominada|antiga|[IXV]{1,5} -)( empresa| EMPRESA| Empresa| Concession·ria| concession·ria)?( (([0-9A-Z¬¡… Õ”‘⁄&]|de |da |do |das |dos )[0-9A-Za-z\\QÁ„‡·‚ÈÍÌÛÙı˙¬√¡¿… Õ”‘’⁄«&\\E]*[\\Q-., \\E]{1,3})+(\\QLTDA.\\E|LTDA)( ME)?(\\s*(-| |/)\\s*[A-Z]([A-Z¬√¡… Õ”‘’⁄«&]+|[a-zÁ„‡·‚ÈÍÌÛÙı˙&]+))*))(,|\\Q.\\E|;|:|\"| [a-zÈ‡·ÌÛ˙Í‚Ù0-9]|, [a-z]|\\)|\\Q(\\E|<)";
+		String regexEmpresaSA = "( (a|‡|pela|da|da mesma|denominaÁ„o atual È|atualmente denominada|antiga|[IXV]{1,5} -)( empresa| EMPRESA| Empresa| Concession·ria| concession·ria)?( (([0-9A-Z¬¡… Õ”‘⁄&]|de |da |do |das |dos )[0-9A-Za-z\\QÁ„‡·‚ÈÍÌÛÙı˙¬√¡¿… Õ”‘’⁄«&\\E]*[\\Q-., \\E]{1,3})+(\\QS/A\\E|\\QS.A.\\E|\\QS.A\\E|\\QS. A.\\E)(\\s*(-| |/)\\s*[A-Z]([A-Z¬√¡… Õ”‘’⁄«&]+|[a-zÁ„‡·‚ÈÍÌÛÙı˙&]+))*))(,|\\Q.\\E|;|:|\"| [a-zÈ‡·ÌÛ˙Í‚Ù0-9]|\\)|\\Q(\\E|<)";
+		String regexEmpresaNaoSALTDA = "( (a|‡|pela|da|da mesma|denominaÁ„o atual È|atualmente denominada|[IXV]{1,5} -)( empresa| EMPRESA| Empresa| Concession·ria| concession·ria)( (([0-9A-Z¬¡… Õ”‘⁄&]|de |da |do |das |dos )[0-9A-Za-z\\QÁ„‡·‚ÈÍÌÛÙı˙¬√¡¿… Õ”‘’⁄«&\\E]*[\\Q-., \\E]{1,3})+(\\s*(-| |/)\\s*[A-Z]([A-Z¬√¡… Õ”‘’⁄«&]+|[a-zÁ„‡·‚ÈÍÌÛÙı˙&]+))*))(,|\\Q.\\E|;|:|\"|\\)|<)";
+		String regexEmpresaNaoSALTDASemSigla = "( (a|‡|pela|da|da mesma|denominaÁ„o atual È|atualmente denominada|[IXV]{1,5} -)( empresa| EMPRESA| Empresa| Concession·ria| concession·ria)( (([0-9A-Z¬¡… Õ”‘⁄&]|de |da |do |das |dos )[0-9A-Za-z\\QÁ„‡·‚ÈÍÌÛÙı˙¬√¡¿… Õ”‘’⁄«&\\E]*[\\Q-., \\E]{0,3})+))(,|\\Q.\\E|;|:|\"| [a-z])";
 		String regexInst = "(( |\"|\\(|>)(FundaÁ(„o|ıes)|EscritÛrio(s)?|OrganizaÁ(„o|ıes)|Instituto(s)?|Departamento(s)?|Procuradoria(s)?|AgÍncia(s)?|Junta(s)?|Assembleia(s)?|C‚mara(s)?|ConsÛrcio(s)?|Defensoria(s)?|Tribuna(l|is)|Companhia(s)?|ConservatÛrio(s)?|Controladoria(s)?|GerÍncia(s)?|Contadoria(s)?|InteligÍncia(s)?|Corpo(s)?|Centra(l|is)|Banco(s)?|PolÌcia(s)?|Diretoria(s)?|Receita|Delegacia(s)?|Autarquia(s)?|SuperintendÍncia(s)?|MinistÈrio(s)?|Centro(s)?) (((de |do |dos |da |das |‡ |a |ao |aos |pelo |pelos |pelas |pela |por |em |no |nos |nas |na |para )?[A-Z¬¡… Õ”‘⁄]([A-Z¬√¡… Õ”‘’⁄«]+|[a-zÁ„‡·‚ÈÍÌÛÙı˙]+)(, |-| (e )?)?)+(\\s*(-|/|\\()\\s*[A-Z][A-Za-z\\QÁ„‡·‚ÈÍÌÛÙı˙¬√¡¿… Õ”‘’⁄«&\\E]+(\\))?)*)\\s*(, |<|\\Q.\\E|;|:|\"|\\Q)\\E|\\Q(\\E| [a-zÈ‡·ÌÛ˙Í‚Ù0-9]))+";
 		String regexInst2 = "( AD Diper| Adagro| Arquivo P˙blico Digital| Porto Digital| Porto de Recife| ProRural| Complexo Industrial Portu·rio( ([A-Z¡…Õ”⁄¬ ‘][A-Z¡…Õ”⁄¬ ‘√’«a-z·ÈÌÛ˙‚ÍÙÁ„ı]+( )?)+)?| Pernambuco ParticipaÁıes e Investimento S/A( - Perpart)?| ServiÁo de ProteÁ„o ao Consumidor( - PROCON)?| AdministraÁ„o Geral de Fernando de Noronha| Congresso Nacional| LaboratÛrio FarmacÍutico de Pernambuco(\\s*(-)?\\s*LAFEPE)?)";
 		String regexGrupo = "(( |\"|\\(|>)(Comiss(„o|ıes)|ComitÍ(s)?|Grupo(s)?|Grupamento(s)?|Conselho(s)?|CoordenaÁ(„o|ıes)|Coordenadoria(s)?|Assessoria(s)?|Sociedade(s)?) ((e )?(de |do |dos |da |das |‡ |a |ao |aos |pelo |pelos |pelas |pela |por |em |no |nos |nas |na |para |com |com os |com as )?(<ED>)?[A-Z¬¡… Õ”‘⁄]([A-Z¬√¡… Õ”‘’⁄«]+|[a-zÁ„‡·‚ÈÍÌÛÙı˙]+)(, |-| )?)+(\\s*(-|/)\\s*[A-Z][A-Za-z\\QÁ„‡·‚ÈÍÌÛÙı˙¬√¡¿… Õ”‘’⁄«&\\E]+)*)(</ED>)?\\s*(,|<|\\Q.\\E|;|:|\"|\\Q)\\E|\\Q(\\E| [a-zÈ‡·ÌÛ˙Í‚Ù])";
@@ -153,17 +152,19 @@ public class Segmentacao {
 		String regexFundo = "(( |\"|\\(|>)(Fundo(s)?) ((de |do |dos |da |das |‡ |a |ao |aos |pelo |pelos |pelas |pela |por |em |no |nos |nas |na |para |com |com os |com as )?[A-Z¬¡¿… Õ”‘⁄]([A-Z¬√¡… Õ”‘’⁄«]+|[a-zÁ„‡·‚ÈÍÌÛÙı˙]+)(, |-| (e )?)?(</CAR>|</ORG>)?)+(\\s*(-|/)\\s*[A-Z][A-Za-z\\QÁ„‡·‚ÈÍÌÛÙı˙¬√¡¿… Õ”‘’⁄«&\\E]+)*)\\s*(,|<|\\Q.\\E|;|:|\"|\\Q)\\E|\\Q(\\E| [a-zÈ‡·ÌÛ˙Í‚Ù])";
 		String regexGratificacao = "(( |\"|\\(|>)(GratificaÁ(„o|ıes)|CompensaÁ(„o|ıes)|BonificaÁ(„o|ıes)|Abono(s)?|BenefÌcio(s)?) (e )?((de |do |dos |da |das |‡ |a |ao |aos |pelo |pelos |pelas |pela |por |em |no |nos |nas |na |para |com |com os |com as )?[A-Z¬¡¿… Õ”‘⁄]([A-Z¬√¡… Õ”‘’⁄«]+|[a-zÁ„‡·‚ÈÍÌÛÙı˙]+)(, | (e )?)?)+(\\s*(-|/)\\s*[A-Z][A-Za-z\\QÁ„‡·‚ÈÍÌÛÙı˙¬√¡¿… Õ”‘’⁄«&\\E]+)*)\\s*(,|<|\\Q.\\E|;|:|\"|\\Q)\\E|\\Q(\\E| [a-zÈ‡·ÌÛ˙Í‚Ù])";
 		String regexPremio = "(( |\"|\\(|>)(PrÍmio(s)?|Medalha(s)?|MenÁ(„o|ıes)|Homenage(m|ns)|Honraria(s)?|CondecoraÁ(„o|ıes)|L·urea(s)?) ((de |do |dos |da |das |‡ |a |ao |aos |pelo |pelos |pelas |pela |por |em |no |nos |nas |na |para (o |a )?|com |com os |com as )?[A-Z¬¡¿… Õ”‘⁄]([A-Z¬√¡… Õ”‘’⁄«]+|[a-zÁ„‡·‚ÈÍÌÛÙı˙]+)(, |-| (e )?)?)+(\\s*(-|/)\\s*[A-Z][A-Za-z\\QÁ„‡·‚ÈÍÌÛÙı˙¬√¡¿… Õ”‘’⁄«&\\E]+)*)\\s*(,|<|\\Q.\\E|;|:|\"|\\Q)\\E|\\Q(\\E| [a-zÈ‡·ÌÛ˙Í‚Ù])";
-		String regexEdificacao = "(( |\"|\\(|>)(PrÈdio(s)?|EdifÌcio(s)?|Escola(s)?|Pal·cio(s)?|PresÌdio(s)?|Arena(s)?|Refinaria(s)?|Estaleiro(s)?|Polo(s)?|EstaÁ(„o|ıes)|Coletor(es|a|as)?|ReservatÛrio(s)?|CartÛrio(s)?|Universidade(s)?|Hospita(l|is)( Regina(l|is)| Federa(l|is)| Estadua(l|is)| Municipa(l|is))?) ((de |do |dos |da |das |‡ |a |ao |aos |pelo |pelos |pelas |pela |por |em |no |nos |nas |na |para |com |com os |com as )?[A-Z¬¡¿… Õ”‘⁄]([A-Z¬√¡… Õ”‘’⁄«]+|[a-zÁ„‡·‚ÈÍÌÛÙı˙]+)(-| (e )?)?)+(\\s*(-|/|\\Q(\\E)\\s*[A-Z][A-Za-z\\QÁ„‡·‚ÈÍÌÛÙı˙¬√¡¿… Õ”‘’⁄«&\\E]+(\\Q)\\E)?)*\\s*(,|<|\\Q.\\E|;|:|\"|\\Q)\\E|\\Q(\\E| [a-z„‡·‚ÈÍÌÛÙı˙]))";
+		String regexEdificacao = "(( |\"|\\(|>)(PrÈdio(s)?|EdifÌcio(s)?|Escola(s)?|Pal·cio(s)?|PresÌdio(s)?|Arena(s)?|Refinaria(s)?|Estaleiro(s)?|Polo(s)?|EstaÁ(„o|ıes)|Coletor(es|a|as)?|ReservatÛrio(s)?|CartÛrio(s)?|Universidade(s)?|Hospita(l|is)( Regina(l|is)| Federa(l|is)| Estadua(l|is)| Municipa(l|is))?) ((de |do |dos |da |das |‡ |a |ao |aos |pelo |pelos |pelas |pela |por |em |no |nos |nas |na |para |com |com os |com as )?[A-Z¬¡¿… Õ”‘⁄]([A-Z¬√¡… Õ”‘’⁄«]+|[a-zÁ„‡·‚ÈÍÌÛÙı˙]+)(-| (e )?)?)+(\\s*(-|/|\\Q(\\E)\\s*[A-Z][A-Za-z0-9\\QÁ„‡·‚ÈÍÌÛÙı˙¬√¡¿… Õ”‘’⁄«.&\\E]+(\\Q)\\E)?)*\\s*(,|<|\\Q.\\E|;|:|\"|\\Q)\\E|\\Q(\\E| [a-z„‡·‚ÈÍÌÛÙı˙]))";
 		String regexSistema = "(( |\"|\\(|>)(Sistema|sistema) ((de |do |dos |da |das |‡ |a |ao |aos |pelo |pelos |pelas |pela |por |em |no |nos |nas |na |para |com |com os |com as )?(\\Qe-\\E)?[A-Z¬¡¿… Õ”‘⁄]([A-Z¬√¡… Õ”‘’⁄«]+|[a-zÁ„‡·‚ÈÍÌÛÙı˙]+)(, |-| (e )?)?)+(\\s*(-|/|\\()\\s*[A-Z][A-Za-z\\QÁ„‡·‚ÈÍÌÛÙı˙¬√¡¿… Õ”‘’⁄«&\\E]+)*)\\s*(,|<|\\Q.\\E|;|:|\"|\\Q)\\E|\\Q(\\E| [a-zÈ‡·ÌÛ˙Í‚Ù])";
 		String regexEvento = "(( |\"|\\(|>)([IVX]{1,5} |\\d{1,3}(∫|∞|™) )?(ConferÍncia|Congresso|Evento|Show|Concerto|SimpÛsio|Debate|FÛrum|Estudo|Copa) ((de |do |dos |da |das |‡ |a |ao |aos |pelo |pelos |pelas |pela |por |em |no |nos |nas |na |para |com |com os |com as )?[A-Z¬¡… Õ”‘⁄]([A-Z¬√¡… Õ”‘’⁄«]+|[a-zÁ„‡·‚ÈÍÌÛÙı˙]+)(\\. |, | - | (e )?)?)+((de )?\\d{4})?(\\s*(-|/|\\()\\s*[A-Z][A-Za-z\\QÁ„‡·‚ÈÍÌÛÙı˙¬√¡¿… Õ”‘’⁄«&\\E]+)*)\\s*(,|<|\\Q.\\E|;|:|\"|\\Q)\\E|\\Q(\\E| [a-zÈ‡·ÌÛ˙Í‚Ù])";
 		String regexPartido = "(( |\"|\\(|>)((?i)Partido(s)?) ((de |do |dos |da |das |‡ |a |ao |aos |pelo |pelos |pelas |pela |para |com |com os |com as )?[A-Z¬¡¿… Õ”‘⁄]([A-Z¬√¡… Õ”‘’⁄«]+|[a-zÁ„‡·‚ÈÍÌÛÙı˙]+)(, |-| (e )?)?)+(\\s*(-|/)\\s*[A-Z][A-Za-z\\QÁ„‡·‚ÈÍÌÛÙı˙¬√¡¿… Õ”‘’⁄«&\\E]+)*)\\s*(,|<|\\Q.\\E|;|:|\"|\\Q)\\E|\\Q(\\E| [a-zÈ‡·ÌÛ˙Í‚Ù])";
-		String regexData = "( (\\d{1,2})(∞|∫)? de ([a-zÁA-Z«]{4,9}) (do ano )?(de )?(\\d{4})| \\d{1,2}[\\Q./\\E]\\d{1,2}[\\Q./\\E]\\d{2,4})";
+		String regexData = "( (\\d{1,2})(∞|∫)? de ([a-zÁA-Z«]{4,9}) (do ano )?(de )?(\\d{4})| \\d{1,2}[\\Q./\\E]\\d{1,2}[\\Q./\\E]\\d{4})";
 		String regexIntervaloData = " <DAT>[0-9A-Za-z \\Q∫∞/.\\E]+</DAT> a <DAT>[0-9A-Za-z \\Q∫∞/.\\E]+</DAT>| \\d{1,2}(∞|∫)?( de)? ([ A-Za-z]{4,10})? (a|e) <DAT>[0-9A-Za-z \\Q∫∞./\\E]+</DAT>| [A-Z«a-zÁ]{4,9} a [A-Z«a-zÁ]{4,9} de \\d{4}| \\d{4} a \\d{4}";
 		String regexInfoEmp = " (estabelecid|situad|localizad)(a na|o no)( [0-9A-Za-zÁ„‡·‚ÈÍÌÛÙı˙¬√¡¿… Õ”‘’⁄«\\Q() ,∫∞™-.;/'\"\\E]+ CNPJ(/MF)? n(∫|∞) \\d{2}\\.\\d{3}\\.\\d{3}/\\d{4}-\\d{2} e CACEPE n(∞|∫) \\d{7}\\-\\d{2})";
 		String regexCNPJ = " CNPJ(/MF)?( n∞| n∫)?( \\d{2}\\.\\d{3}\\.\\d{3}(/\\d{4}-\\d{2})?)";
 		String regexIE = " (InscriÁ„o Estadual|IE)( n∞| n∫)?( \\d{1,3}\\.\\d{3}\\.\\d{3}(\\-\\d{1,2}|\\.\\d{3})?)";
 		String regexCACEPE = " \\d{7}\\-\\d{2}";
-		String regexMunicipio = "( ((M|m)unicÌpio|(A|a)rquipÈlago|(I|i)lha|(C|c)idade)(s)?( de| do| dos| da| das)?(:)?)(( [A-Z¬¡… Õ”‘⁄][A-Za-zÁ„‡·‚ÈÍÌÛÙı˙¬√¡… Õ”‘’⁄« ]+(,|\\Q.\\E| e|;))+)";
+		String regexMunicipio = "( ((M|m)unicÌpio|(A|a)rquipÈlago|(I|i)lha|(C|c)idade)(s)?( de| do| dos| da| das)?(:)?)(( [A-Z¬¡… Õ”‘⁄][A-Za-zÁ„‡·‚ÈÍÌÛÙı˙¬√¡… Õ”‘’⁄« ]+(,|\\Q.\\E| e|;|<))+)";
+		String regexMunicipio2= "(, em ([A-Z][A-Za-zÁ„‡·‚ÈÍÌÛÙı˙¬√¡¿… Õ”‘’⁄«  ]+))(,|<)";
+		String regexMunicipio3= "( [A-Z][A-Za-zÁ„‡·‚ÈÍÌÛÙı˙¬√¡¿… Õ”‘’⁄«  ]+)\\Q-\\E[A-Z]{2}(,|<| |\\.)";
 		String regexCargo = "([A-Za-zÁ„‡·‚ÈÍÌÛÙı˙¬√¡¿… Õ”‘’⁄«]+)?(( | \"| \\(| >)(ex|EX|Ex)?(\\Q-\\E)?(Primeiro |Segundo |Terceiro |(1|2|3)(∫|∞|™) )?(Auditor(es)?|Comandante(s)?( Geral)?|Chefe(s)?|Sargent(o|a)(s)?|Tenente(s)?(-)?|Subtenente(s)?|Corone(l|Èis)|Capit„(o)?(s)?|Major(es)?|Fiscal|Educador|Cirurgi„o|Secret·ri(o|a)(s)?|Diretor(es|a|as)?(-)?|Agente(s)?|Ministr(o|a)(s)?|Deputad(o|a)(s)?|PresidÍncia|Presidente|Gerente(s)?|Assistente(s)?|Assessor(a|es|as)?|Superintendente(s)?|Coordenador(a|as|es)?|Gestor(es|a|as)?|TÈcnico(s)?|MÈdic(o|a)(s)?|Terapeuta(s)?|FarmacÍutic(o|a)(s)?|Condutor(es)?)(\\s*(destinad(o|a)(s)? |sobre |relativ(o|a)(s)? |com |para )?\\s*(de |do |dos |da |das |‡ |‡s |a |ao |aos |pelo |pelos |pelas |pela |por |em |no |nos |nas |na )?(<ORG>)?\\s*[A-Z¬¡… Õ”‘⁄]([A-Z¬√¡… Õ”‘’⁄«]+|[a-zÁ„‡·‚ÈÍÌÛÙı˙]+)(</ORG>)?(, |\\s*-\\s*|\\s+(e )?)?)+\\s*(,|<|\\Q.\\E|;|:|\"|\\Q)\\E|\\Q(\\E| [a-zÈ‡·ÌÛ˙Í‚Ù]))+";
 		String regexCargo2 = "([A-Za-zÁ„‡·‚ÈÍÌÛÙı˙¬√¡¿… Õ”‘’⁄«]+)?(( | \"| >| /)(ex|EX|Ex)?(\\Q-\\E)?(Fisioterapeuta|Arte(\\s+|-)Educador(a|as|es)?|Delegad(o|a)(s)?|Escriv(„o|„es)|Agente(s)?|Governador(a|as|es)?( do Estado)?|Psicopedagogo|Arquiteto|Aeroportu·rio|MÈdico|Terapeuta|Jornalista|TurismÛlogo|Enfermeiro|PsicÛlogo|Bibliotec·rio|Arquivista|Professor))(,| [a-z ]{1,8}[^A-Z]| [A-Z]{3}|\\.|/|\\s*<)";
 		String regexEncargo = "(( |\"|\\(|>)(Taxa(s)?|Imposto(s)?|Tributo(s)?|ContribuiÁ(„o|ıes)|EmprÈstimo(s)? CompulsÛrio(s)?|Financiamento(s)?|Encargo(s)?|Despesa(s)?) ((destinad(o|a)(s)? |sobre |relativ(o|a)(s)? |com |para )?(de |do |dos |da |das |‡ |‡s |a |ao |aos |pelo |pelos |pelas |pela |por |em |no |nos |nas |na |para )?[A-Z¬¡… Õ”‘⁄]([A-Z¬√¡… Õ”‘’⁄«]+|[a-zÁ„‡·‚ÈÍÌÛÙı˙]+)(, |-| (e )?)?)+(\\s*(-|/)\\s*[A-Z]([A-Z¬√¡… Õ”‘’⁄«&]+|[a-zÁ„‡·‚ÈÍÌÛÙı˙&]+))*)\\s*(,|<|\\Q.\\E|;|:|\"|\\Q)\\E|\\Q(\\E| [a-zÈ‡·ÌÛ˙Í‚Ù])";
@@ -203,7 +204,7 @@ public class Segmentacao {
 		Pattern padraoEmpresaLTDA = Pattern.compile(regexEmpresaLTDA);
 		Pattern padraoEmpresaSA = Pattern.compile(regexEmpresaSA);
 		Pattern padraoEmpresaNaoSALTDA = Pattern.compile(regexEmpresaNaoSALTDA);
-		Pattern padraoEmpresaNaoSALTDASemSigla = Pattern.compile(regexEmpresaNaoSALTDASemSilga);
+		Pattern padraoEmpresaNaoSALTDASemSigla = Pattern.compile(regexEmpresaNaoSALTDASemSigla);
 		Pattern padraoInst = Pattern.compile(regexInst);
 		Pattern padraoInst2 = Pattern.compile(regexInst2);
 		Pattern padraoSecretaria = Pattern.compile(regexSecretaria);
@@ -222,6 +223,8 @@ public class Segmentacao {
 		Pattern padraoIE = Pattern.compile(regexIE);
 		Pattern padraoCACEPE = Pattern.compile(regexCACEPE);
 		Pattern padraoMunicipio = Pattern.compile(regexMunicipio);
+		Pattern padraoMunicipio2 = Pattern.compile(regexMunicipio2);
+		Pattern padraoMunicipio3 = Pattern.compile(regexMunicipio3);
 		Pattern padraoLocal = Pattern.compile(regexLocal);
 		Pattern padraoCargo = Pattern.compile(regexCargo);
 		Pattern padraoCargo2 = Pattern.compile(regexCargo2);
@@ -241,6 +244,8 @@ public class Segmentacao {
 		Matcher matcherAuxiliar;
 
 		popularAsHashtablesSoma();
+		
+		
 
 		Hashtable<String, String> tiposDocumentos = new Hashtable<>();
 		tiposDocumentos.put("Lei", "LE");
@@ -267,7 +272,6 @@ public class Segmentacao {
 		tiposDocumentos.put("Lei Complementar Federal", "LCF");
 		tiposDocumentos.put("Protocolo", "PROT");
 		tiposDocumentos.put("Lei OrÁament·ria Anual", "LOA");
-		tiposDocumentos.put("ConvÍnio", "CONV");
 
 		Hashtable<String, String> numeracaoMeses = new Hashtable<>();
 		numeracaoMeses.put("janeiro", "01");
@@ -343,8 +347,10 @@ public class Segmentacao {
 				System.out.println("N„o conseguiu escrever no documento");
 			}
 
-			arquivoPasta = new File(caminhoDecretos + anosDecretos[i] + "\\" + pastaDestino);
+			//O ORIGINAL, MUDAR, EXCLUIR O DE BASE DECRETOS
+			//arquivoPasta = new File(caminhoDecretos + anosDecretos[i] + "\\" + pastaDestino);
 			//System.out.println(arquivoPasta);
+			arquivoPasta = new File( "C:\\Users\\JN\\Documents\\BaseDecretos");
 			if (!arquivoPasta.exists()){ //Se pasta n„o existe, cria
 				arquivoPasta.mkdir();
 			}
@@ -452,7 +458,6 @@ public class Segmentacao {
 					partes = decretoSaida.split("CONSIDERANDO");
 					decretoSaida = partes[0].trim();
 					decretoSaida += "</ATRIB>\n";
-					//antes tinha <</EM>
 					decretoSaida = decretoSaida.replaceFirst("\\s*O\\s*</EM>", "</EM>");
 
 					matcher = padraoConsideracoes.matcher(decretoIntermediario);
@@ -489,7 +494,6 @@ public class Segmentacao {
 					}
 
 					decretoSaida+= "</CORPO>\n";
-
 					matcher = padraoFinalmentes.matcher(decretoIntermediario);
 					matcherAuxiliar = null;
 					if (matcher.find()){
@@ -595,41 +599,91 @@ public class Segmentacao {
 
 					decretoSaida = decretoSaida.replace("table>", "TBL>");
 					decretoSaida = decretoSaida.replaceAll("<(/)?tbody>", "");
-
+					//ATEN«√O, MUDAR PARA O OUTRO DEPOIS
+					decretoSaida = decretoSaida.replaceAll("ANULAC√O", "ANULA«√O");
+					decretoSaida = decretoSaida.replaceAll("lha", "Ilha");
 					matcher = padraoAnexo.matcher(decretoSaida);
 					if (matcher.find()){
 						textoModificado = "";
-						quantidadeDecretosAnexos.containsKey(tipo);
-						quantidadeDecretosAnexos.put(tipo, quantidadeDecretosAnexos.get(tipo) + 1);
+						quantidadeDecretosQTemAnexos.containsKey(tipo);
+						quantidadeDecretosQTemAnexos.put(tipo, quantidadeDecretosQTemAnexos.get(tipo) + 1);
 
 						entreTags = matcher.group(1);
+						int acrescentarXTab;
 
 						if (entreTags.startsWith("ANEXO ⁄NICO")){
-							textoModificado = classificadorAnexos(entreTags, tipo);
-
+							textoModificado = classificadorAnexos(entreTags, tipo, "\nANEXO ⁄NICO");
+							if (textoModificado.contains("CR…DITO SUPLEMENTAR")){
+								textoModificado = tabelaReformulada(textoModificado, "supl");
+							}
+							if (textoModificado.contains("CR…DITO ESPECIAL")){
+								textoModificado = tabelaReformulada(textoModificado, "esp");
+							}
+							if (textoModificado.contains("CR…DITO EXTRAORDIN¡RIO")){
+								textoModificado = tabelaReformulada(textoModificado, "extra");
+							}
 							if (textoModificado.contains("ANULA«√O DE DOTA«√O")){
 								textoModificado = tabelaReformulada(textoModificado, "dot");
-							} else if (textoModificado.contains("CR…DITO SUPLEMENTAR")){
-								textoModificado = tabelaReformulada(textoModificado, "supl");
-							} else if (textoModificado.contains("EXCESSO DE ARRECADA«√O")){
+							}
+							if (textoModificado.contains("EXCESSO DE ARRECADA«√O")){
 								textoModificado = tabelaReformulada(textoModificado, "arr");
+							}
+							if (textoModificado.contains("OR«AMENTO DE INVESTIMENTO")){
+								textoModificado = tabelaReformulada(textoModificado, "inv");
+							}
+
+							//se tiver qualquer tabela, seja orÁament·ria ou n„o, entra
+							if (textoModificado.contains("<TBL")){
+								acrescentarXTab = textoModificado.split("<TBL").length - 1;
+								quantidadeTabelasPorTipoDecreto.containsKey(tipo);
+								quantidadeTabelasPorTipoDecreto.put(tipo, quantidadeTabelasPorTipoDecreto.get(tipo) + acrescentarXTab);
+								textoModificado = textoModificado.replace("<TBL>", "<TBL tipo=\'outro\'>");
 							}
 							
 							decretoSaida = decretoSaida.replace(entreTags, textoModificado);
 							decretoSaida = decretoSaida.replace("<ANEXOS>", "<ANEXOS num_anexos=\'1\'>");
 						} else {
 							segmentosConsAss = entreTags.split("ANEXO [IVX]{1,4}");
-							String modSegmentos = "";
+							String anexos = entreTags.trim();
+							String t;
+							String modSegmentos;
 							for (int k = 1; k < segmentosConsAss.length; k++){
-								modSegmentos = classificadorAnexos(segmentosConsAss[k], tipo);
+								modSegmentos = "";
+								t = "\nANEXO ⁄NICO";
+								matcherAuxiliar = Pattern.compile("ANEXO ([IVX⁄NC]{1,5})").matcher(anexos);
+								if (matcherAuxiliar.find()){
+									t = "\nANEXO " + matcherAuxiliar.group(1);
+									anexos = anexos.replaceFirst("ANEXO [IVX]{1,4}", "");
+								}
+
+								modSegmentos = classificadorAnexos(segmentosConsAss[k], tipo, t);
+
 								if (modSegmentos != ""){
+									if (modSegmentos.contains("CR…DITO SUPLEMENTAR")){
+										modSegmentos = tabelaReformulada(modSegmentos, "supl");
+									}
+									if (modSegmentos.contains("CR…DITO ESPECIAL")){
+										modSegmentos = tabelaReformulada(modSegmentos, "esp");
+									}
+									if (modSegmentos.contains("CR…DITO EXTRAORDIN¡RIO")){
+										modSegmentos = tabelaReformulada(modSegmentos, "extra");
+									}
 									if (modSegmentos.contains("ANULA«√O DE DOTA«√O")){
 										modSegmentos = tabelaReformulada(modSegmentos, "dot");
-									} else if (modSegmentos.contains("CR…DITO SUPLEMENTAR")){
-										modSegmentos = tabelaReformulada(modSegmentos, "supl");
-									} else if (modSegmentos.contains("EXCESSO DE ARRECADA«√O")){
+									} 		
+									if (modSegmentos.contains("EXCESSO DE ARRECADA«√O")){
 										modSegmentos = tabelaReformulada(modSegmentos, "arr");
 									}
+									if (modSegmentos.contains("OR«AMENTO DE INVESTIMENTO")){
+										modSegmentos = tabelaReformulada(modSegmentos, "inv");
+									}
+								}
+
+								if (modSegmentos.contains("<TBL")){
+									acrescentarXTab = modSegmentos.split("<TBL").length - 1;
+									quantidadeTabelasPorTipoDecreto.containsKey(tipo);
+									quantidadeTabelasPorTipoDecreto.put(tipo, quantidadeTabelasPorTipoDecreto.get(tipo) + acrescentarXTab);
+									modSegmentos  = modSegmentos.replace("<TBL>", "<TBL tipo=\'outro\'>");
 								}
 								textoModificado += modSegmentos;
 							}
@@ -637,22 +691,24 @@ public class Segmentacao {
 							decretoSaida = decretoSaida.replace("<ANEXOS>", "<ANEXOS num_anexos=\'" + (segmentosConsAss.length - 1) + "\'>");
 						}
 						
-						///TAVA ANTES DO IF 
-						if (entreTags.contains("TAB")){
-							quantidadeDecretosTabela.containsKey(tipo);
-							quantidadeDecretosTabela.put(tipo, quantidadeDecretosTabela.get(tipo) + 1);
-
-							somaDecretosTabela.containsKey(tipo);
-							somaDecretosTabela.put(tipo, somaDecretosTabela.get(tipo) + 1);
+						if (entreTags.contains("TBL")){
+							quantidadeDecretosQTemTabela.put(tipo, quantidadeDecretosQTemTabela.get(tipo) + 1);
+							somaDecretosQTemTabelaTodosAnos.containsKey(tipo);
+							somaDecretosQTemTabelaTodosAnos.put(tipo, somaDecretosQTemTabelaTodosAnos.get(tipo) + 1);			
 							
-							if (entreTags.contains("CR…DITO SUPLEMENTAR") || 
-									entreTags.contains("DOTA«√O")
+							if (entreTags.contains("CR…DITO SUPLEMENTAR")
+									|| entreTags.contains("CR…DITO EXTRAORDIN¡RIO")
+									|| entreTags.contains("CR…DITO ESPECIAL")
+									|| entreTags.contains("ANULA«√O DE DOTA«√O")
 									|| entreTags.contains("EXCESSO DE ARRECADA«√O")
-									|| entreTags.contains("R$")){
-								somaDecretosTabelaOrcamentaria.containsKey(tipo);
-								somaDecretosTabelaOrcamentaria.put(tipo, somaDecretosTabelaOrcamentaria.get(tipo) + 1);
-							} else {
-								entreTags.replace("TBL", "TBL tipo=\'outro\'");
+									|| entreTags.contains("OR«AMENTO DE INVESTIMENTO")
+									){
+								quantidadeDecretosQTemTabelaOrcamentaria.put(tipo, quantidadeDecretosQTemTabelaOrcamentaria.get(tipo) + 1);
+								somaDecretosQTemTabelaOrcamentariaTodosAnos.containsKey(tipo);
+								somaDecretosQTemTabelaOrcamentariaTodosAnos.put(tipo, somaDecretosQTemTabelaOrcamentariaTodosAnos.get(tipo) + 1);
+								
+								
+								quantidadeTabelasOrcamentariasPorTipoDecreto.put(tipo, quantidadeTabelasOrcamentariasPorTipoDecreto.get(tipo) + entreTags.split("orcamentaria").length);
 							}
 						}
 					}
@@ -722,7 +778,8 @@ public class Segmentacao {
 						if (matcher.group(3) == null){
 							entreTags = matcher.group(3);
 							textoModificado = " <EMP>" + matcher.group(4).trim() + "</EMP>";
-						} else if (matcher.group(3).contains("Empresa")||matcher.group(3).contains("EMPRESA")){
+						} else if (matcher.group(3).contains("Empresa")||matcher.group(3).contains("EMPRESA") || 
+							matcher.group(3).contains("Concession·ria")){
 							entreTags = matcher.group(3) + matcher.group(4);
 							textoModificado = " <EMP>" + (matcher.group(3) + matcher.group(4)).trim() + "</EMP>";
 						} else if (matcher.group(3).contains("empresa") && matcher.group(4).charAt(0) == matcher.group(4).toUpperCase().charAt(0)){
@@ -741,7 +798,8 @@ public class Segmentacao {
 						if (matcher.group(3) == null){
 							entreTags = matcher.group(4);
 							textoModificado = " <EMP>" + matcher.group(4).trim() + "</EMP>";
-						} else if (matcher.group(3).contains("Empresa")||matcher.group(3).contains("EMPRESA")){
+						} else if (matcher.group(3).contains("Empresa")||matcher.group(3).contains("EMPRESA") || 
+								matcher.group(3).contains("Concession·ria")){
 							entreTags = matcher.group(3) + matcher.group(4);
 							textoModificado = " <EMP>" + (matcher.group(3) + matcher.group(4)).trim() + "</EMP>";
 						} else if (matcher.group(3).contains("empresa") && matcher.group(4).charAt(0) == matcher.group(4).toUpperCase().charAt(0)){
@@ -760,7 +818,8 @@ public class Segmentacao {
 						if (matcher.group(3) == null){
 							entreTags = matcher.group(4);
 							textoModificado = " <EMP>" + matcher.group(4).trim() + "</EMP>";
-						} else if (matcher.group(3).contains("Empresa")||matcher.group(3).contains("EMPRESA")){
+						} else if (matcher.group(3).contains("Empresa")||matcher.group(3).contains("EMPRESA") || 
+							matcher.group(3).contains("Concession·ria")){
 							entreTags = matcher.group(3) + matcher.group(4);
 							textoModificado = " <EMP>" + (matcher.group(3) + matcher.group(4)).trim() + "</EMP>";
 						} else if (matcher.group(3).contains("empresa") && matcher.group(4).charAt(0) == matcher.group(4).toUpperCase().charAt(0)){
@@ -778,7 +837,8 @@ public class Segmentacao {
 						if (matcher.group(3) == null){
 							entreTags = matcher.group(4);
 							textoModificado = " <EMP>" + matcher.group(4).trim() + "</EMP>";
-						} else if (matcher.group(3).contains("Empresa")||matcher.group(3).contains("EMPRESA")){
+						} else if (matcher.group(3).contains("Empresa")||matcher.group(3).contains("EMPRESA") || 
+							matcher.group(3).contains("Concession·ria")){
 							entreTags = matcher.group(3) + matcher.group(4);
 							textoModificado = " <EMP>" + (matcher.group(3) + matcher.group(4)).trim() + "</EMP>";
 							decretoSaida = decretoSaida.replaceFirst("\\Q" + entreTags +"\\E", textoModificado);
@@ -914,6 +974,20 @@ public class Segmentacao {
 							decretoSaida = decretoSaida.replaceFirst("\\Q" + primeiroCaractere + entreTags +"\\E", textoModificado);			
 						}
 					}
+					
+					matcher = padraoData.matcher(decretoSaida);
+					while (matcher.find()){
+						entreTags = matcher.group(1);
+						textoModificado = " <DAT>" + matcher.group(1).trim() + "</DAT>";
+						decretoSaida = decretoSaida.replaceFirst("\\Q" + entreTags +"\\E", textoModificado);
+					}
+
+					matcher = padraoIntervaloData.matcher(decretoSaida);
+					while (matcher.find()){
+						entreTags = matcher.group(0);
+						textoModificado = " <INT_DAT>" + matcher.group(0).trim() + "</INT_DAT>";						
+						decretoSaida = decretoSaida.replaceFirst("\\Q" + entreTags +"\\E", textoModificado);
+					}
 
 					matcher = padraoDoc2.matcher(decretoSaida);
 					while (matcher.find()){
@@ -954,7 +1028,9 @@ public class Segmentacao {
 					matcher = padraoDoc.matcher(decretoSaida);
 					while (matcher.find()){
 						entreTags = matcher.group(0);
-						if (entreTags.contains("ImÛveis EdÌsio")) continue;
+						if (entreTags.contains("Registro Geral") && 
+								(entreTags.contains("Ivanilda") || entreTags.contains("EdÌsio"))) 
+							continue;
 						if(nomeArquivo.contains("41.909"))
 							System.out.println(entreTags);
 						primeiroCaractere = entreTags.charAt(0);
@@ -980,20 +1056,31 @@ public class Segmentacao {
 						textoModificado = removerdorSinaisFinaisEntreTags(
 								textoModificado, "DOC", tipoDoc, ePlural);
 						textoModificado = adicionarAtributos(textoModificado);
-						if (textoModificado.split("</(UNI|GRUP|INST|ED|SECR)>").length 
-								> textoModificado.split("<(UNI|GRUP|INST|ED|SECR)>").length){
+						if (textoModificado.split("</UNI>").length 
+								> textoModificado.split("<UNI>").length){
 							textoModificado = textoModificado.replace("</UNI></DOC>", "</DOC></UNI>");
+						}
+						if (textoModificado.split("</GRUP>").length 
+								> textoModificado.split("<GRUP>").length){
 							textoModificado = textoModificado.replace("</GRUP></DOC>", "</DOC></GRUP>");
+						}
+						
+						if (textoModificado.split("</INST>").length 
+								> textoModificado.split("<INST>").length){
 							textoModificado = textoModificado.replace("</INST></DOC>", "</DOC></INST>");
+						}
+						
+						if (textoModificado.split("</ED>").length 
+								> textoModificado.split("<ED>").length){
 							textoModificado = textoModificado.replace("</ED></DOC>", "</DOC></ED>");
+						}
+						
+						if (textoModificado.split("</SECR>").length 
+								> textoModificado.split("<SECR>").length){
 							textoModificado = textoModificado.replace("</SECR></DOC>", "</DOC></SECR>");
-						} /*else if (textoModificado.split("</(CAR|UNI|GRUP|INST|ED)>").length > textoModificado.split("<(CAR|UNI|GRUP|INST|ED)>").length){
-							textoModificado = textoModificado.replace("</CAR></DOC>", "</DOC></CAR>");
-							textoModificado = textoModificado.replace("</UNI></DOC>", "</DOC></UNI>");
-							textoModificado = textoModificado.replace("</GRUP></DOC>", "</DOC></GRUP>");
-							textoModificado = textoModificado.replace("</INST></DOC>", "</DOC></INST>");
-							textoModificado = textoModificado.replace("</ED></DOC>", "</DOC></ED>");
-						}*/
+						}
+						
+						
 						decretoSaida = decretoSaida.replaceFirst("\\Q" + primeiroCaractere + entreTags + "\\E", textoModificado);
 					}
 
@@ -1251,20 +1338,6 @@ public class Segmentacao {
 						decretoSaida = decretoSaida.replaceFirst("\\Q" + primeiroCaractere + entreTags +"\\E", textoModificado);			
 					}
 
-					matcher = padraoData.matcher(decretoSaida);
-					while (matcher.find()){
-						entreTags = matcher.group(1);
-						textoModificado = " <DAT>" + matcher.group(1).trim() + "</DAT>";
-						decretoSaida = decretoSaida.replaceFirst("\\Q" + entreTags +"\\E", textoModificado);
-					}
-
-					matcher = padraoIntervaloData.matcher(decretoSaida);
-					while (matcher.find()){
-						entreTags = matcher.group(0);
-						textoModificado = " <INT_DAT>" + matcher.group(0).trim() + "</INT_DAT>";						
-						decretoSaida = decretoSaida.replaceFirst("\\Q" + entreTags +"\\E", textoModificado);
-					}
-
 					matcher = padraoInfoEmp.matcher(decretoSaida);
 					while (matcher.find()){
 						entreTags = matcher.group(3);
@@ -1313,6 +1386,20 @@ public class Segmentacao {
 						}
 					}
 
+					matcher = padraoMunicipio2.matcher(decretoSaida);
+					while (matcher.find()){
+						entreTags = matcher.group(1);
+						textoModificado = ", em <MUN>" + matcher.group(2).trim() + "</MUN>";
+						decretoSaida = decretoSaida.replaceFirst("\\Q" + entreTags +"\\E", textoModificado);
+					}
+					
+					matcher = padraoMunicipio3.matcher(decretoSaida);
+					while (matcher.find()){
+						entreTags = matcher.group(1);
+						textoModificado = " <MUN>" + matcher.group(1).trim() + "</MUN>";
+						decretoSaida = decretoSaida.replaceFirst("\\Q" + entreTags +"\\E", textoModificado);
+					}
+
 					matcher = padraoLocal.matcher(decretoSaida);
 					while (matcher.find()){
 						entreTags = matcher.group(2);
@@ -1332,6 +1419,8 @@ public class Segmentacao {
 					decretoSaida = decretoSaida.replaceAll(" m2"," m\u00B2");
 					decretoSaida = decretoSaida.replaceAll(" m3"," m\u00B3");
 					decretoSaida = decretoSaida.replaceAll("&sup3;","\u00B3");
+					decretoSaida = decretoSaida.replaceFirst("DECRETA :", "DECRETA:");
+					decretoSaida = decretoSaida.replaceFirst("<TBL></DOC> tipo", "</DOC><TBL tipo");
 					decretoSaida+= "</DECR>";
 
 					a.createNewFile();
@@ -1364,21 +1453,21 @@ public class Segmentacao {
 
 			try {
 				List<String> contador;
-				contador = new ArrayList<>(quantidadeDecretosAnexos.keySet());
+				contador = new ArrayList<>(quantidadeDecretosQTemAnexos.keySet());
 				for (int v = 0; v < contador.size(); v++){	
-					bwb.write(contador.get(v) + "    " + quantidadeDecretosAnexos.get(contador.get(v)));
+					bwb.write(contador.get(v) + "    " + quantidadeDecretosQTemAnexos.get(contador.get(v)));
 					bwb.newLine();
-					bwc.write(contador.get(v) + "    " + quantidadeAnexosTabela.get(contador.get(v)));					
+					bwc.write(contador.get(v) + "    " + quantidadeDecretosQTemTabela.get(contador.get(v)));					
 					bwc.newLine();
-					bwf.write(contador.get(v) + "    " + quantidadeTabelaOrcamentarias.get(contador.get(v)));
+					bwf.write(contador.get(v) + "    " + quantidadeDecretosQTemTabelaOrcamentaria.get(contador.get(v)));
 					bwf.newLine();
-					bwg.write(contador.get(v) + "    " + quantidadeDecretosTabela.get(contador.get(v)));
+					bwg.write(contador.get(v) + "    " + quantidadeTabelasPorTipoDecreto.get(contador.get(v)));
 					bwg.newLine();
-					bwh.write(contador.get(v) + "    " + quantidadeDecretosTabelaOrcamentaria.get(contador.get(v)));
+					bwh.write(contador.get(v) + "    " + quantidadeTabelasOrcamentariasPorTipoDecreto.get(contador.get(v)));
 					bwh.newLine();
-					bwi.write(contador.get(v) + "    " + somaDecretosTabela.get(contador.get(v)));
+					bwi.write(contador.get(v) + "    " + somaDecretosQTemTabelaTodosAnos.get(contador.get(v)));
 					bwi.newLine();
-					bwj.write(contador.get(v) + "    " + somaDecretosTabelaOrcamentaria.get(contador.get(v)));
+					bwj.write(contador.get(v) + "    " + somaDecretosQTemTabelaOrcamentariaTodosAnos.get(contador.get(v)));
 					bwj.newLine();
 				}
 
@@ -1415,9 +1504,6 @@ public class Segmentacao {
 	}
 
 	public static String verificarSeSiglaCorrespondeAoNome(String entreTags, String tag){
-		if (nomeArquivo.contains("42.247")){
-			System.out.println("----------------" + entreTags);
-		}
 		String[] aux = entreTags.split(" -");
 		if (aux.length > 1 && !(tag.equals("DOC") || entreTags.contains("CPRH")) && entreTags.charAt(0) != (entreTags.split(" -")[1]).trim().charAt(0)){
 			entreTags = entreTags.split(" -")[0];	
@@ -1430,38 +1516,25 @@ public class Segmentacao {
 		return entreTags;
 	}
 
-	public static boolean verificarSeTabela(String entreTags, String tipo){
-		boolean isTabela = false;
-		if (entreTags.contains("TBL")){
-			isTabela = true;
-			quantidadeAnexosTabela.put(tipo, quantidadeAnexosTabela.get(tipo) + 1);
-			if (entreTags.contains("R$") || entreTags.contains("TOTAL")){ //È uma tabela orÁament·ria
-				quantidadeTabelaOrcamentarias.put(tipo, quantidadeTabelaOrcamentarias.get(tipo) + 1);
-			}
-		}
-		return isTabela;
-	}
-
 	public static String tabelaReformulada (String tabela, String tipoTabela){
 		Matcher matcher;
 		String aux;
 		tabela = tabela.replaceAll("<(/)?td>", "");
 		tabela = tabela.replaceAll("<(/)?tr>", "");
 		tabela = tabela.replaceAll("<(/)?tbody>", "");
-		tabela = tabela.replaceAll("\t", "  ");
+		tabela = tabela.replaceAll("\t", " ");
 
-		matcher = Pattern.compile("\\(([A-Z«¡…Õ”⁄¬ ‘√’ ]+)\\)").matcher(tabela);
+		matcher = Pattern.compile("\\(([A-Z«¡…Õ”⁄¬ ‘√’ 0-9]+)\\)").matcher(tabela);
 		while (matcher.find()){
 			aux = matcher.group(1);
 			tabela = tabela.replace("(" +matcher.group(1)+ ")", " ");
-			tabela = tabela.replaceFirst("<TBL>","\n<TBL\ttipo=\'orcamentaria\'>\n<TIT>" + aux.trim() + "</TIT>\n ");	
+			tabela = tabela.replaceFirst("<TBL>","\n<TBL tipo=\'orcamentaria\'>\n<TIT>" + aux.trim() + "</TIT>\n ");	
 		}
 
 		matcher = Pattern.compile(" \\d{5}\\s*- [</>A-Z«¡…Õ”⁄¬ ‘√’¿, -]+ ").matcher(tabela);
 		while (matcher.find()){
 			tabela = tabela.replaceFirst(matcher.group(0), "\n<DESCR_ENT>\n<ID_ORG_G>" + matcher.group(0).trim() + "</ID_ORG_G> ");
 		}
-
 
 		matcher = Pattern.compile(" \\d{2}\\.\\d{3}\\.\\d{4}\\.\\d{3,5}\\s*(- )?[\\Q</>-,(). \'\\EA-Z«¡…Õ”⁄¬ ‘√’¿‡a-zÁ·ÈÌÛ˙‚ÍÙ„ı]+ ").matcher(tabela);
 		while (matcher.find()){
@@ -1488,7 +1561,7 @@ public class Segmentacao {
 		matcher = Pattern.compile("(TOTAL)?(\\s+(\\d{1,3}\\.)?(\\d{1,3}\\.)?\\d{3},\\d{2})").matcher(tabela);
 		while (matcher.find()){
 			if (matcher.group(1) != null){
-				tabela = tabela.replaceFirst(matcher.group(2), " <TOT>" + matcher.group(2).trim() + "</TOT> ");
+				tabela = tabela.replaceFirst(matcher.group(2), " <TOT tipoTabela=\"" + tipoTabela + "\">" + matcher.group(2).trim() + "</TOT> ");
 			} else {
 				tabela = tabela.replaceFirst(matcher.group(2), " <VAL>" + matcher.group(2).trim() + "</VAL> ");
 			}
@@ -1569,8 +1642,6 @@ public class Segmentacao {
 			}
 		}
 
-		tabela = tabela.replaceFirst("<TOT", "<TOT tipoTabela=\"" + "\"");
-
 		//matcher = Pattern.compile("\\s*[A-Za-z]+\\s*(</DESCR_OGM>)").matcher(tabela);
 		//while (matcher.find()){
 		//tabela = tabela.replaceFirst(matcher.group(1), "");
@@ -1589,8 +1660,11 @@ public class Segmentacao {
 			String atributosTag, boolean ehPlural){
 		boolean ehPraAddTag = false;
 		Matcher m;
-		if (entreTags.contains("<</")){
-			entreTags = entreTags.replace("<</" + tag, "</" + tag);
+		m = Pattern.compile("<(TAB|TBL)?</").matcher(entreTags);
+		if (m.find()){
+			//n„o funciona o tab/tbl como deveria
+			entreTags = entreTags.replaceAll("<(TAB|TBL)?</" + tag, "</" + tag +
+						(m.group(1) == null ? "" : m.group(1)));
 			ehPraAddTag = true;
 		}
 
@@ -1623,8 +1697,10 @@ public class Segmentacao {
 				entreTags = entreTags.replace(")</" + tag + ">", "</" + tag + ">)");
 			} else if (entreTags.contains("(<")){
 				entreTags = entreTags.replace("(</" + tag + ">", "</" + tag + ">(");
+			} else if (entreTags.contains("-<")){
+				entreTags = entreTags.replace("-</" + tag + ">", "</" + tag + "> -");
 			} else {
-				Pattern pat = Pattern.compile("( [a-z·ÈÌÛ˙‚ÍÙ‡]( )?)</");
+				Pattern pat = Pattern.compile(" [a-z·ÈÌÛ˙‚ÍÙ‡]( )?</");
 				Matcher mat = pat.matcher(entreTags);
 				if (mat.find()){
 					String aux = mat.group(1);
@@ -1637,7 +1713,10 @@ public class Segmentacao {
 			}
 		}
 
-		if(ehPraAddTag) entreTags = entreTags + "<";
+		if(ehPraAddTag) {
+			entreTags = entreTags + "<";
+			System.out.println("aquiÛ" + nomeArquivo);
+		}
 
 		return entreTags;
 	}
@@ -1656,7 +1735,7 @@ public class Segmentacao {
 
 
 	public static String adicionarAtributos(String entreTags){
-		Pattern p = Pattern.compile("([0-9]{2,6})(/|-)?([0-9]{2,4})?");
+		Pattern p = Pattern.compile("([0-9\\Q.\\E]{2,6})(/|-)?([0-9]{2,4})?");
 		Matcher m = p.matcher(entreTags);
 		Matcher mat = Pattern.compile("([a-z])\'>").matcher(entreTags);
 		String aux;
@@ -1672,61 +1751,54 @@ public class Segmentacao {
 		return entreTags;
 	}
 
-	public static String classificadorAnexos(String entreTags, String tipo){
+	public static String classificadorAnexos(String entreTags, String tipo, String unicoOuNumero){
 		String textoModificado;
-		String semAnexo = entreTags.
-				replaceFirst("\\s*</td>(\\s*<td>\\s*</td>\\s*)+(</tr>)?\\s*","");
+		String semAnexo = entreTags;
+		semAnexo = semAnexo.replaceFirst("ANEXO\\s*⁄NICO\\s*</td>\\s*</tr>","");
+		semAnexo = semAnexo.replaceFirst("ANEXO ⁄NICO", "");
 
-		//QQ coisa remover os valores em romano
-		semAnexo = entreTags.
-				replaceFirst("ANEXO\\s*(⁄NICO|I{1,3}|IV|VI{0,3})\\s*</td>\\s*</tr>","");
-
-		String unicoOuNumero = "";
-		/*
-				entreTags.replaceFirst("ANEXO\\s+(⁄NICO|\\d{1,2}|[IVX]{1,4})\\s+(</td>\\s*</tr>)?", "");
-		//coloca o n˙mero do anexo
-		String unicoOuNumero = entreTags.replaceFirst("\\Q" + semAnexo + "\\E", "");
-		if (unicoOuNumero.contains("</td> </tr>")){
-			unicoOuNumero = unicoOuNumero.replaceFirst("</td>\\s*</tr>", "");
+		if (semAnexo.contains("</TBL>") && !semAnexo.contains("<TBL>")){
 			semAnexo = "<TBL>" + semAnexo;
 		}
-		*/
-		if (semAnexo.contains("</TBL>") && !semAnexo.contains("<TBL")){
-			semAnexo = "<TBL>" + semAnexo;
-		}
-
-		if (semAnexo.substring((int) (semAnexo.length()/2)).contains("DESCRI«√O")){
+		
+		if (semAnexo.contains("DESCRI«√O")){
 			textoModificado = unicoOuNumero + " <DESCR>" + semAnexo.trim() + "</DESCR>";
-		} else if (semAnexo.substring((int) (semAnexo.length()/2)).contains("MEMORIAL")){
+		} else if (semAnexo.contains("CERTIFICADO")){
+			textoModificado = unicoOuNumero + " <CERT>" + semAnexo.trim() + "</CERT>";
+		} else if (semAnexo.contains("MEMORIAL")){
 			textoModificado = unicoOuNumero + " <MEMO>" + semAnexo.trim() + "</MEMO>";
-		} else if (semAnexo.substring((int) (semAnexo.length()/2)).contains("PLANO")){
+		} else if (semAnexo.contains("PLANO")){
 			textoModificado = unicoOuNumero + " <PLAN>" + semAnexo.trim() + "</PLAN>";
-		} else if (semAnexo.substring((int) (semAnexo.length()/2)).contains("FORMUL¡RIO")){
+		} else if (semAnexo.contains("DECLARA«√O")){
+			textoModificado = unicoOuNumero + " <DECL>" + semAnexo.trim() + "</DECL>"; 
+		} else if (semAnexo.contains("TERMO")){
+			textoModificado = unicoOuNumero + " <TERM>" + semAnexo.trim() + "</TERM>"; 
+		} else if (semAnexo.contains("FORMUL¡RIO") || semAnexo.contains("FICHA")){
 			textoModificado = unicoOuNumero + " <FORM>" + semAnexo.trim() + "</FORM>";
-		} else if (semAnexo.substring((int) (semAnexo.length()/2)).contains("C”DIGO")){
+		} else if (semAnexo.contains("C”DIGO")){
 			textoModificado = unicoOuNumero + " <COD>" + semAnexo.trim() + "</COD>";
-		} else if (semAnexo.substring((int) (semAnexo.length()/2)).contains("RELAT”RIO")){
+		} else if (semAnexo.contains("RELAT”RIO")){
 			textoModificado = unicoOuNumero + " <REL>" + semAnexo.trim() + "</REL>";
-		} else if (semAnexo.substring((int) (semAnexo.length()/2)).contains("REGIMENTO")){
+		} else if (semAnexo.contains("REGIMENTO")){
 			textoModificado = unicoOuNumero + " <REGTO>" + semAnexo.trim() + "</REGTO>";
-		} else if (semAnexo.substring((int) (semAnexo.length()/2)).contains("REGULAMENTO")){
+		} else if (semAnexo.contains("REGULAMENTO")){
 			textoModificado = unicoOuNumero + " <REGUL>" + semAnexo.trim() + "</REGUL>";
-		} else if (!entreTags.contains("TBL")){
+		} else if (!semAnexo.contains("TBL")){
 			textoModificado = unicoOuNumero + " <OUTRO>" + semAnexo.trim() + "</OUTRO>";
 		} else {
+			//possui estritamente tabela
+			//todos os outros tipos podem ter embutidas tabelas
 			textoModificado = unicoOuNumero + " <TAB>" + semAnexo.trim() + "</TAB>";	
-			quantidadeAnexosTabela.put(tipo, quantidadeAnexosTabela.get(tipo) + 1);
-			if (entreTags.contains("R$") || entreTags.contains("TOTAL")){ //È uma tabela orÁament·ria
-				quantidadeTabelaOrcamentarias.put(tipo, quantidadeTabelaOrcamentarias.get(tipo) + 1);
+			if (semAnexo.contains("ANULA«√O DE DOTA«√O")
+					|| semAnexo.contains("EXCESSO DE ARRECADA«√O")
+					|| semAnexo.contains("CR…DITO SUPLEMENTAR")
+					|| semAnexo.contains("CR…DITO ESPECIAL")
+					|| semAnexo.contains("CR…DITO EXTRAORDIN¡RIO")
+					|| semAnexo.contains("OR«AMENTO DE INVESTIMENTO")){ //È uma tabela orÁament·ria
+				textoModificado = textoModificado.replaceFirst("\\s*</td>(\\s*<td>\\s*</td>\\s*)+(</tr>)?\\s*","");
 			}
 		}
-		
-		//Se n„o possuir TAB, pode-se remover o TBL
-		if(!textoModificado.contains("TAB")){
-			textoModificado = textoModificado.replace("<TBL>", "");
-			textoModificado = textoModificado.replace("</TBL>", "");
-		}
-		
+
 		return textoModificado; 
 	}
 
@@ -1774,288 +1846,287 @@ public class Segmentacao {
 		contadorTiposDecreto.put("Transfere", 0);
 		contadorTiposDecreto.put("Transforma", 0);
 
-		quantidadeDecretosAnexos.put("Abre", 0);
-		quantidadeDecretosAnexos.put("Acrescenta", 0);
-		quantidadeDecretosAnexos.put("Aloca", 0);
-		quantidadeDecretosAnexos.put("Altera", 0);
-		quantidadeDecretosAnexos.put("Amplia", 0);
-		quantidadeDecretosAnexos.put("Aprova", 0);
-		quantidadeDecretosAnexos.put("Autoriza", 0);
-		quantidadeDecretosAnexos.put("Atualiza", 0);
-		quantidadeDecretosAnexos.put("Ativa", 0);
-		quantidadeDecretosAnexos.put("Concede", 0);
-		quantidadeDecretosAnexos.put("Convoca", 0);
-		quantidadeDecretosAnexos.put("Cria", 0);
-		quantidadeDecretosAnexos.put("Declara", 0);
-		quantidadeDecretosAnexos.put("Decreta", 0);
-		quantidadeDecretosAnexos.put("Define", 0);
-		quantidadeDecretosAnexos.put("Delega", 0);
-		quantidadeDecretosAnexos.put("Desativa", 0);
-		quantidadeDecretosAnexos.put("Disciplina", 0);
-		quantidadeDecretosAnexos.put("Dispıe", 0);
-		quantidadeDecretosAnexos.put("Eleva", 0);
-		quantidadeDecretosAnexos.put("Estabelece", 0);
-		quantidadeDecretosAnexos.put("Estende", 0);
-		quantidadeDecretosAnexos.put("Homologa", 0);
-		quantidadeDecretosAnexos.put("Incorpora", 0);
-		quantidadeDecretosAnexos.put("Institui", 0);
-		quantidadeDecretosAnexos.put("Interpreta", 0);
-		quantidadeDecretosAnexos.put("Introduz", 0);
-		quantidadeDecretosAnexos.put("Modifica", 0);
-		quantidadeDecretosAnexos.put("Promove", 0);
-		quantidadeDecretosAnexos.put("Prorroga", 0);
-		quantidadeDecretosAnexos.put("Qualifica", 0);
-		quantidadeDecretosAnexos.put("Reabre", 0);
-		quantidadeDecretosAnexos.put("Redenomina", 0);
-		quantidadeDecretosAnexos.put("Regulamenta", 0);
-		quantidadeDecretosAnexos.put("Relaciona", 0);
-		quantidadeDecretosAnexos.put("Renova", 0);
-		quantidadeDecretosAnexos.put("Revoga", 0);
-		quantidadeDecretosAnexos.put("Transfere", 0);
-		quantidadeDecretosAnexos.put("Transforma", 0);
+		quantidadeDecretosQTemAnexos.put("Abre", 0);
+		quantidadeDecretosQTemAnexos.put("Acrescenta", 0);
+		quantidadeDecretosQTemAnexos.put("Aloca", 0);
+		quantidadeDecretosQTemAnexos.put("Altera", 0);
+		quantidadeDecretosQTemAnexos.put("Amplia", 0);
+		quantidadeDecretosQTemAnexos.put("Aprova", 0);
+		quantidadeDecretosQTemAnexos.put("Autoriza", 0);
+		quantidadeDecretosQTemAnexos.put("Atualiza", 0);
+		quantidadeDecretosQTemAnexos.put("Ativa", 0);
+		quantidadeDecretosQTemAnexos.put("Concede", 0);
+		quantidadeDecretosQTemAnexos.put("Convoca", 0);
+		quantidadeDecretosQTemAnexos.put("Cria", 0);
+		quantidadeDecretosQTemAnexos.put("Declara", 0);
+		quantidadeDecretosQTemAnexos.put("Decreta", 0);
+		quantidadeDecretosQTemAnexos.put("Define", 0);
+		quantidadeDecretosQTemAnexos.put("Delega", 0);
+		quantidadeDecretosQTemAnexos.put("Desativa", 0);
+		quantidadeDecretosQTemAnexos.put("Disciplina", 0);
+		quantidadeDecretosQTemAnexos.put("Dispıe", 0);
+		quantidadeDecretosQTemAnexos.put("Eleva", 0);
+		quantidadeDecretosQTemAnexos.put("Estabelece", 0);
+		quantidadeDecretosQTemAnexos.put("Estende", 0);
+		quantidadeDecretosQTemAnexos.put("Homologa", 0);
+		quantidadeDecretosQTemAnexos.put("Incorpora", 0);
+		quantidadeDecretosQTemAnexos.put("Institui", 0);
+		quantidadeDecretosQTemAnexos.put("Interpreta", 0);
+		quantidadeDecretosQTemAnexos.put("Introduz", 0);
+		quantidadeDecretosQTemAnexos.put("Modifica", 0);
+		quantidadeDecretosQTemAnexos.put("Promove", 0);
+		quantidadeDecretosQTemAnexos.put("Prorroga", 0);
+		quantidadeDecretosQTemAnexos.put("Qualifica", 0);
+		quantidadeDecretosQTemAnexos.put("Reabre", 0);
+		quantidadeDecretosQTemAnexos.put("Redenomina", 0);
+		quantidadeDecretosQTemAnexos.put("Regulamenta", 0);
+		quantidadeDecretosQTemAnexos.put("Relaciona", 0);
+		quantidadeDecretosQTemAnexos.put("Renova", 0);
+		quantidadeDecretosQTemAnexos.put("Revoga", 0);
+		quantidadeDecretosQTemAnexos.put("Transfere", 0);
+		quantidadeDecretosQTemAnexos.put("Transforma", 0);
 
-		quantidadeAnexosTabela.put("Abre", 0);
-		quantidadeAnexosTabela.put("Acrescenta", 0);
-		quantidadeAnexosTabela.put("Aloca", 0);
-		quantidadeAnexosTabela.put("Altera", 0);
-		quantidadeAnexosTabela.put("Amplia", 0);
-		quantidadeAnexosTabela.put("Aprova", 0);
-		quantidadeAnexosTabela.put("Autoriza", 0);
-		quantidadeAnexosTabela.put("Atualiza", 0);
-		quantidadeAnexosTabela.put("Ativa", 0);
-		quantidadeAnexosTabela.put("Concede", 0);
-		quantidadeAnexosTabela.put("Convoca", 0);
-		quantidadeAnexosTabela.put("Cria", 0);
-		quantidadeAnexosTabela.put("Declara", 0);
-		quantidadeAnexosTabela.put("Decreta", 0);
-		quantidadeAnexosTabela.put("Define", 0);
-		quantidadeAnexosTabela.put("Delega", 0);
-		quantidadeAnexosTabela.put("Desativa", 0);
-		quantidadeAnexosTabela.put("Disciplina", 0);
-		quantidadeAnexosTabela.put("Dispıe", 0);
-		quantidadeAnexosTabela.put("Eleva", 0);
-		quantidadeAnexosTabela.put("Estabelece", 0);
-		quantidadeAnexosTabela.put("Estende", 0);
-		quantidadeAnexosTabela.put("Homologa", 0);
-		quantidadeAnexosTabela.put("Incorpora", 0);
-		quantidadeAnexosTabela.put("Institui", 0);
-		quantidadeAnexosTabela.put("Interpreta", 0);
-		quantidadeAnexosTabela.put("Introduz", 0);
-		quantidadeAnexosTabela.put("Modifica", 0);
-		quantidadeAnexosTabela.put("Promove", 0);
-		quantidadeAnexosTabela.put("Prorroga", 0);
-		quantidadeAnexosTabela.put("Qualifica", 0);
-		quantidadeAnexosTabela.put("Reabre", 0);
-		quantidadeAnexosTabela.put("Redenomina", 0);
-		quantidadeAnexosTabela.put("Regulamenta", 0);
-		quantidadeAnexosTabela.put("Relaciona", 0);
-		quantidadeAnexosTabela.put("Renova", 0);
-		quantidadeAnexosTabela.put("Revoga", 0);
-		quantidadeAnexosTabela.put("Transfere", 0);
-		quantidadeAnexosTabela.put("Transforma", 0);
+		quantidadeDecretosQTemTabela.put("Abre", 0);
+		quantidadeDecretosQTemTabela.put("Acrescenta", 0);
+		quantidadeDecretosQTemTabela.put("Aloca", 0);
+		quantidadeDecretosQTemTabela.put("Altera", 0);
+		quantidadeDecretosQTemTabela.put("Amplia", 0);
+		quantidadeDecretosQTemTabela.put("Aprova", 0);
+		quantidadeDecretosQTemTabela.put("Autoriza", 0);
+		quantidadeDecretosQTemTabela.put("Atualiza", 0);
+		quantidadeDecretosQTemTabela.put("Ativa", 0);
+		quantidadeDecretosQTemTabela.put("Concede", 0);
+		quantidadeDecretosQTemTabela.put("Convoca", 0);
+		quantidadeDecretosQTemTabela.put("Cria", 0);
+		quantidadeDecretosQTemTabela.put("Declara", 0);
+		quantidadeDecretosQTemTabela.put("Decreta", 0);
+		quantidadeDecretosQTemTabela.put("Define", 0);
+		quantidadeDecretosQTemTabela.put("Delega", 0);
+		quantidadeDecretosQTemTabela.put("Desativa", 0);
+		quantidadeDecretosQTemTabela.put("Disciplina", 0);
+		quantidadeDecretosQTemTabela.put("Dispıe", 0);
+		quantidadeDecretosQTemTabela.put("Eleva", 0);
+		quantidadeDecretosQTemTabela.put("Estabelece", 0);
+		quantidadeDecretosQTemTabela.put("Estende", 0);
+		quantidadeDecretosQTemTabela.put("Homologa", 0);
+		quantidadeDecretosQTemTabela.put("Incorpora", 0);
+		quantidadeDecretosQTemTabela.put("Institui", 0);
+		quantidadeDecretosQTemTabela.put("Interpreta", 0);
+		quantidadeDecretosQTemTabela.put("Introduz", 0);
+		quantidadeDecretosQTemTabela.put("Modifica", 0);
+		quantidadeDecretosQTemTabela.put("Promove", 0);
+		quantidadeDecretosQTemTabela.put("Prorroga", 0);
+		quantidadeDecretosQTemTabela.put("Qualifica", 0);
+		quantidadeDecretosQTemTabela.put("Reabre", 0);
+		quantidadeDecretosQTemTabela.put("Redenomina", 0);
+		quantidadeDecretosQTemTabela.put("Regulamenta", 0);
+		quantidadeDecretosQTemTabela.put("Relaciona", 0);
+		quantidadeDecretosQTemTabela.put("Renova", 0);
+		quantidadeDecretosQTemTabela.put("Revoga", 0);
+		quantidadeDecretosQTemTabela.put("Transfere", 0);
+		quantidadeDecretosQTemTabela.put("Transforma", 0);
 
-		quantidadeTabelaOrcamentarias.put("Abre", 0);
-		quantidadeTabelaOrcamentarias.put("Acrescenta", 0);
-		quantidadeTabelaOrcamentarias.put("Aloca", 0);
-		quantidadeTabelaOrcamentarias.put("Altera", 0);
-		quantidadeTabelaOrcamentarias.put("Amplia", 0);
-		quantidadeTabelaOrcamentarias.put("Aprova", 0);
-		quantidadeTabelaOrcamentarias.put("Autoriza", 0);
-		quantidadeTabelaOrcamentarias.put("Atualiza", 0);
-		quantidadeTabelaOrcamentarias.put("Ativa", 0);
-		quantidadeTabelaOrcamentarias.put("Concede", 0);
-		quantidadeTabelaOrcamentarias.put("Convoca", 0);
-		quantidadeTabelaOrcamentarias.put("Cria", 0);
-		quantidadeTabelaOrcamentarias.put("Declara", 0);
-		quantidadeTabelaOrcamentarias.put("Decreta", 0);
-		quantidadeTabelaOrcamentarias.put("Define", 0);
-		quantidadeTabelaOrcamentarias.put("Delega", 0);
-		quantidadeTabelaOrcamentarias.put("Desativa", 0);
-		quantidadeTabelaOrcamentarias.put("Disciplina", 0);
-		quantidadeTabelaOrcamentarias.put("Dispıe", 0);
-		quantidadeTabelaOrcamentarias.put("Eleva", 0);
-		quantidadeTabelaOrcamentarias.put("Estabelece", 0);
-		quantidadeTabelaOrcamentarias.put("Estende", 0);
-		quantidadeTabelaOrcamentarias.put("Homologa", 0);
-		quantidadeTabelaOrcamentarias.put("Incorpora", 0);
-		quantidadeTabelaOrcamentarias.put("Institui", 0);
-		quantidadeTabelaOrcamentarias.put("Interpreta", 0);
-		quantidadeTabelaOrcamentarias.put("Introduz", 0);
-		quantidadeTabelaOrcamentarias.put("Modifica", 0);
-		quantidadeTabelaOrcamentarias.put("Promove", 0);
-		quantidadeTabelaOrcamentarias.put("Prorroga", 0);
-		quantidadeTabelaOrcamentarias.put("Qualifica", 0);
-		quantidadeTabelaOrcamentarias.put("Reabre", 0);
-		quantidadeTabelaOrcamentarias.put("Redenomina", 0);
-		quantidadeTabelaOrcamentarias.put("Regulamenta", 0);
-		quantidadeTabelaOrcamentarias.put("Relaciona", 0);
-		quantidadeTabelaOrcamentarias.put("Renova", 0);
-		quantidadeTabelaOrcamentarias.put("Revoga", 0);
-		quantidadeTabelaOrcamentarias.put("Transfere", 0);
-		quantidadeTabelaOrcamentarias.put("Transforma", 0);
+		quantidadeDecretosQTemTabelaOrcamentaria.put("Abre", 0);
+		quantidadeDecretosQTemTabelaOrcamentaria.put("Acrescenta", 0);
+		quantidadeDecretosQTemTabelaOrcamentaria.put("Aloca", 0);
+		quantidadeDecretosQTemTabelaOrcamentaria.put("Altera", 0);
+		quantidadeDecretosQTemTabelaOrcamentaria.put("Amplia", 0);
+		quantidadeDecretosQTemTabelaOrcamentaria.put("Aprova", 0);
+		quantidadeDecretosQTemTabelaOrcamentaria.put("Autoriza", 0);
+		quantidadeDecretosQTemTabelaOrcamentaria.put("Atualiza", 0);
+		quantidadeDecretosQTemTabelaOrcamentaria.put("Ativa", 0);
+		quantidadeDecretosQTemTabelaOrcamentaria.put("Concede", 0);
+		quantidadeDecretosQTemTabelaOrcamentaria.put("Convoca", 0);
+		quantidadeDecretosQTemTabelaOrcamentaria.put("Cria", 0);
+		quantidadeDecretosQTemTabelaOrcamentaria.put("Declara", 0);
+		quantidadeDecretosQTemTabelaOrcamentaria.put("Decreta", 0);
+		quantidadeDecretosQTemTabelaOrcamentaria.put("Define", 0);
+		quantidadeDecretosQTemTabelaOrcamentaria.put("Delega", 0);
+		quantidadeDecretosQTemTabelaOrcamentaria.put("Desativa", 0);
+		quantidadeDecretosQTemTabelaOrcamentaria.put("Disciplina", 0);
+		quantidadeDecretosQTemTabelaOrcamentaria.put("Dispıe", 0);
+		quantidadeDecretosQTemTabelaOrcamentaria.put("Eleva", 0);
+		quantidadeDecretosQTemTabelaOrcamentaria.put("Estabelece", 0);
+		quantidadeDecretosQTemTabelaOrcamentaria.put("Estende", 0);
+		quantidadeDecretosQTemTabelaOrcamentaria.put("Homologa", 0);
+		quantidadeDecretosQTemTabelaOrcamentaria.put("Incorpora", 0);
+		quantidadeDecretosQTemTabelaOrcamentaria.put("Institui", 0);
+		quantidadeDecretosQTemTabelaOrcamentaria.put("Interpreta", 0);
+		quantidadeDecretosQTemTabelaOrcamentaria.put("Introduz", 0);
+		quantidadeDecretosQTemTabelaOrcamentaria.put("Modifica", 0);
+		quantidadeDecretosQTemTabelaOrcamentaria.put("Promove", 0);
+		quantidadeDecretosQTemTabelaOrcamentaria.put("Prorroga", 0);
+		quantidadeDecretosQTemTabelaOrcamentaria.put("Qualifica", 0);
+		quantidadeDecretosQTemTabelaOrcamentaria.put("Reabre", 0);
+		quantidadeDecretosQTemTabelaOrcamentaria.put("Redenomina", 0);
+		quantidadeDecretosQTemTabelaOrcamentaria.put("Regulamenta", 0);
+		quantidadeDecretosQTemTabelaOrcamentaria.put("Relaciona", 0);
+		quantidadeDecretosQTemTabelaOrcamentaria.put("Renova", 0);
+		quantidadeDecretosQTemTabelaOrcamentaria.put("Revoga", 0);
+		quantidadeDecretosQTemTabelaOrcamentaria.put("Transfere", 0);
+		quantidadeDecretosQTemTabelaOrcamentaria.put("Transforma", 0);
 
-		quantidadeDecretosTabela.put("Abre", 0);
-		quantidadeDecretosTabela.put("Acrescenta", 0);
-		quantidadeDecretosTabela.put("Aloca", 0);
-		quantidadeDecretosTabela.put("Altera", 0);
-		quantidadeDecretosTabela.put("Amplia", 0);
-		quantidadeDecretosTabela.put("Aprova", 0);
-		quantidadeDecretosTabela.put("Autoriza", 0);
-		quantidadeDecretosTabela.put("Atualiza", 0);
-		quantidadeDecretosTabela.put("Ativa", 0);
-		quantidadeDecretosTabela.put("Concede", 0);
-		quantidadeDecretosTabela.put("Convoca", 0);
-		quantidadeDecretosTabela.put("Cria", 0);
-		quantidadeDecretosTabela.put("Declara", 0);
-		quantidadeDecretosTabela.put("Decreta", 0);
-		quantidadeDecretosTabela.put("Define", 0);
-		quantidadeDecretosTabela.put("Delega", 0);
-		quantidadeDecretosTabela.put("Desativa", 0);
-		quantidadeDecretosTabela.put("Disciplina", 0);
-		quantidadeDecretosTabela.put("Dispıe", 0);
-		quantidadeDecretosTabela.put("Eleva", 0);
-		quantidadeDecretosTabela.put("Estabelece", 0);
-		quantidadeDecretosTabela.put("Estende", 0);
-		quantidadeDecretosTabela.put("Homologa", 0);
-		quantidadeDecretosTabela.put("Incorpora", 0);
-		quantidadeDecretosTabela.put("Institui", 0);
-		quantidadeDecretosTabela.put("Interpreta", 0);
-		quantidadeDecretosTabela.put("Introduz", 0);
-		quantidadeDecretosTabela.put("Modifica", 0);
-		quantidadeDecretosTabela.put("Promove", 0);
-		quantidadeDecretosTabela.put("Prorroga", 0);
-		quantidadeDecretosTabela.put("Qualifica", 0);
-		quantidadeDecretosTabela.put("Reabre", 0);
-		quantidadeDecretosTabela.put("Redenomina", 0);
-		quantidadeDecretosTabela.put("Regulamenta", 0);
-		quantidadeDecretosTabela.put("Relaciona", 0);
-		quantidadeDecretosTabela.put("Renova", 0);
-		quantidadeDecretosTabela.put("Revoga", 0);
-		quantidadeDecretosTabela.put("Transfere", 0);
-		quantidadeDecretosTabela.put("Transforma", 0);
+		quantidadeTabelasPorTipoDecreto.put("Abre", 0);
+		quantidadeTabelasPorTipoDecreto.put("Acrescenta", 0);
+		quantidadeTabelasPorTipoDecreto.put("Aloca", 0);
+		quantidadeTabelasPorTipoDecreto.put("Altera", 0);
+		quantidadeTabelasPorTipoDecreto.put("Amplia", 0);
+		quantidadeTabelasPorTipoDecreto.put("Aprova", 0);
+		quantidadeTabelasPorTipoDecreto.put("Autoriza", 0);
+		quantidadeTabelasPorTipoDecreto.put("Atualiza", 0);
+		quantidadeTabelasPorTipoDecreto.put("Ativa", 0);
+		quantidadeTabelasPorTipoDecreto.put("Concede", 0);
+		quantidadeTabelasPorTipoDecreto.put("Convoca", 0);
+		quantidadeTabelasPorTipoDecreto.put("Cria", 0);
+		quantidadeTabelasPorTipoDecreto.put("Declara", 0);
+		quantidadeTabelasPorTipoDecreto.put("Decreta", 0);
+		quantidadeTabelasPorTipoDecreto.put("Define", 0);
+		quantidadeTabelasPorTipoDecreto.put("Delega", 0);
+		quantidadeTabelasPorTipoDecreto.put("Desativa", 0);
+		quantidadeTabelasPorTipoDecreto.put("Disciplina", 0);
+		quantidadeTabelasPorTipoDecreto.put("Dispıe", 0);
+		quantidadeTabelasPorTipoDecreto.put("Eleva", 0);
+		quantidadeTabelasPorTipoDecreto.put("Estabelece", 0);
+		quantidadeTabelasPorTipoDecreto.put("Estende", 0);
+		quantidadeTabelasPorTipoDecreto.put("Homologa", 0);
+		quantidadeTabelasPorTipoDecreto.put("Incorpora", 0);
+		quantidadeTabelasPorTipoDecreto.put("Institui", 0);
+		quantidadeTabelasPorTipoDecreto.put("Interpreta", 0);
+		quantidadeTabelasPorTipoDecreto.put("Introduz", 0);
+		quantidadeTabelasPorTipoDecreto.put("Modifica", 0);
+		quantidadeTabelasPorTipoDecreto.put("Promove", 0);
+		quantidadeTabelasPorTipoDecreto.put("Prorroga", 0);
+		quantidadeTabelasPorTipoDecreto.put("Qualifica", 0);
+		quantidadeTabelasPorTipoDecreto.put("Reabre", 0);
+		quantidadeTabelasPorTipoDecreto.put("Redenomina", 0);
+		quantidadeTabelasPorTipoDecreto.put("Regulamenta", 0);
+		quantidadeTabelasPorTipoDecreto.put("Relaciona", 0);
+		quantidadeTabelasPorTipoDecreto.put("Renova", 0);
+		quantidadeTabelasPorTipoDecreto.put("Revoga", 0);
+		quantidadeTabelasPorTipoDecreto.put("Transfere", 0);
+		quantidadeTabelasPorTipoDecreto.put("Transforma", 0);
 
-		quantidadeDecretosTabelaOrcamentaria.put("Abre", 0);
-		quantidadeDecretosTabelaOrcamentaria.put("Acrescenta", 0);
-		quantidadeDecretosTabelaOrcamentaria.put("Aloca", 0);
-		quantidadeDecretosTabelaOrcamentaria.put("Altera", 0);
-		quantidadeDecretosTabelaOrcamentaria.put("Amplia", 0);
-		quantidadeDecretosTabelaOrcamentaria.put("Aprova", 0);
-		quantidadeDecretosTabelaOrcamentaria.put("Autoriza", 0);
-		quantidadeDecretosTabelaOrcamentaria.put("Atualiza", 0);
-		quantidadeDecretosTabelaOrcamentaria.put("Ativa", 0);
-		quantidadeDecretosTabelaOrcamentaria.put("Concede", 0);
-		quantidadeDecretosTabelaOrcamentaria.put("Convoca", 0);
-		quantidadeDecretosTabelaOrcamentaria.put("Cria", 0);
-		quantidadeDecretosTabelaOrcamentaria.put("Declara", 0);
-		quantidadeDecretosTabelaOrcamentaria.put("Decreta", 0);
-		quantidadeDecretosTabelaOrcamentaria.put("Define", 0);
-		quantidadeDecretosTabelaOrcamentaria.put("Delega", 0);
-		quantidadeDecretosTabelaOrcamentaria.put("Desativa", 0);
-		quantidadeDecretosTabelaOrcamentaria.put("Disciplina", 0);
-		quantidadeDecretosTabelaOrcamentaria.put("Dispıe", 0);
-		quantidadeDecretosTabelaOrcamentaria.put("Eleva", 0);
-		quantidadeDecretosTabelaOrcamentaria.put("Estabelece", 0);
-		quantidadeDecretosTabelaOrcamentaria.put("Estende", 0);
-		quantidadeDecretosTabelaOrcamentaria.put("Homologa", 0);
-		quantidadeDecretosTabelaOrcamentaria.put("Incorpora", 0);
-		quantidadeDecretosTabelaOrcamentaria.put("Institui", 0);
-		quantidadeDecretosTabelaOrcamentaria.put("Interpreta", 0);
-		quantidadeDecretosTabelaOrcamentaria.put("Introduz", 0);
-		quantidadeDecretosTabelaOrcamentaria.put("Modifica", 0);
-		quantidadeDecretosTabelaOrcamentaria.put("Promove", 0);
-		quantidadeDecretosTabelaOrcamentaria.put("Prorroga", 0);
-		quantidadeDecretosTabelaOrcamentaria.put("Qualifica", 0);
-		quantidadeDecretosTabelaOrcamentaria.put("Reabre", 0);
-		quantidadeDecretosTabelaOrcamentaria.put("Redenomina", 0);
-		quantidadeDecretosTabelaOrcamentaria.put("Regulamenta", 0);
-		quantidadeDecretosTabelaOrcamentaria.put("Relaciona", 0);
-		quantidadeDecretosTabelaOrcamentaria.put("Renova", 0);
-		quantidadeDecretosTabelaOrcamentaria.put("Revoga", 0);
-		quantidadeDecretosTabelaOrcamentaria.put("Transfere", 0);
-		quantidadeDecretosTabelaOrcamentaria.put("Transforma", 0);
+		quantidadeTabelasOrcamentariasPorTipoDecreto.put("Abre", 0);
+		quantidadeTabelasOrcamentariasPorTipoDecreto.put("Acrescenta", 0);
+		quantidadeTabelasOrcamentariasPorTipoDecreto.put("Aloca", 0);
+		quantidadeTabelasOrcamentariasPorTipoDecreto.put("Altera", 0);
+		quantidadeTabelasOrcamentariasPorTipoDecreto.put("Amplia", 0);
+		quantidadeTabelasOrcamentariasPorTipoDecreto.put("Aprova", 0);
+		quantidadeTabelasOrcamentariasPorTipoDecreto.put("Autoriza", 0);
+		quantidadeTabelasOrcamentariasPorTipoDecreto.put("Atualiza", 0);
+		quantidadeTabelasOrcamentariasPorTipoDecreto.put("Ativa", 0);
+		quantidadeTabelasOrcamentariasPorTipoDecreto.put("Concede", 0);
+		quantidadeTabelasOrcamentariasPorTipoDecreto.put("Convoca", 0);
+		quantidadeTabelasOrcamentariasPorTipoDecreto.put("Cria", 0);
+		quantidadeTabelasOrcamentariasPorTipoDecreto.put("Declara", 0);
+		quantidadeTabelasOrcamentariasPorTipoDecreto.put("Decreta", 0);
+		quantidadeTabelasOrcamentariasPorTipoDecreto.put("Define", 0);
+		quantidadeTabelasOrcamentariasPorTipoDecreto.put("Delega", 0);
+		quantidadeTabelasOrcamentariasPorTipoDecreto.put("Desativa", 0);
+		quantidadeTabelasOrcamentariasPorTipoDecreto.put("Disciplina", 0);
+		quantidadeTabelasOrcamentariasPorTipoDecreto.put("Dispıe", 0);
+		quantidadeTabelasOrcamentariasPorTipoDecreto.put("Eleva", 0);
+		quantidadeTabelasOrcamentariasPorTipoDecreto.put("Estabelece", 0);
+		quantidadeTabelasOrcamentariasPorTipoDecreto.put("Estende", 0);
+		quantidadeTabelasOrcamentariasPorTipoDecreto.put("Homologa", 0);
+		quantidadeTabelasOrcamentariasPorTipoDecreto.put("Incorpora", 0);
+		quantidadeTabelasOrcamentariasPorTipoDecreto.put("Institui", 0);
+		quantidadeTabelasOrcamentariasPorTipoDecreto.put("Interpreta", 0);
+		quantidadeTabelasOrcamentariasPorTipoDecreto.put("Introduz", 0);
+		quantidadeTabelasOrcamentariasPorTipoDecreto.put("Modifica", 0);
+		quantidadeTabelasOrcamentariasPorTipoDecreto.put("Promove", 0);
+		quantidadeTabelasOrcamentariasPorTipoDecreto.put("Prorroga", 0);
+		quantidadeTabelasOrcamentariasPorTipoDecreto.put("Qualifica", 0);
+		quantidadeTabelasOrcamentariasPorTipoDecreto.put("Reabre", 0);
+		quantidadeTabelasOrcamentariasPorTipoDecreto.put("Redenomina", 0);
+		quantidadeTabelasOrcamentariasPorTipoDecreto.put("Regulamenta", 0);
+		quantidadeTabelasOrcamentariasPorTipoDecreto.put("Relaciona", 0);
+		quantidadeTabelasOrcamentariasPorTipoDecreto.put("Renova", 0);
+		quantidadeTabelasOrcamentariasPorTipoDecreto.put("Revoga", 0);
+		quantidadeTabelasOrcamentariasPorTipoDecreto.put("Transfere", 0);
+		quantidadeTabelasOrcamentariasPorTipoDecreto.put("Transforma", 0);
 	}
 
 	public static void popularAsHashtablesSoma(){
-		somaDecretosTabelaOrcamentaria.put("Abre", 0);
-		somaDecretosTabelaOrcamentaria.put("Acrescenta", 0);
-		somaDecretosTabelaOrcamentaria.put("Aloca", 0);
-		somaDecretosTabelaOrcamentaria.put("Altera", 0);
-		somaDecretosTabelaOrcamentaria.put("Amplia", 0);
-		somaDecretosTabelaOrcamentaria.put("Aprova", 0);
-		somaDecretosTabelaOrcamentaria.put("Autoriza", 0);
-		somaDecretosTabelaOrcamentaria.put("Atualiza", 0);
-		somaDecretosTabelaOrcamentaria.put("Ativa", 0);
-		somaDecretosTabelaOrcamentaria.put("Concede", 0);
-		somaDecretosTabelaOrcamentaria.put("Convoca", 0);
-		somaDecretosTabelaOrcamentaria.put("Cria", 0);
-		somaDecretosTabelaOrcamentaria.put("Declara", 0);
-		somaDecretosTabelaOrcamentaria.put("Decreta", 0);
-		somaDecretosTabelaOrcamentaria.put("Define", 0);
-		somaDecretosTabelaOrcamentaria.put("Delega", 0);
-		somaDecretosTabelaOrcamentaria.put("Desativa", 0);
-		somaDecretosTabelaOrcamentaria.put("Disciplina", 0);
-		somaDecretosTabelaOrcamentaria.put("Dispıe", 0);
-		somaDecretosTabelaOrcamentaria.put("Eleva", 0);
-		somaDecretosTabelaOrcamentaria.put("Estabelece", 0);
-		somaDecretosTabelaOrcamentaria.put("Estende", 0);
-		somaDecretosTabelaOrcamentaria.put("Homologa", 0);
-		somaDecretosTabelaOrcamentaria.put("Incorpora", 0);
-		somaDecretosTabelaOrcamentaria.put("Institui", 0);
-		somaDecretosTabelaOrcamentaria.put("Interpreta", 0);
-		somaDecretosTabelaOrcamentaria.put("Introduz", 0);
-		somaDecretosTabelaOrcamentaria.put("Modifica", 0);
-		somaDecretosTabelaOrcamentaria.put("Promove", 0);
-		somaDecretosTabelaOrcamentaria.put("Prorroga", 0);
-		somaDecretosTabelaOrcamentaria.put("Qualifica", 0);
-		somaDecretosTabelaOrcamentaria.put("Reabre", 0);
-		somaDecretosTabelaOrcamentaria.put("Redenomina", 0);
-		somaDecretosTabelaOrcamentaria.put("Regulamenta", 0);
-		somaDecretosTabelaOrcamentaria.put("Relaciona", 0);
-		somaDecretosTabelaOrcamentaria.put("Renova", 0);
-		somaDecretosTabelaOrcamentaria.put("Revoga", 0);
-		somaDecretosTabelaOrcamentaria.put("Transfere", 0);
-		somaDecretosTabelaOrcamentaria.put("Transforma", 0);
+		somaDecretosQTemTabelaOrcamentariaTodosAnos.put("Abre", 0);
+		somaDecretosQTemTabelaOrcamentariaTodosAnos.put("Acrescenta", 0);
+		somaDecretosQTemTabelaOrcamentariaTodosAnos.put("Aloca", 0);
+		somaDecretosQTemTabelaOrcamentariaTodosAnos.put("Altera", 0);
+		somaDecretosQTemTabelaOrcamentariaTodosAnos.put("Amplia", 0);
+		somaDecretosQTemTabelaOrcamentariaTodosAnos.put("Aprova", 0);
+		somaDecretosQTemTabelaOrcamentariaTodosAnos.put("Autoriza", 0);
+		somaDecretosQTemTabelaOrcamentariaTodosAnos.put("Atualiza", 0);
+		somaDecretosQTemTabelaOrcamentariaTodosAnos.put("Ativa", 0);
+		somaDecretosQTemTabelaOrcamentariaTodosAnos.put("Concede", 0);
+		somaDecretosQTemTabelaOrcamentariaTodosAnos.put("Convoca", 0);
+		somaDecretosQTemTabelaOrcamentariaTodosAnos.put("Cria", 0);
+		somaDecretosQTemTabelaOrcamentariaTodosAnos.put("Declara", 0);
+		somaDecretosQTemTabelaOrcamentariaTodosAnos.put("Decreta", 0);
+		somaDecretosQTemTabelaOrcamentariaTodosAnos.put("Define", 0);
+		somaDecretosQTemTabelaOrcamentariaTodosAnos.put("Delega", 0);
+		somaDecretosQTemTabelaOrcamentariaTodosAnos.put("Desativa", 0);
+		somaDecretosQTemTabelaOrcamentariaTodosAnos.put("Disciplina", 0);
+		somaDecretosQTemTabelaOrcamentariaTodosAnos.put("Dispıe", 0);
+		somaDecretosQTemTabelaOrcamentariaTodosAnos.put("Eleva", 0);
+		somaDecretosQTemTabelaOrcamentariaTodosAnos.put("Estabelece", 0);
+		somaDecretosQTemTabelaOrcamentariaTodosAnos.put("Estende", 0);
+		somaDecretosQTemTabelaOrcamentariaTodosAnos.put("Homologa", 0);
+		somaDecretosQTemTabelaOrcamentariaTodosAnos.put("Incorpora", 0);
+		somaDecretosQTemTabelaOrcamentariaTodosAnos.put("Institui", 0);
+		somaDecretosQTemTabelaOrcamentariaTodosAnos.put("Interpreta", 0);
+		somaDecretosQTemTabelaOrcamentariaTodosAnos.put("Introduz", 0);
+		somaDecretosQTemTabelaOrcamentariaTodosAnos.put("Modifica", 0);
+		somaDecretosQTemTabelaOrcamentariaTodosAnos.put("Promove", 0);
+		somaDecretosQTemTabelaOrcamentariaTodosAnos.put("Prorroga", 0);
+		somaDecretosQTemTabelaOrcamentariaTodosAnos.put("Qualifica", 0);
+		somaDecretosQTemTabelaOrcamentariaTodosAnos.put("Reabre", 0);
+		somaDecretosQTemTabelaOrcamentariaTodosAnos.put("Redenomina", 0);
+		somaDecretosQTemTabelaOrcamentariaTodosAnos.put("Regulamenta", 0);
+		somaDecretosQTemTabelaOrcamentariaTodosAnos.put("Relaciona", 0);
+		somaDecretosQTemTabelaOrcamentariaTodosAnos.put("Renova", 0);
+		somaDecretosQTemTabelaOrcamentariaTodosAnos.put("Revoga", 0);
+		somaDecretosQTemTabelaOrcamentariaTodosAnos.put("Transfere", 0);
+		somaDecretosQTemTabelaOrcamentariaTodosAnos.put("Transforma", 0);
 
 
-		somaDecretosTabela.put("Abre", 0);
-		somaDecretosTabela.put("Acrescenta", 0);
-		somaDecretosTabela.put("Aloca", 0);
-		somaDecretosTabela.put("Altera", 0);
-		somaDecretosTabela.put("Amplia", 0);
-		somaDecretosTabela.put("Aprova", 0);
-		somaDecretosTabela.put("Autoriza", 0);
-		somaDecretosTabela.put("Atualiza", 0);
-		somaDecretosTabela.put("Ativa", 0);
-		somaDecretosTabela.put("Concede", 0);
-		somaDecretosTabela.put("Convoca", 0);
-		somaDecretosTabela.put("Cria", 0);
-		somaDecretosTabela.put("Declara", 0);
-		somaDecretosTabela.put("Decreta", 0);
-		somaDecretosTabela.put("Define", 0);
-		somaDecretosTabela.put("Delega", 0);
-		somaDecretosTabela.put("Desativa", 0);
-		somaDecretosTabela.put("Disciplina", 0);
-		somaDecretosTabela.put("Dispıe", 0);
-		somaDecretosTabela.put("Eleva", 0);
-		somaDecretosTabela.put("Estabelece", 0);
-		somaDecretosTabela.put("Estende", 0);
-		somaDecretosTabela.put("Homologa", 0);
-		somaDecretosTabela.put("Incorpora", 0);
-		somaDecretosTabela.put("Institui", 0);
-		somaDecretosTabela.put("Interpreta", 0);
-		somaDecretosTabela.put("Introduz", 0);
-		somaDecretosTabela.put("Modifica", 0);
-		somaDecretosTabela.put("Promove", 0);
-		somaDecretosTabela.put("Prorroga", 0);
-		somaDecretosTabela.put("Qualifica", 0);
-		somaDecretosTabela.put("Reabre", 0);
-		somaDecretosTabela.put("Redenomina", 0);
-		somaDecretosTabela.put("Regulamenta", 0);
-		somaDecretosTabela.put("Relaciona", 0);
-		somaDecretosTabela.put("Renova", 0);
-		somaDecretosTabela.put("Revoga", 0);
-		somaDecretosTabela.put("Transfere", 0);
-		somaDecretosTabela.put("Transforma", 0);
-
+		somaDecretosQTemTabelaTodosAnos.put("Abre", 0);
+		somaDecretosQTemTabelaTodosAnos.put("Acrescenta", 0);
+		somaDecretosQTemTabelaTodosAnos.put("Aloca", 0);
+		somaDecretosQTemTabelaTodosAnos.put("Altera", 0);
+		somaDecretosQTemTabelaTodosAnos.put("Amplia", 0);
+		somaDecretosQTemTabelaTodosAnos.put("Aprova", 0);
+		somaDecretosQTemTabelaTodosAnos.put("Autoriza", 0);
+		somaDecretosQTemTabelaTodosAnos.put("Atualiza", 0);
+		somaDecretosQTemTabelaTodosAnos.put("Ativa", 0);
+		somaDecretosQTemTabelaTodosAnos.put("Concede", 0);
+		somaDecretosQTemTabelaTodosAnos.put("Convoca", 0);
+		somaDecretosQTemTabelaTodosAnos.put("Cria", 0);
+		somaDecretosQTemTabelaTodosAnos.put("Declara", 0);
+		somaDecretosQTemTabelaTodosAnos.put("Decreta", 0);
+		somaDecretosQTemTabelaTodosAnos.put("Define", 0);
+		somaDecretosQTemTabelaTodosAnos.put("Delega", 0);
+		somaDecretosQTemTabelaTodosAnos.put("Desativa", 0);
+		somaDecretosQTemTabelaTodosAnos.put("Disciplina", 0);
+		somaDecretosQTemTabelaTodosAnos.put("Dispıe", 0);
+		somaDecretosQTemTabelaTodosAnos.put("Eleva", 0);
+		somaDecretosQTemTabelaTodosAnos.put("Estabelece", 0);
+		somaDecretosQTemTabelaTodosAnos.put("Estende", 0);
+		somaDecretosQTemTabelaTodosAnos.put("Homologa", 0);
+		somaDecretosQTemTabelaTodosAnos.put("Incorpora", 0);
+		somaDecretosQTemTabelaTodosAnos.put("Institui", 0);
+		somaDecretosQTemTabelaTodosAnos.put("Interpreta", 0);
+		somaDecretosQTemTabelaTodosAnos.put("Introduz", 0);
+		somaDecretosQTemTabelaTodosAnos.put("Modifica", 0);
+		somaDecretosQTemTabelaTodosAnos.put("Promove", 0);
+		somaDecretosQTemTabelaTodosAnos.put("Prorroga", 0);
+		somaDecretosQTemTabelaTodosAnos.put("Qualifica", 0);
+		somaDecretosQTemTabelaTodosAnos.put("Reabre", 0);
+		somaDecretosQTemTabelaTodosAnos.put("Redenomina", 0);
+		somaDecretosQTemTabelaTodosAnos.put("Regulamenta", 0);
+		somaDecretosQTemTabelaTodosAnos.put("Relaciona", 0);
+		somaDecretosQTemTabelaTodosAnos.put("Renova", 0);
+		somaDecretosQTemTabelaTodosAnos.put("Revoga", 0);
+		somaDecretosQTemTabelaTodosAnos.put("Transfere", 0);
+		somaDecretosQTemTabelaTodosAnos.put("Transforma", 0);
 	}
 }

@@ -91,10 +91,8 @@ public class RemovedorFormatacaoCaracteresEspHTML {
 					br.close();
 					fr.close();
 				} catch (FileNotFoundException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 
@@ -125,7 +123,12 @@ public class RemovedorFormatacaoCaracteresEspHTML {
 				decreto = decreto.replaceAll("&ccedil;", "ç");
 				decreto = decreto.replaceAll("&Ccedil;", "Ç");
 				decreto = decreto.replaceAll("&uuml;", "u");//u com trema
-				decreto = decreto.replaceAll("&Uuml;;", "U");
+				decreto = decreto.replaceAll("&Uuml;", "U");
+				decreto = decreto.replaceAll("&ugrave;", "ú");
+				decreto = decreto.replaceAll("&uml;", "");//nada mesmo
+				decreto = decreto.replaceAll("\\Qï¬?\\E", "fi");
+				decreto = decreto.replaceAll("\\QcÌ§aÌƒ\\E", "çã");
+				decreto = decreto.replaceAll("\\QaÌ?\\E", "á");
 
 				//substituição de símbolos (sinais)
 				decreto = decreto.replaceAll("&nbsp;", " ");
@@ -146,15 +149,10 @@ public class RemovedorFormatacaoCaracteresEspHTML {
 				decreto = decreto.replaceAll("&frac12;", "1/2");
 				decreto = decreto.replaceAll("&frac13;", "1/3");
 				decreto = decreto.replaceAll("&acute;", "\'");
-				decreto = decreto.replaceAll("&ugrave;", "ú");
 				decreto = decreto.replaceAll(",000", ",00");
 				decreto = decreto.replaceAll("&amp;", "e");//antes era & mas dá erro
 				decreto = decreto.replaceAll("&hellip;", ".");
 				decreto = decreto.replaceAll("âˆ†", "\u2033");
-				decreto = decreto.replaceAll("&uml;", "");//nada mesmo
-				decreto = decreto.replaceAll("\\Qï¬?\\E", "fi");
-				decreto = decreto.replaceAll("\\QcÌ§aÌƒ\\E", "çã");
-				decreto = decreto.replaceAll("\\QaÌ?\\E", "á");
 				decreto = decreto.replaceAll(" ", " ");
 
 
@@ -229,11 +227,11 @@ public class RemovedorFormatacaoCaracteresEspHTML {
 					decreto = decreto.replaceFirst("([0-9])([A-Za-zçãàáâéêíóôõúÂÃÁÀÉÊÍÓÔÕÚÇ])", substituirPor);	
 				}
 				
-				padrao = Pattern.compile(" m (2|3)( |;|,|\\.|\\))");
+				padrao = Pattern.compile(" m\\s*(2|3)( |;|,|\\.|\\))");
 				matcher = padrao.matcher(decreto);
 				while (matcher.find()){
 					substituirPor = " m" + matcher.group(1) + matcher.group(2);
-					decreto = decreto.replaceFirst(" m (2|3)( |;|,|\\.|\\))", substituirPor);	
+					decreto = decreto.replaceFirst(" m\\s*(2|3)( |;|,|\\.|\\))", substituirPor);	
 				}
 				
 				padrao = Pattern.compile("(,|\\.)([A-ZÁÉÍÓÚÂÊÔa-záéíóúâêô])");
@@ -263,24 +261,20 @@ public class RemovedorFormatacaoCaracteresEspHTML {
 				decreto = decreto.replaceAll("Policia", "Polícia");
 				decreto = decreto.replaceAll("C\\s*O\\s*N\\*\\s*S\\s*I\\s*D\\s*E\\s*R\\s*A\\s*N\\s*D\\s*O", "CONSIDERANDO");
 				decreto = decreto.replaceAll(" ONSIDERANDO", " CONSIDERANDO");
-				//garante que há ao menos dois espaços na hora da segmentação, é necessário para o funcionamento do regex
 				decreto = decreto.replaceAll("GVERNO|GPVERNO", "GOVERNO");
 				decreto = decreto.replaceAll("ÚNCIO", "ÚNICO");
 				decreto = decreto.replaceAll("GVERNADOR|GPVERNADOR", "GOVERNADOR");
 				decreto = decreto.replaceAll("MEORIAL", "MEMORIAL");
 				decreto = decreto.replaceAll("F undação", "Fundação");
 				decreto = decreto.replaceAll("Conselho estadual", "Conselho Estadual");
-				decreto = decreto.replaceAll(" n °", " nº");
-				decreto = decreto.replaceAll(" n º", " nº");
+				decreto = decreto.replaceAll(" n (°|º)", " nº");
+				decreto = decreto.replaceAll(" n(\\.)? o ", " nº ");
 				decreto = decreto.replaceAll(" de do ", " do ");
-				decreto = decreto.replaceAll(" n o ", " nº ");
 				decreto = decreto.replaceAll("Oficio", "Ofício");
-				decreto = decreto.replaceAll("O G O VER N ADOR DO E S T ADO", "O GOVERNADOR DO ESTADO");
+				decreto = decreto.replaceAll("O\\s*G\\s*O\\s*V\\s*E\\s*R\\s*N\\s*A\\s*D\\s*O\\s*R\\s*DO\\s*E\\s*S\\s*T\\s*A\\s*D\\s*O", "O GOVERNADOR DO ESTADO");
 				decreto = decreto.replaceAll("D\\s*E\\s*C\\s*R\\s*E\\s*T\\s*A", "DECRETA");
 				decreto = decreto.replaceAll("SETMBRO", "SETEMBRO");
 				decreto = decreto.replaceAll(" /", "/");
-				
-
 
 				try {
 					fw = new FileWriter(new File(arquivoPasta + "\\\\" + nomeArquivo.replace("html", "xml")));
@@ -289,7 +283,6 @@ public class RemovedorFormatacaoCaracteresEspHTML {
 					bw.flush();
 					bw.close();
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 
