@@ -274,6 +274,8 @@ public class RemovedorFormatacaoCaracteresEspHTML {
 				decreto = decreto.replaceAll("O\\s*G\\s*O\\s*V\\s*E\\s*R\\s*N\\s*A\\s*D\\s*O\\s*R\\s*DO\\s*E\\s*S\\s*T\\s*A\\s*D\\s*O", "O GOVERNADOR DO ESTADO");
 				decreto = decreto.replaceAll("D\\s*E\\s*C\\s*R\\s*E\\s*T\\s*A", "DECRETA");
 				decreto = decreto.replaceAll("SETMBRO", "SETEMBRO");
+				decreto = decreto.replaceAll("ANULACÃO", "ANULAÇÃO");
+				decreto = decreto.replaceAll("lha", "Ilha");
 				decreto = decreto.replaceAll(" /", "/");
 
 				try {

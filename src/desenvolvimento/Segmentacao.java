@@ -55,6 +55,7 @@ public class Segmentacao {
 		File g = new File ("qtdTabelasPorTipoDecreto");
 		File y = new File("somaDecretosQTemTabelaTodosAnos");
 		File z = new File("somaDecretosQTemTabelaOrcamentariaTodosAnos");
+		File u = new File("decretoTipo");
 
 		//"Cria-se" os Files que apontam para as pastas dos decretos
 		File[] pastas = new File[3];
@@ -94,6 +95,8 @@ public class Segmentacao {
 		BufferedWriter bwi = null;
 		FileWriter fwj;
 		BufferedWriter bwj = null;
+		FileWriter fwu;
+		BufferedWriter bwu = null;
 		FileWriter fwarq;
 		BufferedWriter bwarq = null;
 
@@ -308,6 +311,8 @@ public class Segmentacao {
 			bwi = new BufferedWriter(fwi);
 			fwj = new FileWriter(z);
 			bwj = new BufferedWriter(fwj);
+			fwu = new FileWriter(u);
+			bwu = new BufferedWriter(fwu);
 			bwd.write("\nDados\n");
 			bwd.newLine();
 		} catch (IOException e1) {
@@ -428,6 +433,8 @@ public class Segmentacao {
 						System.out.println(decretoSaida);
 					}
 
+					bwu.write(nomeArquivo + "  ----  " + tipo  );
+					bwu.newLine();
 
 					decretoSaida = decretoSaida.replace("<DECR>", "<DECR tipo=\'" + tipo.toLowerCase() + "\'>");
 
@@ -1498,6 +1505,8 @@ public class Segmentacao {
 			bwi.close();
 			bwj.flush();
 			bwj.close();
+			bwu.flush();
+			bwu.close();
 		}  catch (IOException e) {
 			System.out.println("Os streams foram fechados corretamente.");
 		}
@@ -1561,7 +1570,7 @@ public class Segmentacao {
 		matcher = Pattern.compile("(TOTAL)?(\\s+(\\d{1,3}\\.)?(\\d{1,3}\\.)?\\d{3},\\d{2})").matcher(tabela);
 		while (matcher.find()){
 			if (matcher.group(1) != null){
-				tabela = tabela.replaceFirst(matcher.group(2), " <TOT tipoTabela=\"" + tipoTabela + "\">" + matcher.group(2).trim() + "</TOT> ");
+				tabela = tabela.replaceFirst(matcher.group(2), " <TOT tipoOrcamentaria=\"" + tipoTabela + "\">" + matcher.group(2).trim() + "</TOT> ");
 			} else {
 				tabela = tabela.replaceFirst(matcher.group(2), " <VAL>" + matcher.group(2).trim() + "</VAL> ");
 			}
@@ -1761,22 +1770,16 @@ public class Segmentacao {
 			semAnexo = "<TBL>" + semAnexo;
 		}
 		
-		if (semAnexo.contains("DESCRIÇÃO")){
-			textoModificado = unicoOuNumero + " <DESCR>" + semAnexo.trim() + "</DESCR>";
-		} else if (semAnexo.contains("CERTIFICADO")){
-			textoModificado = unicoOuNumero + " <CERT>" + semAnexo.trim() + "</CERT>";
-		} else if (semAnexo.contains("MEMORIAL")){
+		if (semAnexo.contains("MEMORIAL")){
 			textoModificado = unicoOuNumero + " <MEMO>" + semAnexo.trim() + "</MEMO>";
 		} else if (semAnexo.contains("PLANO")){
 			textoModificado = unicoOuNumero + " <PLAN>" + semAnexo.trim() + "</PLAN>";
-		} else if (semAnexo.contains("DECLARAÇÃO")){
+		} else if (semAnexo.contains("DECLARAÇÃO") || semAnexo.contains("CERTIFICADO")){
 			textoModificado = unicoOuNumero + " <DECL>" + semAnexo.trim() + "</DECL>"; 
 		} else if (semAnexo.contains("TERMO")){
 			textoModificado = unicoOuNumero + " <TERM>" + semAnexo.trim() + "</TERM>"; 
 		} else if (semAnexo.contains("FORMULÁRIO") || semAnexo.contains("FICHA")){
 			textoModificado = unicoOuNumero + " <FORM>" + semAnexo.trim() + "</FORM>";
-		} else if (semAnexo.contains("CÓDIGO")){
-			textoModificado = unicoOuNumero + " <COD>" + semAnexo.trim() + "</COD>";
 		} else if (semAnexo.contains("RELATÓRIO")){
 			textoModificado = unicoOuNumero + " <REL>" + semAnexo.trim() + "</REL>";
 		} else if (semAnexo.contains("REGIMENTO")){
